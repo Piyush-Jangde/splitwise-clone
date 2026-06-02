@@ -69,10 +69,11 @@ Primary priorities:
 - Express setup
 - Prisma client setup
 - Health check endpoint
+- Error middleware
 
 ## Current Phase
 
-- Error middleware
+
 - Auth APIs
 
 ## Current Backend API Plan
