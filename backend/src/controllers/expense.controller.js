@@ -264,8 +264,171 @@ const getExpenseById = asyncHandler(async (req, res) => {
   });
 });
 
+async function getExpenseWithGroup(expenseId) {
+  return prisma.expense.findUnique({
+    where: { id: expenseId },
+    include: {
+      group: true,
+    },
+  });
+}
+
+//checks if the user has the permission to edit/delete the expense
+function canModifyExpense(expense, userId) {
+  return (
+    expense.creatorId === userId ||
+    expense.group.ownerId === userId
+  );
+}
+
+const updateExpense = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    description,
+    amount,
+    splitType,
+    payerId,
+    participants,
+    receiptUrl,
+  } = req.body;
+
+  const existingExpense = await getExpenseWithGroup(id);
+
+  if (!existingExpense) {
+    throw new ApiError(404, "Expense not found");
+  }
+
+  if (!canModifyExpense(existingExpense, req.user.id)) {
+    throw new ApiError(403, "Only expense creator or group owner can edit this expense");
+  }
+
+  if (!description || !amount || !splitType || !payerId) {
+    throw new ApiError(400, "Description, amount, split type and payer are required");
+  }
+
+  if (!participants || !Array.isArray(participants) || participants.length === 0) {
+    throw new ApiError(400, "Participants are required");
+  }
+
+  const payerMembership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: existingExpense.groupId,
+        userId: payerId,
+      },
+    },
+  });
+
+  if (!payerMembership) {
+    throw new ApiError(400, "Payer must be a group member");
+  }
+
+  for (const participant of participants) {
+    const membership = await prisma.groupMember.findUnique({
+      where: {
+        groupId_userId: {
+          groupId: existingExpense.groupId,
+          userId: participant.userId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ApiError(400, "All participants must be group members");
+    }
+  }
+
+  const calculatedSplits = calculateSplits(splitType, amount, participants);
+
+  const updatedExpense = await prisma.$transaction(async (tx) => {
+    await tx.expenseParticipant.deleteMany({
+      where: {
+        expenseId: id,
+      },
+    });
+
+    return tx.expense.update({
+      where: { id },
+      data: {
+        description,
+        amount,
+        splitType,
+        payerId,
+        receiptUrl,
+        participants: {
+          create: calculatedSplits.map((split) => ({
+            userId: split.userId,
+            amountOwed: split.amountOwed,
+            percentage: split.percentage,
+            shares: split.shares,
+          })),
+        },
+      },
+      include: {
+        payer: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+        creator: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+        participants: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  });
+
+  res.json({
+    success: true,
+    message: "Expense updated successfully",
+    expense: updatedExpense,
+  });
+});
+
+const deleteExpense = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const existingExpense = await getExpenseWithGroup(id);
+
+  if (!existingExpense) {
+    throw new ApiError(404, "Expense not found");
+  }
+
+  if (!canModifyExpense(existingExpense, req.user.id)) {
+    throw new ApiError(403, "Only expense creator or group owner can delete this expense");
+  }
+
+  await prisma.expense.delete({
+    where: { id },
+  });
+
+  res.json({
+    success: true,
+    message: "Expense deleted successfully",
+  });
+});
+
 module.exports = {
   createExpense,
   getGroupExpenses,
   getExpenseById,
+  updateExpense,
+  deleteExpense,
 };

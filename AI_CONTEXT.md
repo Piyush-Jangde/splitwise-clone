@@ -142,6 +142,14 @@ Decision:
 - Split calculations are handled by split.service.js.
 - Expense controller handles authorization, validation, and database persistence.
 
+Completed:
+- Edit expense API
+- Delete expense API
+
+Decision:
+- Expense edits rebuild participant allocations instead of updating rows individually.
+- This keeps split recalculation simple and reliable for MVP scale.
+
 # User Personas
 
 The application is intentionally generic and supports:
