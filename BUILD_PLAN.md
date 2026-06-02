@@ -393,6 +393,24 @@ Business Rules:
 - Only proposed owner may accept/reject.
 - Ownership changes only after acceptance.
 
+Backend MVP Status: Complete
+
+Completed:
+- Auth
+- Groups
+- Members
+- Expenses
+- Balances
+- Settlements
+- Activity Feed
+- Ownership Transfer
+
+Current Phase:
+- Backend Stabilization
+
+Next Phase:
+- Frontend Development
+
 
 # 6. Entity Model
 
