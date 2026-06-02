@@ -264,24 +264,41 @@ Planned:
 - Prisma client setup
 - Health check endpoint
 - Error middleware
-
+- Auth APIs
+- Group API 
 ## Current Phase
 
-
-- Auth APIs
+- Expense APIs
 
 ## Next Planned Order
 
-1. Auth APIs
-2. Group APIs
-3. Expense APIs
-4. Settlement APIs
-5. Balance APIs
-6. Activity APIs
-7. Frontend
-8. Realtime
-9. Deployment
+Planned order:
 
+- Settlement APIs
+- Balance APIs
+- Activity APIs
+- Frontend
+- Realtime
+- Deployment
+
+
+### Group APIs
+
+Completed:
+- Create group
+- Get my groups
+- Get group details
+- Rename group
+- Delete group
+- Add member
+- Remove member
+- Join via invite code
+
+Business Rules:
+- Only owner can add/remove members.
+- Any member can rename group.
+- Only owner can delete group.
+- Invite codes are unique and reusable.
 ---
 
 # 6. Entity Model

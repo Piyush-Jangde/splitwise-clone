@@ -193,10 +193,163 @@ const deleteGroup = asyncHandler(async (req, res) => {
   });
 });
 
+const addMember = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  if (!userId) {
+    throw new ApiError(400, "User ID is required");
+  }
+
+  const group = await prisma.group.findUnique({
+    where: { id },
+  });
+
+  if (!group) {
+    throw new ApiError(404, "Group not found");
+  }
+
+  if (group.ownerId !== req.user.id) {
+    throw new ApiError(403, "Only group owner can add members");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const existingMember = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: id,
+        userId,
+      },
+    },
+  });
+
+  if (existingMember) {
+    throw new ApiError(409, "User is already a group member");
+  }
+
+  const member = await prisma.groupMember.create({
+    data: {
+      groupId: id,
+      userId,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+          phoneNumber: true,
+        },
+      },
+    },
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Member added successfully",
+    member,
+  });
+});
+
+const removeMember = asyncHandler(async (req, res) => {
+  const { id, userId } = req.params;
+
+  const group = await prisma.group.findUnique({
+    where: { id },
+  });
+
+  if (!group) {
+    throw new ApiError(404, "Group not found");
+  }
+
+  if (group.ownerId !== req.user.id) {
+    throw new ApiError(403, "Only group owner can remove members");
+  }
+
+  if (group.ownerId === userId) {
+    throw new ApiError(400, "Owner cannot be removed from the group");
+  }
+
+  const membership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: id,
+        userId,
+      },
+    },
+  });
+
+  if (!membership) {
+    throw new ApiError(404, "Member not found in this group");
+  }
+
+  await prisma.groupMember.delete({
+    where: {
+      groupId_userId: {
+        groupId: id,
+        userId,
+      },
+    },
+  });
+
+  res.json({
+    success: true,
+    message: "Member removed successfully",
+  });
+});
+
+const joinGroupByInviteCode = asyncHandler(async (req, res) => {
+  const { inviteCode } = req.params;
+
+  const group = await prisma.group.findUnique({
+    where: { inviteCode },
+  });
+
+  if (!group) {
+    throw new ApiError(404, "Invalid invite code");
+  }
+
+  const existingMember = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: group.id,
+        userId: req.user.id,
+      },
+    },
+  });
+
+  if (existingMember) {
+    throw new ApiError(409, "You are already a member of this group");
+  }
+
+  const member = await prisma.groupMember.create({
+    data: {
+      groupId: group.id,
+      userId: req.user.id,
+    },
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Joined group successfully",
+    member,
+  });
+});
+
 module.exports = {
   createGroup,
   getMyGroups,
   getGroupById,
+  addMember,
+  removeMember,
+  joinGroupByInviteCode,
   renameGroup,
   deleteGroup,
 };

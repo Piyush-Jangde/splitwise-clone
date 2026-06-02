@@ -70,25 +70,22 @@ Primary priorities:
 - Prisma client setup
 - Health check endpoint
 - Error middleware
-
+- Auth APIs
+- Group API  
 ## Current Phase
 
-
-- Auth APIs
+- Expense APIs
 
 ## Current Backend API Plan
 
 Planned order:
 
-1. Auth APIs
-2. Group APIs
-3. Expense APIs
-4. Settlement APIs
-5. Balance APIs
-6. Activity APIs
-7. Frontend
-8. Realtime
-9. Deployment
+- Settlement APIs
+- Balance APIs
+- Activity APIs
+- Frontend
+- Realtime
+- Deployment
 
 ### Backend API - Auth APIs
 
@@ -112,6 +109,24 @@ Auth Implementation Decision:
 Although Google Login is a must-have requirement, email/password authentication was implemented first to make backend testing faster and easier. Google Login remains required for the final MVP and will be implemented before submission.
 
 ---
+
+### Group APIs
+
+Completed:
+- Create group
+- Get my groups
+- Get group details
+- Rename group
+- Delete group
+- Add member
+- Remove member
+- Join via invite code
+
+Business Rules:
+- Only owner can add/remove members.
+- Any member can rename group.
+- Only owner can delete group.
+- Invite codes are unique and reusable.
 
 # User Personas
 
@@ -958,6 +973,16 @@ Planned endpoints:
 - `GET /api/activity`
 
 ---
+
+# Known Limitations / Setup Requirements:
+ 
+Prisma generated client is intentionally excluded from Git using .gitignore.
+
+After cloning the repository, developers must run:
+
+npx prisma generate
+
+before starting the backend.
 
 # Environment Variables
 
