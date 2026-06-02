@@ -8,6 +8,7 @@ const expenseRoutes = require("./routes/expense.routes");
 const balanceRoutes = require("./routes/balance.routes");
 const settlementRoutes = require("./routes/settlement.routes");
 const activityRoutes = require("./routes/activity.routes");
+const ownershipTransferRoutes = require("./routes/ownershipTransfer.routes");
 
 const errorHandler = require("./middleware/error.middleware");
 
@@ -39,6 +40,7 @@ app.use("/api",expenseRoutes);
 app.use("/api",balanceRoutes);
 app.use("/api",settlementRoutes);
 app.use("/api",activityRoutes);
+app.use("/api", ownershipTransferRoutes);
 app.use(errorHandler);
 
 module.exports = app;

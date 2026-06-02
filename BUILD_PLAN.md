@@ -359,6 +359,41 @@ Decision:
 - Activity records are stored separately as an audit trail.
 - Metadata is JSON to support flexible activity details without changing schema.
 
+Backend Status
+
+Completed:
+- Authentication
+- Group Management
+- Member Management
+- Expense Management
+- Balance Calculation
+- Settlement Recording
+- Activity Feed
+
+Current Work:
+- Ownership Transfer
+
+Remaining:
+- Frontend
+- Realtime Updates
+- Deployment
+
+### Ownership Transfer
+
+Completed:
+- Create ownership transfer request
+- Accept ownership transfer
+- Reject ownership transfer
+- Ownership change transaction
+- Ownership transfer activity logging
+
+Business Rules:
+- Only owner can initiate transfer.
+- Proposed owner must already be a group member.
+- Only proposed owner may accept/reject.
+- Ownership changes only after acceptance.
+
+
 # 6. Entity Model
 
 ## User
