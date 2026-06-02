@@ -301,6 +301,20 @@ Business Rules:
 - Invite codes are unique and reusable.
 ---
 
+### Expense APIs v1
+
+Completed:
+- Created expense API
+- Tested equal split
+- Tested unequal split
+- Tested percentage split
+- Tested share split
+- ExpenseParticipant rows verified in Prisma Studio
+
+Decision:
+- Split calculations are handled by split.service.js.
+- Expense controller handles authorization, validation, and database persistence.
+
 # 6. Entity Model
 
 ## User

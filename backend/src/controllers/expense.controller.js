@@ -1,0 +1,271 @@
+const prisma = require("../config/prisma");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/apiError");
+
+const {
+  calculateEqualSplit,
+  calculateUnequalSplit,
+  calculatePercentageSplit,
+  calculateShareSplit,
+} = require("../services/split.service");
+
+function calculateSplits(splitType, amount, participants) {
+  if (splitType === "EQUAL") {
+    return calculateEqualSplit(
+      amount,
+      participants.map((p) => p.userId)
+    );
+  }
+
+  if (splitType === "UNEQUAL") {
+    return calculateUnequalSplit(participants);
+  }
+
+  if (splitType === "PERCENTAGE") {
+    return calculatePercentageSplit(amount, participants);
+  }
+
+  if (splitType === "SHARE") {
+    return calculateShareSplit(amount, participants);
+  }
+
+  throw new ApiError(400, "Invalid split type");
+}
+
+const createExpense = asyncHandler(async (req, res) => {
+  const {
+    description,
+    amount,
+    splitType,
+    payerId,
+    groupId,
+    participants,
+    receiptUrl,
+  } = req.body;
+
+  if (!description || !amount || !splitType || !payerId || !groupId) {
+    throw new ApiError(400, "Description, amount, split type, payer and group are required");
+  }
+
+  if (!participants || !Array.isArray(participants) || participants.length === 0) {
+    throw new ApiError(400, "Participants are required");
+  }
+
+  const requesterMembership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId,
+        userId: req.user.id,
+      },
+    },
+  });
+
+  if (!requesterMembership) {
+    throw new ApiError(403, "You are not a member of this group");
+  }
+
+  const payerMembership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId,
+        userId: payerId,
+      },
+    },
+  });
+
+  if (!payerMembership) {
+    throw new ApiError(400, "Payer must be a group member");
+  }
+
+  for (const participant of participants) {
+    const membership = await prisma.groupMember.findUnique({
+      where: {
+        groupId_userId: {
+          groupId,
+          userId: participant.userId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ApiError(400, "All participants must be group members");
+    }
+  }
+
+  const calculatedSplits = calculateSplits(splitType, amount, participants);
+
+  const expense = await prisma.expense.create({
+    data: {
+      description,
+      amount,
+      splitType,
+      payerId,
+      creatorId: req.user.id,
+      groupId,
+      receiptUrl,
+      participants: {
+        create: calculatedSplits.map((split) => ({
+          userId: split.userId,
+          amountOwed: split.amountOwed,
+          percentage: split.percentage,
+          shares: split.shares,
+        })),
+      },
+    },
+    include: {
+      payer: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      creator: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Expense created successfully",
+    expense,
+  });
+});
+
+const getGroupExpenses = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const membership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: id,
+        userId: req.user.id,
+      },
+    },
+  });
+
+  if (!membership) {
+    throw new ApiError(403, "You are not a member of this group");
+  }
+
+  const expenses = await prisma.expense.findMany({
+    where: {
+      groupId: id,
+    },
+    include: {
+      payer: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      creator: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  res.json({
+    success: true,
+    expenses,
+  });
+});
+
+const getExpenseById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const expense = await prisma.expense.findUnique({
+    where: { id },
+    include: {
+      group: true,
+      payer: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      creator: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!expense) {
+    throw new ApiError(404, "Expense not found");
+  }
+
+  const membership = await prisma.groupMember.findUnique({
+    where: {
+      groupId_userId: {
+        groupId: expense.groupId,
+        userId: req.user.id,
+      },
+    },
+  });
+
+  if (!membership) {
+    throw new ApiError(403, "You cannot access this expense");
+  }
+
+  res.json({
+    success: true,
+    expense,
+  });
+});
+
+module.exports = {
+  createExpense,
+  getGroupExpenses,
+  getExpenseById,
+};

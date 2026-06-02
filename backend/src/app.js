@@ -4,6 +4,7 @@ const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
 const groupRoutes = require("./routes/group.routes");
+const expenseRoutes = require("./routes/expense.routes");
 
 const errorHandler = require("./middleware/error.middleware");
 
@@ -31,6 +32,7 @@ app.get("/api/health", (req, res) => {
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/groups",groupRoutes);
+app.use("/api",expenseRoutes);
 app.use(errorHandler);
 
 module.exports = app;
