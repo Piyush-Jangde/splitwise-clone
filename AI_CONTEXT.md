@@ -150,6 +150,16 @@ Decision:
 - Expense edits rebuild participant allocations instead of updating rows individually.
 - This keeps split recalculation simple and reliable for MVP scale.
 
+### Balance APIs v1
+
+Completed:
+- Group raw balances
+- Group simplified balances
+- Logged-in user balance summary
+
+Temporary Decision:
+- Settlement data is passed as an empty array until Settlement APIs are implemented.
+
 # User Personas
 
 The application is intentionally generic and supports:
