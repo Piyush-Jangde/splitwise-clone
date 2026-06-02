@@ -236,7 +236,7 @@ exports.Prisma.JsonNullValueFilter = {
 };
 exports.AuthProvider = exports.$Enums.AuthProvider = {
   GOOGLE: 'GOOGLE',
-  PHONE: 'PHONE'
+  EMAIL_PASSWORD: 'EMAIL_PASSWORD'
 };
 
 exports.SplitType = exports.$Enums.SplitType = {

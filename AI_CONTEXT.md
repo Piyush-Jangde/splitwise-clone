@@ -90,6 +90,27 @@ Planned order:
 8. Realtime
 9. Deployment
 
+### Backend API - Auth APIs
+
+Completed:
+- Email/password registration
+- Password hashing with bcrypt
+- JWT login
+- Protected route middleware
+- Logged-in user endpoint
+
+Decision:
+- Email/password auth implemented first for demo reliability.
+- Google login remains planned/future because OAuth setup can slow down MVP delivery.
+
+Endpoints:
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/me
+
+Auth Implementation Decision:
+Although Google Login is a must-have requirement, email/password authentication was implemented first to make backend testing faster and easier. Google Login remains required for the final MVP and will be implemented before submission.
+
 ---
 
 # User Personas

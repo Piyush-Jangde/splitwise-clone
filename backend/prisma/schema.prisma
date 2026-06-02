@@ -9,7 +9,7 @@ datasource db {
 
 enum AuthProvider {
   GOOGLE
-  PHONE
+  EMAIL_PASSWORD
 }
 
 enum SplitType {

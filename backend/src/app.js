@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const authRoutes = require("./routes/auth.routes");
 
 const errorHandler = require("./middleware/error.middleware");
 
@@ -26,7 +27,7 @@ app.get("/api/health", (req, res) => {
     service: "splitwise-clone-backend",
   });
 });
-
+app.use("/api/auth", authRoutes);
 app.use(errorHandler);
 
 module.exports = app;

@@ -65,7 +65,7 @@ export type OwnershipTransfer = $Result.DefaultSelection<Prisma.$OwnershipTransf
 export namespace $Enums {
   export const AuthProvider: {
   GOOGLE: 'GOOGLE',
-  PHONE: 'PHONE'
+  EMAIL_PASSWORD: 'EMAIL_PASSWORD'
 };
 
 export type AuthProvider = (typeof AuthProvider)[keyof typeof AuthProvider]
