@@ -8,6 +8,8 @@ const {
   calculatePercentageSplit,
   calculateShareSplit,
 } = require("../services/split.service");
+const {createActivity}=require("../services/activity.service");
+
 
 function calculateSplits(splitType, amount, participants) {
   if (splitType === "EQUAL") {
@@ -138,6 +140,18 @@ const createExpense = asyncHandler(async (req, res) => {
           },
         },
       },
+    },
+  });
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId,
+    activityType: "EXPENSE_CREATED",
+    entityId: expense.id,
+    metadata: {
+        description: expense.description,
+        amount: expense.amount,
+        splitType: expense.splitType,
     },
   });
 
@@ -395,6 +409,18 @@ const updateExpense = asyncHandler(async (req, res) => {
     });
   });
 
+  await createActivity({
+    actorId: req.user.id,
+    groupId: existingExpense.groupId,
+    activityType: "EXPENSE_UPDATED",
+    entityId: updatedExpense.id,
+    metadata: {
+        description: updatedExpense.description,
+        amount: updatedExpense.amount,
+        splitType: updatedExpense.splitType,
+    },
+  });
+
   res.json({
     success: true,
     message: "Expense updated successfully",
@@ -417,6 +443,17 @@ const deleteExpense = asyncHandler(async (req, res) => {
 
   await prisma.expense.delete({
     where: { id },
+  });
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId: existingExpense.groupId,
+    activityType: "EXPENSE_DELETED",
+    entityId: id,
+    metadata: {
+        description: existingExpense.description,
+        amount: existingExpense.amount,
+    },
   });
 
   res.json({

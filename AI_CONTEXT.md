@@ -172,6 +172,20 @@ Decision:
 - Settlements are stored as independent records instead of modifying old expenses.
 - This preserves audit history and keeps expenses as source-of-truth records.
 
+### Activity System
+
+Completed:
+- Group activity feed API
+- User activity feed API
+- Activity service helper
+- Activity entries for group changes
+- Activity entries for expenses
+- Activity entries for settlements
+
+Decision:
+- Activity records are stored separately as an audit trail.
+- Metadata is JSON to support flexible activity details without changing schema.
+
 # User Personas
 
 The application is intentionally generic and supports:

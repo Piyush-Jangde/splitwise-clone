@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const prisma = require("../config/prisma");
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/apiError");
+const {createActivity} = require("../services/activity.service");
 
 function generateInviteCode() {
   return crypto.randomBytes(8).toString("hex");
@@ -46,6 +47,17 @@ const createGroup = asyncHandler(async (req, res) => {
           },
         },
       },
+    },
+  });
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId: group.id,
+    activityType: "MEMBER_ADDED",
+    entityId: req.user.id,
+    metadata: {
+        message: `${req.user.fullName} created the group`,
+        groupName: group.name,
     },
   });
 
@@ -161,6 +173,16 @@ const renameGroup = asyncHandler(async (req, res) => {
     data: { name },
   });
 
+  await createActivity({
+    actorId: req.user.id,
+    groupId: id,
+    activityType: "GROUP_RENAMED",
+    entityId: id,
+    metadata: {
+        newName: name,
+    },
+  });
+
   res.json({
     success: true,
     message: "Group renamed successfully",
@@ -182,6 +204,16 @@ const deleteGroup = asyncHandler(async (req, res) => {
   if (group.ownerId !== req.user.id) {
     throw new ApiError(403, "Only the group owner can delete this group");
   }
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId: id,
+    activityType: "GROUP_DELETED",
+    entityId: id,
+    metadata: {
+        groupName: group.name,
+    },
+  });
 
   await prisma.group.delete({
     where: { id },
@@ -251,6 +283,17 @@ const addMember = asyncHandler(async (req, res) => {
     },
   });
 
+  await createActivity({
+    actorId: req.user.id,
+    groupId: id,
+    activityType: "MEMBER_ADDED",
+    entityId: userId,
+    metadata: {
+        addedUserId: userId,
+        addedUserName: user.fullName,
+    },
+  });
+
   res.status(201).json({
     success: true,
     message: "Member added successfully",
@@ -296,6 +339,16 @@ const removeMember = asyncHandler(async (req, res) => {
         groupId: id,
         userId,
       },
+    },
+  });
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId: id,
+    activityType: "MEMBER_REMOVED",
+    entityId: userId,
+    metadata: {
+        removedUserId: userId,
     },
   });
 

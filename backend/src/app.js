@@ -7,6 +7,7 @@ const groupRoutes = require("./routes/group.routes");
 const expenseRoutes = require("./routes/expense.routes");
 const balanceRoutes = require("./routes/balance.routes");
 const settlementRoutes = require("./routes/settlement.routes");
+const activityRoutes = require("./routes/activity.routes");
 
 const errorHandler = require("./middleware/error.middleware");
 
@@ -37,6 +38,7 @@ app.use("/api/groups",groupRoutes);
 app.use("/api",expenseRoutes);
 app.use("/api",balanceRoutes);
 app.use("/api",settlementRoutes);
+app.use("/api",activityRoutes);
 app.use(errorHandler);
 
 module.exports = app;

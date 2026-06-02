@@ -2,6 +2,8 @@ const prisma = require("../config/prisma");
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/apiError");
 
+const {createActivity}= require("../services/activity.service");
+
 const createSettlement = asyncHandler(async (req, res) => {
   const {
     amount,
@@ -93,6 +95,19 @@ const createSettlement = asyncHandler(async (req, res) => {
           name: true,
         },
       },
+    },
+  });
+
+  await createActivity({
+    actorId: req.user.id,
+    groupId,
+    activityType: "SETTLEMENT_CREATED",
+    entityId: settlement.id,
+    metadata: {
+        amount: settlement.amount,
+        payerId,
+        receiverId,
+        note,
     },
   });
 
