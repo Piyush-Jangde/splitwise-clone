@@ -30,7 +30,9 @@ const getGroupBalances = asyncHandler(async (req, res) => {
     },
   });
 
-  const settlements = [];
+  const settlements = await prisma.settlement.findMany({
+    where: { groupId },
+  });
 
   const rawBalances = calculateRawBalances(expenses, settlements);
   const simplifiedBalances = calculateSimplifiedBalances(rawBalances);
@@ -65,7 +67,13 @@ const getMyBalanceSummary = asyncHandler(async (req, res) => {
     },
   });
 
-  const settlements = [];
+  const settlements = await prisma.settlement.findMany({
+    where: {
+      groupId: {
+        in: groupIds,
+      },
+    },
+  });
 
   const rawBalances = calculateRawBalances(expenses, settlements);
 

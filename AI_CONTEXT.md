@@ -160,6 +160,18 @@ Completed:
 Temporary Decision:
 - Settlement data is passed as an empty array until Settlement APIs are implemented.
 
+### Settlement APIs
+
+Completed:
+- Record group settlement
+- Get group settlement history
+- Settlements integrated into group balance calculation
+- Settlements integrated into user balance summary
+
+Decision:
+- Settlements are stored as independent records instead of modifying old expenses.
+- This preserves audit history and keeps expenses as source-of-truth records.
+
 # User Personas
 
 The application is intentionally generic and supports:
@@ -224,6 +236,13 @@ No persona-specific functionality exists.
 - Record settlements
 - Settlement history
 - Settlements reduce outstanding debt
+
+Settlement Authorization Rule:
+
+Only the authenticated payer may record a settlement.
+
+Reason:
+Prevents users from recording payments on behalf of other members and improves trustworthiness of financial records.
 
 ### Activity
 

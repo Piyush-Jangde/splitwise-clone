@@ -333,6 +333,18 @@ Completed:
 Temporary Decision:
 - Settlement data is passed as an empty array until Settlement APIs are implemented.
 
+### Settlement APIs
+
+Completed:
+- Record group settlement
+- Get group settlement history
+- Settlements integrated into group balance calculation
+- Settlements integrated into user balance summary
+
+Decision:
+- Settlements are stored as independent records instead of modifying old expenses.
+- This preserves audit history and keeps expenses as source-of-truth records.
+
 # 6. Entity Model
 
 ## User
