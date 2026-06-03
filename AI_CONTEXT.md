@@ -1241,6 +1241,21 @@ Fix:
 - Amount must be greater than zero.
 - Existing invalid test expenses were removed before continuing balance testing.
 
+## End-to-End Backend Test
+
+Tested full backend flow:
+- Created group
+- Added members by invite code
+- Created equal expense
+- Created percentage expense
+- Verified group balances
+- Recorded settlement
+- Verified balances changed after settlement
+- Verified activity feed
+
+Result:
+- Backend modules work together correctly.
+- Remaining Google Auth valid-token test will be done after frontend GIS integration.
 ---
 
 # Product Tradeoffs

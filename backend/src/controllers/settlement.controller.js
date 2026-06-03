@@ -18,6 +18,12 @@ const createSettlement = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Amount, payer, receiver and group are required");
   }
 
+  const numericAmount = Number(amount);
+
+  if (Number.isNaN(numericAmount) || numericAmount <= 0) {
+    throw new ApiError(400, "Settlement amount must be greater than zero");
+  }
+
   if (payerId === receiverId) {
     throw new ApiError(400, "Payer and receiver cannot be the same user");
   }
@@ -25,6 +31,8 @@ const createSettlement = asyncHandler(async (req, res) => {
   if (req.user.id !== payerId) {
   throw new ApiError(403,"You can only record settlements made by yourself");
   }
+
+  
 
   const requesterMembership = await prisma.groupMember.findUnique({
     where: {
@@ -67,7 +75,7 @@ const createSettlement = asyncHandler(async (req, res) => {
 
   const settlement = await prisma.settlement.create({
     data: {
-      amount,
+      amount: numericAmount,
       payerId,
       receiverId,
       groupId,
