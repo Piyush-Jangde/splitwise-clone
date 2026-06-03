@@ -1225,6 +1225,22 @@ Confirmed implementation details:
 - Owner self-removal error message: `"Owner cannot be removed from the group"`.
 - Test group was not deleted because it is needed for expense, balance, and settlement testing.
 
+## Expense Split Validation Fix
+
+During backend testing, invalid unequal and percentage split inputs were accepted.
+
+Root cause:
+- Unequal split calculated participant amounts but did not verify that the sum matched the total expense amount.
+- Percentage split normalized percentages instead of requiring them to add up to 100.
+
+Fix:
+- Added strict validation in `split.service.js`.
+- Unequal split amounts must add up to total expense amount.
+- Percentage splits must add up to 100.
+- Share split values must be positive integers.
+- Amount must be greater than zero.
+- Existing invalid test expenses were removed before continuing balance testing.
+
 ---
 
 # Product Tradeoffs

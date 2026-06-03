@@ -20,7 +20,7 @@ function calculateSplits(splitType, amount, participants) {
   }
 
   if (splitType === "UNEQUAL") {
-    return calculateUnequalSplit(participants);
+    return calculateUnequalSplit(amount, participants);
   }
 
   if (splitType === "PERCENTAGE") {
