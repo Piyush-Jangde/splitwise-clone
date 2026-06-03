@@ -1258,6 +1258,28 @@ Result:
 - Remaining Google Auth valid-token test will be done after frontend GIS integration.
 ---
 
+Frontend tech stack updated:
+- React + Vite
+- TypeScript
+- Axios
+- React Router DOM
+- Tailwind CSS or clean CSS
+- Google Identity Services
+- React Context API
+- localStorage for JWT persistence
+
+Frontend foundation completed:
+- Created React + Vite + TypeScript frontend.
+- Added Axios and React Router DOM.
+- Added centralized API client using VITE_API_BASE_URL.
+- Added Axios request interceptor to attach JWT token from localStorage.
+- Added auth type definitions for User and AuthResponse.
+- Added AuthContext, AuthProvider, and useAuth hook.
+- Used lazy useState initialization to restore auth state from localStorage without useEffect.
+- Split context/provider/hook files to avoid React Fast Refresh warning.
+- Added ProtectedRoute for authenticated pages.
+- Added initial routes for login, register, and dashboard.
+
 # Product Tradeoffs
 
 ## Group Ownership
