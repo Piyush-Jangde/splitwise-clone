@@ -1171,6 +1171,8 @@ For deployment, the JWT secret must be changed to a strong production value.
 
 # Testing Strategy
 
+
+
 ## Completed Tests
 
 - Split engine tests
@@ -1211,6 +1213,17 @@ Test order:
 12. Record settlement
 13. Verify updated balances
 14. Get activity feed
+
+## Group Testing Notes
+
+Group module tested successfully.
+
+Confirmed implementation details:
+- Join group endpoint is `POST /api/groups/join/:inviteCode`.
+- Group rename is allowed for any group member by current product design.
+- Owner cannot be removed from the group.
+- Owner self-removal error message: `"Owner cannot be removed from the group"`.
+- Test group was not deleted because it is needed for expense, balance, and settlement testing.
 
 ---
 

@@ -632,6 +632,17 @@ Total shares = 6.
 
 ---
 
+## Group Testing Notes
+
+Group module tested successfully.
+
+Confirmed implementation details:
+- Join group endpoint is `POST /api/groups/join/:inviteCode`.
+- Group rename is allowed for any group member by current product design.
+- Owner cannot be removed from the group.
+- Owner self-removal error message: `"Owner cannot be removed from the group"`.
+- Test group was not deleted because it is needed for expense, balance, and settlement testing.
+
 # 10. API Design
 
 All API routes should use `/api` prefix.
