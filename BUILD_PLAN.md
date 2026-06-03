@@ -411,6 +411,33 @@ Current Phase:
 Next Phase:
 - Frontend Development
 
+## Google Auth Backend Implementation
+
+Implemented `POST /api/auth/google`.
+
+The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
+
+The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
+
+Current Google Auth status:
+- Route wired successfully.
+- Missing credential returns validation error.
+- Invalid credential reaches Google verification and is rejected.
+- Real Google login will be tested after frontend GIS button is implemented.
+
+## Google Auth Backend Implementation
+
+Implemented `POST /api/auth/google`.
+
+The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
+
+The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
+
+Current Google Auth status:
+- Route wired successfully.
+- Missing credential returns validation error.
+- Invalid credential reaches Google verification and is rejected.
+- Real Google login will be tested after frontend GIS button is implemented.
 
 # 6. Entity Model
 

@@ -129,6 +129,7 @@ exports.Prisma.UserScalarFieldEnum = {
   profilePhotoUrl: 'profilePhotoUrl',
   authProvider: 'authProvider',
   passwordHash: 'passwordHash',
+  googleId: 'googleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

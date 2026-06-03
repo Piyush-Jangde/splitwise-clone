@@ -39,14 +39,16 @@ enum ActivityType {
 }
 
 model User {
-  id              String       @id @default(uuid())
+  id              String  @id @default(uuid())
   fullName        String
-  email           String       @unique
-  phoneNumber     String
+  email           String  @unique
+  phoneNumber     String?
   username        String?
   profilePhotoUrl String?
-  authProvider    AuthProvider @default(GOOGLE)
-  passwordHash    String?
+
+  authProvider AuthProvider @default(EMAIL_PASSWORD)
+  passwordHash String?
+  googleId     String?      @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

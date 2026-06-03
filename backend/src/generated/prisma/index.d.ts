@@ -1904,6 +1904,7 @@ export namespace Prisma {
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider | null
     passwordHash: string | null
+    googleId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1917,6 +1918,7 @@ export namespace Prisma {
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider | null
     passwordHash: string | null
+    googleId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1930,6 +1932,7 @@ export namespace Prisma {
     profilePhotoUrl: number
     authProvider: number
     passwordHash: number
+    googleId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1945,6 +1948,7 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
+    googleId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1958,6 +1962,7 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
+    googleId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1971,6 +1976,7 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
+    googleId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2052,11 +2058,12 @@ export namespace Prisma {
     id: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber: string | null
     username: string | null
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider
     passwordHash: string | null
+    googleId: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -2087,6 +2094,7 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
+    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
@@ -2113,6 +2121,7 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
+    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2126,6 +2135,7 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
+    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2139,11 +2149,12 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
+    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phoneNumber" | "username" | "profilePhotoUrl" | "authProvider" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phoneNumber" | "username" | "profilePhotoUrl" | "authProvider" | "passwordHash" | "googleId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
     groupMemberships?: boolean | User$groupMembershipsArgs<ExtArgs>
@@ -2182,11 +2193,12 @@ export namespace Prisma {
       id: string
       fullName: string
       email: string
-      phoneNumber: string
+      phoneNumber: string | null
       username: string | null
       profilePhotoUrl: string | null
       authProvider: $Enums.AuthProvider
       passwordHash: string | null
+      googleId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2632,6 +2644,7 @@ export namespace Prisma {
     readonly profilePhotoUrl: FieldRef<"User", 'String'>
     readonly authProvider: FieldRef<"User", 'AuthProvider'>
     readonly passwordHash: FieldRef<"User", 'String'>
+    readonly googleId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -12431,6 +12444,7 @@ export namespace Prisma {
     profilePhotoUrl: 'profilePhotoUrl',
     authProvider: 'authProvider',
     passwordHash: 'passwordHash',
+    googleId: 'googleId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12734,11 +12748,12 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     fullName?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
-    phoneNumber?: StringFilter<"User"> | string
+    phoneNumber?: StringNullableFilter<"User"> | string | null
     username?: StringNullableFilter<"User"> | string | null
     profilePhotoUrl?: StringNullableFilter<"User"> | string | null
     authProvider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
     passwordHash?: StringNullableFilter<"User"> | string | null
+    googleId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     ownedGroups?: GroupListRelationFilter
@@ -12759,11 +12774,12 @@ export namespace Prisma {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
-    phoneNumber?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
     username?: SortOrderInput | SortOrder
     profilePhotoUrl?: SortOrderInput | SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownedGroups?: GroupOrderByRelationAggregateInput
@@ -12783,11 +12799,12 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    googleId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     fullName?: StringFilter<"User"> | string
-    phoneNumber?: StringFilter<"User"> | string
+    phoneNumber?: StringNullableFilter<"User"> | string | null
     username?: StringNullableFilter<"User"> | string | null
     profilePhotoUrl?: StringNullableFilter<"User"> | string | null
     authProvider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
@@ -12806,17 +12823,18 @@ export namespace Prisma {
     friendshipsAsUser2?: FriendshipListRelationFilter
     ownershipTransfersStarted?: OwnershipTransferListRelationFilter
     ownershipTransfersReceived?: OwnershipTransferListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
-    phoneNumber?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
     username?: SortOrderInput | SortOrder
     profilePhotoUrl?: SortOrderInput | SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -12831,11 +12849,12 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     fullName?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
-    phoneNumber?: StringWithAggregatesFilter<"User"> | string
+    phoneNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
     username?: StringNullableWithAggregatesFilter<"User"> | string | null
     profilePhotoUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     authProvider?: EnumAuthProviderWithAggregatesFilter<"User"> | $Enums.AuthProvider
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
+    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -13401,11 +13420,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -13426,11 +13446,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -13451,11 +13472,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -13476,11 +13498,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -13501,11 +13524,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13514,11 +13538,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13527,11 +13552,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14216,6 +14242,7 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
+    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14229,6 +14256,7 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
+    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14242,6 +14270,7 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
+    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16817,11 +16846,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -16841,11 +16871,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -16870,11 +16901,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -16894,11 +16926,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -16934,11 +16967,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -16958,11 +16992,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -16993,11 +17028,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -17017,11 +17053,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -17041,11 +17078,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
@@ -17065,11 +17103,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
@@ -17249,11 +17288,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
@@ -17273,11 +17313,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -17408,11 +17449,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -17432,11 +17474,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -17509,11 +17552,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -17533,11 +17577,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -17557,11 +17602,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -17581,11 +17627,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -17610,11 +17657,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -17634,11 +17682,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -17731,11 +17780,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -17755,11 +17805,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -17790,11 +17841,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -17814,11 +17866,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -17922,11 +17975,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -17946,11 +18000,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18023,11 +18078,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18047,11 +18103,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -18071,11 +18128,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -18095,11 +18153,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18124,11 +18183,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -18148,11 +18208,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18219,11 +18280,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18243,11 +18305,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -18278,11 +18341,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18302,11 +18366,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -18363,11 +18428,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -18387,11 +18453,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18458,11 +18525,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18482,11 +18550,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -18574,11 +18643,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -18598,11 +18668,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18627,11 +18698,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
@@ -18651,11 +18723,12 @@ export namespace Prisma {
     id?: string
     fullName: string
     email: string
-    phoneNumber: string
+    phoneNumber?: string | null
     username?: string | null
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
+    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
@@ -18728,11 +18801,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18752,11 +18826,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
@@ -18787,11 +18862,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
@@ -18811,11 +18887,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     username?: NullableStringFieldUpdateOperationsInput | string | null
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput

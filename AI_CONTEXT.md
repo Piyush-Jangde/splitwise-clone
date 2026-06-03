@@ -238,6 +238,53 @@ Current Phase:
 Next Phase:
 - Frontend Development
 
+## Authentication Update
+
+The app supports both email/password authentication and Google OAuth login.
+
+User schema decisions:
+- `email` is required and unique for all users.
+- `phoneNumber` is optional because Google Auth does not provide phone numbers.
+- `passwordHash` is optional because Google OAuth users do not need passwords.
+- `googleId` is optional but unique, used to identify Google OAuth users.
+- `authProvider` defaults to `EMAIL_PASSWORD`.
+- JWT will still be used for app sessions after either login method succeeds.
+
+Authentication Revision:
+- phoneNumber changed from required to optional.
+- Added googleId unique field.
+- Added Google OAuth login.
+- Backend continues using JWT for authorization.
+- Google OAuth is only used for identity verification.
+
+## Google Auth Backend Implementation
+
+Implemented `POST /api/auth/google`.
+
+The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
+
+The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
+
+Current Google Auth status:
+- Route wired successfully.
+- Missing credential returns validation error.
+- Invalid credential reaches Google verification and is rejected.
+- Real Google login will be tested after frontend GIS button is implemented.
+
+## Google Auth Backend Implementation
+
+Implemented `POST /api/auth/google`.
+
+The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
+
+The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
+
+Current Google Auth status:
+- Route wired successfully.
+- Missing credential returns validation error.
+- Invalid credential reaches Google verification and is rejected.
+- Real Google login will be tested after frontend GIS button is implemented.
+
 # User Personas
 
 The application is intentionally generic and supports:
@@ -1092,6 +1139,8 @@ Planned endpoints:
 ---
 
 # Known Limitations / Setup Requirements:
+Forgot password is not implemented in MVP.
+Future version would use email-based password reset tokens.
  
 Prisma generated client is intentionally excluded from Git using .gitignore.
 

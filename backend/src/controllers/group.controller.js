@@ -350,7 +350,7 @@ const removeMember = asyncHandler(async (req, res) => {
     metadata: {
         removedUserId: userId,
     },
-  });
+  });   
 
   res.json({
     success: true,
