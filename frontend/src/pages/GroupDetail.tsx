@@ -5,10 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import { getGroupDetail } from "../services/groupService";
 import { createExpense } from "../services/expenseService";
 import { getGroupBalances } from "../services/balanceService";
+import { getGroupActivity } from "../services/activityService";
 
 import type { GroupDetailData } from "../types/groupDetail";
 import type { SimplifiedBalance } from "../types/balance";
-import type { SplitType } from "../types/expense"
+import type { SplitType } from "../types/expense";
+import type { Activity } from "../types/activity";
 
 import SettlementForm from "../components/SettlementForm";
 
@@ -28,9 +30,13 @@ function GroupDetail() {
   const [splitType, setSplitType] = useState<SplitType>("EQUAL");
   const [unequalAmounts, setUnequalAmounts] = useState<Record<string, string>>({});
   const [percentageSplits, setPercentageSplits] = useState<Record<string, string>>({});
+  const [shareSplits, setShareSplits] = useState<Record<string, string>>({});
 
   const [balances, setBalances] = useState<SimplifiedBalance[]>([]);
   const [isLoadingBalances, setIsLoadingBalances] = useState(Boolean(groupId));
+
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(true);
 
  useEffect(() => {
   let ignore = false;
@@ -55,6 +61,9 @@ function GroupDetail() {
         setGroup(groupData.group);
         setBalances(balanceData.simplifiedBalances);
       }
+      const activityData = await getGroupActivity(groupId!);
+      setActivities(activityData.activities);
+
     } catch (error: unknown) {
       if (!ignore) {
         if (axios.isAxiosError(error)) {
@@ -73,6 +82,7 @@ function GroupDetail() {
       if (!ignore) {
         setIsLoadingGroup(false);
         setIsLoadingBalances(false);
+        setIsLoadingActivities(false);
       }
     }
   }
@@ -109,6 +119,24 @@ function GroupDetail() {
       setIsLoadingBalances(false);
     }
   }
+
+  async function refreshActivities() {
+    if (!groupId) {
+        return;
+    }
+
+    try {
+        setIsLoadingActivities(true);
+
+        const data = await getGroupActivity(groupId);
+
+        setActivities(data.activities);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        setIsLoadingActivities(false);
+    }
+    }
 
   function handleToggleParticipant(userId: string) {
     setParticipantIds((previousIds) => {
@@ -155,6 +183,19 @@ function GroupDetail() {
 
         if (percentageTotal !== 100) {
             setError("Percentage splits must add up to 100");
+            return;
+        }
+    }
+
+    if (splitType === "SHARE") {
+        const totalShares = participantIds.reduce(
+            (sum, userId) =>
+            sum + Number(shareSplits[userId] || 0),
+            0
+        );
+
+        if (totalShares <= 0) {
+            setError("Total shares must be greater than zero");
             return;
         }
     }
@@ -215,6 +256,13 @@ function GroupDetail() {
                 };
             }
 
+            if (splitType === "SHARE") {
+                return {
+                userId,
+                shares: Number(shareSplits[userId]),
+                };
+            }
+
             return {
                 userId,
             };
@@ -234,7 +282,9 @@ function GroupDetail() {
       });
 
       await refreshBalances();
+      await refreshActivities();
 
+      //Resetting all useful states
       setDescription("");
       setAmount("");
       setPayerId("");
@@ -242,6 +292,8 @@ function GroupDetail() {
       setSplitType("EQUAL");
       setUnequalAmounts({});
       setPercentageSplits({});
+      setShareSplits({});
+
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setError(
@@ -438,6 +490,35 @@ function GroupDetail() {
                         })}
                     </div>
                     )}
+                {splitType === "SHARE" && (
+                    <div>
+                        <h3>Share Split</h3>
+
+                        {participantIds.map((userId) => {
+                        const member = group.members.find(
+                            (member) => member.user.id === userId
+                        );
+
+                        return (
+                            <div key={userId}>
+                            <label>{member?.user.fullName}</label>
+
+                            <input
+                                type="number"
+                                value={shareSplits[userId] || ""}
+                                onChange={(event) =>
+                                setShareSplits((previous) => ({
+                                    ...previous,
+                                    [userId]: event.target.value,
+                                }))
+                                }
+                                placeholder="Shares"
+                            />
+                            </div>
+                        );
+                        })}
+                    </div>
+                    )}
               <button type="submit" disabled={isCreatingExpense}>
                 {isCreatingExpense ? "Creating..." : "Create Expense"}
               </button>
@@ -467,12 +548,51 @@ function GroupDetail() {
             )}
           </section>
 
+            <section>
+                <h2>Activity</h2>
+
+                {isLoadingActivities && (
+                    <p>Loading activity...</p>
+                )}
+
+                {!isLoadingActivities &&
+                    activities.length === 0 && (
+                    <p>No activity yet.</p>
+                    )}
+
+                {!isLoadingActivities &&
+                    activities.length > 0 && (
+                    <ul>
+                        {activities.map((activity) => (
+                        <li key={activity.id}>
+                            <strong>
+                            {activity.actor.fullName}
+                            </strong>
+
+                            {" - "}
+
+                            {activity.activityType}
+
+                            {" - "}
+
+                            {new Date(
+                            activity.createdAt
+                            ).toLocaleString()}
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+            </section>
+
           <hr />
 
           <SettlementForm
             groupId={groupId}
             members={group.members}
-            onSettlementCreated={refreshBalances}
+            onSettlementCreated={async ()=>{
+                await refreshBalances;
+                await refreshActivities;
+            }}
           />
 
           <hr />

@@ -51,6 +51,7 @@ export interface CreateExpensePayload {
     userId: string;
     amountOwed?: number;
     percentage?: number;
+    shares?: number;
   }[];
 }
 

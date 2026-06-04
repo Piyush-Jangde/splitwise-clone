@@ -1341,6 +1341,11 @@ Frontend expense update:
 - Frontend validates that unequal split amounts equal total expense amount.
 - Payload now sends amountOwed per participant for UNEQUAL split.
 
+- Frontend Activity Feed completed.
+- Group detail page now fetches and displays group activities.
+- Activity refreshes after expense creation and settlement creation.
+- Activity currently displays raw activityType values from backend.
+
 # Product Tradeoffs
 
 ## Group Ownership
