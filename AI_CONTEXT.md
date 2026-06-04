@@ -1288,6 +1288,14 @@ Frontend auth update:
 - User is redirected to /dashboard after registration.
 - Added loading and error states for registration UX.
 
+Frontend auth update:
+- Built Login page using TypeScript.
+- Created LoginFormData interface for login form state.
+- Connected login form to POST /api/auth/login.
+- On successful login, frontend stores user and JWT using AuthContext login().
+- User is redirected to /dashboard after login.
+- Used unknown instead of any for type-safe error handling.
+
 # Product Tradeoffs
 
 ## Group Ownership
