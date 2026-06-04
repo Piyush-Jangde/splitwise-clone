@@ -21,7 +21,7 @@ export async function createGroup(name: string) {
   return response.data;
 }
 
-export async function joinGroup(inviteCode: string) {
+export async function joinGroupByInviteCode(inviteCode: string) {
   const response = await api.post(`/groups/join/${inviteCode}`);
   return response.data;
 }
@@ -31,6 +31,18 @@ export async function getGroupDetail(groupId: string) {
     await api.get<GetGroupDetailResponse>(
       `/groups/${groupId}`
     );
+
+  return response.data;
+}
+
+export async function renameGroup(
+  groupId: string,
+  name: string
+) {
+  const response = await api.patch(
+    `/groups/${groupId}`,
+    { name }
+  );
 
   return response.data;
 }

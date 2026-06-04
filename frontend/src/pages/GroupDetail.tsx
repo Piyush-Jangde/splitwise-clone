@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
-import { getGroupDetail } from "../services/groupService";
+import { getGroupDetail, renameGroup } from "../services/groupService";
 import { createExpense } from "../services/expenseService";
 import { getGroupBalances } from "../services/balanceService";
 import { getGroupActivity } from "../services/activityService";
+
 
 import type { GroupDetailData } from "../types/groupDetail";
 import type { SimplifiedBalance } from "../types/balance";
@@ -37,6 +38,9 @@ function GroupDetail() {
 
   const [activities, setActivities] = useState<Activity[]>([]);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
+
+  const [newGroupName, setNewGroupName] = useState("");
+  const [isRenaming, setIsRenaming] = useState(false);
 
  useEffect(() => {
   let ignore = false;
@@ -93,6 +97,50 @@ function GroupDetail() {
     ignore = true;
   };
 }, [groupId]);
+
+    async function handleRenameGroup() {
+        if (!groupId || !group) {
+            return;
+        }
+
+        const nameToUse = (
+            newGroupName || group.name
+        ).trim();
+
+        if (!nameToUse) {
+            setError("Group name is required");
+            return;
+        }
+
+        try {
+            setIsRenaming(true);
+
+            const data = await renameGroup(
+            groupId,
+            nameToUse
+            );
+
+            setGroup((previousGroup) => {
+                if (!previousGroup) {
+                    return previousGroup;
+                }
+
+                return {
+                    ...previousGroup,
+                    name: data.group.name,
+                };
+            });
+
+            await refreshActivities();
+
+            setNewGroupName("");
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsRenaming(false);
+        }
+    }
 
   async function refreshBalances() {
     if (!groupId) {
@@ -353,6 +401,8 @@ function GroupDetail() {
     );
   }
 
+
+
   return (
     <div>
       <header>
@@ -362,11 +412,47 @@ function GroupDetail() {
 
         <p>Group ID: {groupId}</p>
         <p>Invite Code: {group?.inviteCode}</p>
-        <p>Owner: {group?.owner.fullName}</p>
+        {group && (
+            <section>
+                <h2>Invite Members</h2>
+                <p>
+                    Share this invite code with another user so they can join this group:
+                </p>
+                <strong>{group.inviteCode}</strong>    
+                <button
+                    type="button"
+                    onClick={() => {
+                        navigator.clipboard.writeText(group.inviteCode);
+                    }}
+                    >
+                    Copy Invite Code
+                </button>
+            </section>
+        )}
+        <p>Owner: {group?.owner.fullName || "Unknown Owner"}</p>
       </header>
 
       <hr />
+        <section>
+            <h2>Rename Group</h2>
 
+            <input
+                type="text"
+                value={newGroupName || group?.name || ""}
+                onChange={(e) =>
+                setNewGroupName(e.target.value)
+                }
+            />
+
+            <button
+                onClick={handleRenameGroup}
+                disabled={isRenaming}
+            >
+                {isRenaming
+                ? "Renaming..."
+                : "Rename Group"}
+            </button>
+        </section>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {isLoadingGroup && <p>Loading group...</p>}

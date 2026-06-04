@@ -1346,6 +1346,13 @@ Frontend expense update:
 - Activity refreshes after expense creation and settlement creation.
 - Activity currently displays raw activityType values from backend.
 
+TODO:
+- Add user search endpoint and frontend search UI for adding members by name/email.
+- Current MVP uses invite code flow for joining groups.
+
+Implemented Join Group by Invite Code UI using POST /groups/join/:inviteCode.
+Chose invite-code flow because no user search endpoint exists yet.
+
 # Product Tradeoffs
 
 ## Group Ownership

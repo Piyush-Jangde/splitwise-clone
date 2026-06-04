@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import { createGroup, getMyGroups, joinGroup } from "../services/groupService";
+import { createGroup, getMyGroups, joinGroupByInviteCode } from "../services/groupService";
 import type { Group } from "../types/group";
 
 function Dashboard() {
@@ -17,6 +17,7 @@ function Dashboard() {
   const [isJoiningGroup, setIsJoiningGroup] = useState(false);
 
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     let ignore = false;
@@ -84,40 +85,41 @@ function Dashboard() {
     }
   }
 
-  async function handleJoinGroup(
-    event: React.SyntheticEvent<HTMLFormElement>
-    ) {
-        event.preventDefault();
+  async function handleJoinGroup(event: React.SyntheticEvent<HTMLFormElement>) {
+      event.preventDefault();
 
-        if (!inviteCode.trim()) {
-            setError("Invite code is required");
-            return;
+      if (!inviteCode.trim()) {
+        setError("Invite code is required");
+        setSuccessMessage("");
+        return;
+      }
+
+      setError("");
+      setSuccessMessage("");
+      setIsJoiningGroup(true);
+
+      try {
+        await joinGroupByInviteCode(inviteCode.trim());
+
+        const updatedGroups = await getMyGroups();
+
+        setGroups(updatedGroups.groups);
+        setInviteCode("");
+        setSuccessMessage("Group joined successfully");
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(
+            error.response?.data?.message ||
+              error.response?.data ||
+              "Failed to join group"
+          );
+        } else {
+          setError("Something went wrong");
         }
-
-        setError("");
-        setIsJoiningGroup(true);
-
-        try {
-            await joinGroup(inviteCode.trim());
-
-            const updatedGroups = await getMyGroups();
-
-            setGroups(updatedGroups.groups);
-            setInviteCode("");
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-            setError(
-                error.response?.data?.message ||
-                error.response?.data ||
-                "Failed to join group"
-            );
-            } else {
-            setError("Something went wrong");
-            }
-        } finally {
-            setIsJoiningGroup(false);
-        }
-    }
+      } finally {
+        setIsJoiningGroup(false);
+      }
+  }
 
   return (
     <div>
@@ -170,6 +172,9 @@ function Dashboard() {
         <h2>My Groups</h2>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
+        {successMessage && (
+          <p style={{ color: "green" }}>{successMessage}</p>
+        )}
 
         {isLoadingGroups && <p>Loading groups...</p>}
 
