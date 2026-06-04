@@ -1280,6 +1280,14 @@ Frontend foundation completed:
 - Added ProtectedRoute for authenticated pages.
 - Added initial routes for login, register, and dashboard.
 
+Frontend auth update:
+- Built Register page using TypeScript.
+- Created RegisterFormData interface for form state.
+- Connected register form to POST /api/auth/register.
+- On successful registration, frontend stores user and JWT using AuthContext login().
+- User is redirected to /dashboard after registration.
+- Added loading and error states for registration UX.
+
 # Product Tradeoffs
 
 ## Group Ownership
