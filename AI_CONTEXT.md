@@ -1318,6 +1318,12 @@ Frontend group detail update:
 - Dashboard group links now navigate to GroupDetail.
 - Empty expense state is shown when group has no expenses.
 
+Frontend group detail update:
+- Reworked GroupDetail page to fetch full group details from GET /api/groups/:id.
+- Added GroupDetailData and GroupMember TypeScript types.
+- GroupDetail now displays group name, invite code, owner, members, and expenses.
+- Removed separate expense state because expenses are now read from group.expenses.
+
 # Product Tradeoffs
 
 ## Group Ownership

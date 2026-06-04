@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { getGroupExpenses } from "../services/expenseService";
-import type { Expense } from "../types/expense";
+import { getGroupDetail } from "../services/groupService";
+import type { GroupDetailData } from "../types/groupDetail";
 
 function GroupDetail() {
   const { groupId } = useParams<{ groupId: string }>();
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [isLoadingExpenses, setIsLoadingExpenses] = useState(true);
+  const [group, setGroup] = useState<GroupDetailData | null>(null);
+  const [isLoadingGroup, setIsLoadingGroup] = useState(true);
   const [error, setError] = useState("");
 
   const isMissingGroupId = !groupId;
@@ -20,10 +20,10 @@ function GroupDetail() {
       return;
     }
 
-    getGroupExpenses(groupId)
+    getGroupDetail(groupId)
       .then((data) => {
         if (!ignore) {
-          setExpenses(data.expenses);
+          setGroup(data.group);
         }
       })
       .catch((error: unknown) => {
@@ -32,7 +32,7 @@ function GroupDetail() {
             setError(
               error.response?.data?.message ||
                 error.response?.data ||
-                "Failed to fetch group expenses"
+                "Failed to fetch group details"
             );
           } else {
             setError("Something went wrong");
@@ -41,7 +41,7 @@ function GroupDetail() {
       })
       .finally(() => {
         if (!ignore) {
-          setIsLoadingExpenses(false);
+          setIsLoadingGroup(false);
         }
       });
 
@@ -64,40 +64,62 @@ function GroupDetail() {
       <header>
         <Link to="/dashboard">← Back to Dashboard</Link>
 
-        <h1>Group Details</h1>
+        <h1>{group?.name || "Group Details"}</h1>
 
         <p>Group ID: {groupId}</p>
+        <p>Invite Code: {group?.inviteCode}</p>
+        <p>Owner: {group?.owner.fullName}</p>
       </header>
 
       <hr />
 
-      <section>
-        <h2>Expenses</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+      {isLoadingGroup && <p>Loading group...</p>}
 
-        {isLoadingExpenses && <p>Loading expenses...</p>}
+      {!isLoadingGroup && group && (
+        <>
+          <section>
+            <h2>Members</h2>
 
-        {!isLoadingExpenses && expenses.length === 0 && (
-          <p>No expenses yet for this group.</p>
-        )}
+            {group.members.length === 0 ? (
+              <p>No members found.</p>
+            ) : (
+              <ul>
+                {group.members.map((member) => (
+                  <li key={member.user.id}>
+                    {member.user.fullName} ({member.user.email})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
-        {!isLoadingExpenses && expenses.length > 0 && (
-          <ul>
-            {expenses.map((expense) => (
-              <li key={expense.id}>
-                <strong>{expense.description}</strong>
-                <br />
-                Amount: ₹{expense.amount}
-                <br />
-                Split Type: {expense.splitType}
-                <br />
-                Paid by: {expense.payer?.fullName || expense.payerId}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+          <hr />
+
+          <section>
+            <h2>Expenses</h2>
+
+            {group.expenses.length === 0 ? (
+              <p>No expenses yet for this group.</p>
+            ) : (
+              <ul>
+                {group.expenses.map((expense) => (
+                  <li key={expense.id}>
+                    <strong>{expense.description}</strong>
+                    <br />
+                    Amount: ₹{expense.amount}
+                    <br />
+                    Split Type: {expense.splitType}
+                    <br />
+                    Paid by: {expense.payer?.fullName || expense.payerId}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </>
+      )}
     </div>
   );
 }

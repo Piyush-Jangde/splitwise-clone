@@ -131,7 +131,24 @@ const getGroupById = asyncHandler(async (req, res) => {
           },
         },
       },
-      expenses: true,
+      expenses: {
+        include: {
+          payer: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+          creator: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      },
       settlements: true,
       activities: true,
     },
