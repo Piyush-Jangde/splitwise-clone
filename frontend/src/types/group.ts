@@ -17,3 +17,9 @@ export interface CreateGroupResponse {
   message: string;
   group: Group;
 }
+
+export interface JoinGroupResponse {
+  success: boolean;
+  message: string;
+  group: Group;
+}

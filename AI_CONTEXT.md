@@ -1304,6 +1304,12 @@ Frontend groups update:
 - Dashboard now shows current user's groups and invite codes.
 - Used type-safe Axios responses and unknown-based error handling.
 
+Frontend groups update:
+- Join group flow initially assumed POST /api/groups/join/:inviteCode returned a group object.
+- Actual backend response did not include data.group, causing a frontend crash.
+- Fixed by calling joinGroup() and then refetching GET /api/groups to refresh the dashboard group list.
+- This makes the frontend less dependent on join endpoint response shape.
+
 # Product Tradeoffs
 
 ## Group Ownership

@@ -16,3 +16,8 @@ export async function createGroup(name: string) {
 
   return response.data;
 }
+
+export async function joinGroup(inviteCode: string) {
+  const response = await api.post(`/groups/join/${inviteCode}`);
+  return response.data;
+}

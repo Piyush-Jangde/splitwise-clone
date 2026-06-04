@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import { createGroup, getMyGroups } from "../services/groupService";
+import { createGroup, getMyGroups, joinGroup } from "../services/groupService";
 import type { Group } from "../types/group";
 
 function Dashboard() {
@@ -11,7 +11,11 @@ function Dashboard() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [groupName, setGroupName] = useState("");
   const [isLoadingGroups, setIsLoadingGroups] = useState(true);
+
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+  const [inviteCode, setInviteCode] = useState("");
+  const [isJoiningGroup, setIsJoiningGroup] = useState(false);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -80,6 +84,41 @@ function Dashboard() {
     }
   }
 
+  async function handleJoinGroup(
+    event: React.SyntheticEvent<HTMLFormElement>
+    ) {
+        event.preventDefault();
+
+        if (!inviteCode.trim()) {
+            setError("Invite code is required");
+            return;
+        }
+
+        setError("");
+        setIsJoiningGroup(true);
+
+        try {
+            await joinGroup(inviteCode.trim());
+
+            const updatedGroups = await getMyGroups();
+
+            setGroups(updatedGroups.groups);
+            setInviteCode("");
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message ||
+                error.response?.data ||
+                "Failed to join group"
+            );
+            } else {
+            setError("Something went wrong");
+            }
+        } finally {
+            setIsJoiningGroup(false);
+        }
+    }
+
   return (
     <div>
       <header>
@@ -110,6 +149,22 @@ function Dashboard() {
       </section>
 
       <hr />
+
+      <section>
+        <h2>Join Group</h2>
+  
+        <form onSubmit={handleJoinGroup}>
+          <input
+          type="text"
+          placeholder="Enter invite code"
+          value={inviteCode}
+          onChange={(event) => setInviteCode(event.target.value)}
+          />
+          <button type="submit" disabled={isJoiningGroup}>
+          {isJoiningGroup ? "Joining..." : "Join Group"}
+          </button>
+        </form>
+      </section>
 
       <section>
         <h2>My Groups</h2>
