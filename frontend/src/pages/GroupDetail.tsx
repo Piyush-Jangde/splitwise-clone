@@ -317,6 +317,33 @@ function GroupDetail() {
     return member?.user.fullName ?? "Unknown User";
   }
 
+  function formatActivityType(activityType: string) {
+  switch (activityType) {
+    case "EXPENSE_CREATED":
+      return "added an expense";
+
+    case "SETTLEMENT_CREATED":
+      return "recorded a settlement";
+
+    case "GROUP_CREATED":
+      return "created the group";
+
+    case "GROUP_UPDATED":
+      return "updated the group";
+
+    case "MEMBER_ADDED":
+      return "added a member";
+
+    case "MEMBER_REMOVED":
+      return "removed a member";
+
+    default:
+      return activityType
+        .toLowerCase()
+        .replaceAll("_", " ");
+  }
+}
+
   if (!groupId) {
     return (
       <div>
@@ -571,7 +598,7 @@ function GroupDetail() {
 
                             {" - "}
 
-                            {activity.activityType}
+                            {formatActivityType(activity.activityType)}
 
                             {" - "}
 
