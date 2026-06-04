@@ -1296,6 +1296,14 @@ Frontend auth update:
 - User is redirected to /dashboard after login.
 - Used unknown instead of any for type-safe error handling.
 
+Frontend groups update:
+- Added group TypeScript types.
+- Added groupService.ts for group API functions.
+- Connected Dashboard to GET /api/groups.
+- Added create group form connected to POST /api/groups.
+- Dashboard now shows current user's groups and invite codes.
+- Used type-safe Axios responses and unknown-based error handling.
+
 # Product Tradeoffs
 
 ## Group Ownership
