@@ -3,9 +3,9 @@ import { AuthContext } from "../context/AuthContext";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-import { getGroupDetail, renameGroup, removeMember } from "../services/groupService";
+import { getGroupDetail, renameGroup, removeMember, deleteGroup } from "../services/groupService";
 import { createExpense } from "../services/expenseService";
 import { getGroupBalances } from "../services/balanceService";
 import { getGroupActivity } from "../services/activityService";
@@ -21,6 +21,8 @@ import SettlementForm from "../components/SettlementForm";
 function GroupDetail() {
   const auth = useContext(AuthContext);
   const user = auth?.user;
+
+  const navigate = useNavigate();
 
   const { groupId } = useParams<{ groupId: string }>();
 
@@ -178,6 +180,28 @@ function GroupDetail() {
         } finally {
           setIsRemovingMember(false);
         }
+  }
+
+  async function handleDeleteGroup() {
+    if (!groupId || !group) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete "${group.name}"? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteGroup(groupId);
+
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function refreshBalances() {
@@ -463,6 +487,14 @@ function GroupDetail() {
 
         <p>Group ID: {groupId}</p>
         <p>Invite Code: {group?.inviteCode}</p>
+        {group && user?.id === group.owner.id && (
+          <button
+            type="button"
+            onClick={handleDeleteGroup}
+          >
+            Delete Group
+          </button>
+        )}
         {group && (
             <section>
                 <h2>Invite Members</h2>

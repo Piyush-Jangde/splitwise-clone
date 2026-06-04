@@ -57,3 +57,13 @@ export async function removeMember(
 
   return response.data;
 }
+
+export async function deleteGroup(
+  groupId: string
+) {
+  const response = await api.delete(
+    `/groups/${groupId}`
+  );
+
+  return response.data;
+}
