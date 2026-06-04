@@ -40,3 +40,20 @@ export interface GetGroupExpensesResponse {
   success: boolean;
   expenses: Expense[];
 }
+
+export interface CreateExpensePayload {
+  description: string;
+  amount: number;
+  splitType: SplitType;
+  payerId: string;
+  groupId: string;
+  participants: {
+    userId: string;
+  }[];
+}
+
+export interface CreateExpenseResponse {
+  success: boolean;
+  message: string;
+  expense: Expense;
+}

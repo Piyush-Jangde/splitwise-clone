@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { getGroupDetail } from "../services/groupService";
 import type { GroupDetailData } from "../types/groupDetail";
+import { createExpense } from "../services/expenseService";
 
 function GroupDetail() {
   const { groupId } = useParams<{ groupId: string }>();
@@ -10,6 +11,13 @@ function GroupDetail() {
   const [group, setGroup] = useState<GroupDetailData | null>(null);
   const [isLoadingGroup, setIsLoadingGroup] = useState(true);
   const [error, setError] = useState("");
+
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [payerId, setPayerId] = useState("");
+  const [participantIds, setParticipantIds] = useState<string[]>([]);
+  const [isCreatingExpense, setIsCreatingExpense] = useState(false);
+
 
   const isMissingGroupId = !groupId;
 
@@ -59,6 +67,87 @@ function GroupDetail() {
     );
   }
 
+  function handleToggleParticipant(userId: string) {
+    setParticipantIds((previousIds) => {
+        if (previousIds.includes(userId)) {
+        return previousIds.filter((id) => id !== userId);
+        }
+
+        return [...previousIds, userId];
+    });
+  }
+
+  async function handleCreateEqualExpense(
+        event: React.SyntheticEvent<HTMLFormElement>
+        ) {
+        event.preventDefault();
+
+        if (!group || !groupId) {
+            setError("Group data is missing");
+            return;
+        }
+
+        const numericAmount = Number(amount);
+
+        if (!description.trim()) {
+            setError("Description is required");
+            return;
+        }
+
+        if (!numericAmount || numericAmount <= 0) {
+            setError("Amount must be greater than zero");
+            return;
+        }
+
+        if (!payerId) {
+            setError("Please select who paid");
+            return;
+        }
+
+        if (participantIds.length === 0) {
+            setError("Please select at least one participant");
+            return;
+        }
+
+        setError("");
+        setIsCreatingExpense(true);
+
+        try {
+            const data = await createExpense({
+            description: description.trim(),
+            amount: numericAmount,
+            splitType: "EQUAL",
+            payerId,
+            groupId,
+            participants: participantIds.map((userId) => ({
+                userId,
+            })),
+            });
+
+            setGroup({
+            ...group,
+            expenses: [data.expense, ...group.expenses],
+            });
+
+            setDescription("");
+            setAmount("");
+            setPayerId("");
+            setParticipantIds([]);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message ||
+                error.response?.data ||
+                "Failed to create expense"
+            );
+            } else {
+            setError("Something went wrong");
+            }
+        } finally {
+            setIsCreatingExpense(false);
+        }
+    }
+
   return (
     <div>
       <header>
@@ -96,6 +185,66 @@ function GroupDetail() {
           </section>
 
           <hr />
+
+        <section>
+            <h2>Create Equal Expense</h2>
+            <form onSubmit={handleCreateEqualExpense}>
+                <div>
+                    <label htmlFor="description">Description</label>
+                    <input
+                        id="description"
+                        type="text"
+                        value={description}
+                        onChange={(event) => setDescription(event.target.value)}
+                        placeholder="Dinner"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="amount">Amount</label>
+                    <input
+                        id="amount"
+                        type="number"
+                        value={amount}
+                        onChange={(event) => setAmount(event.target.value)}
+                        placeholder="1000"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="payerId">Paid By</label>
+                    <select
+                        id="payerId"
+                        value={payerId}
+                        onChange={(event) => setPayerId(event.target.value)}
+                    >
+                        <option value="">Select payer</option>
+                        {group.members.map((member) => (
+                        <option key={member.user.id} value={member.user.id}>
+                            {member.user.fullName}
+                        </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <p>Participants</p>
+
+                    {group.members.map((member) => (
+                        <label key={member.user.id} style={{ display: "block" }}>
+                        <input
+                            type="checkbox"
+                            checked={participantIds.includes(member.user.id)}
+                            onChange={() => handleToggleParticipant(member.user.id)}
+                        />
+                        {member.user.fullName}
+                        </label>
+                    ))}
+                </div>
+                <button type="submit" disabled={isCreatingExpense}>
+                {isCreatingExpense ? "Creating..." : "Create Expense"}
+                </button>
+            </form>
+        </section>
+
+<hr />
 
           <section>
             <h2>Expenses</h2>

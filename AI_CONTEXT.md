@@ -1324,6 +1324,12 @@ Frontend group detail update:
 - GroupDetail now displays group name, invite code, owner, members, and expenses.
 - Removed separate expense state because expenses are now read from group.expenses.
 
+Frontend expense update:
+- Added Create Equal Expense form inside GroupDetail.
+- Uses group.members for payer dropdown and participant checkboxes.
+- Connected to POST /api/expenses.
+- On success, new expense is added to group.expenses in local state.
+
 # Product Tradeoffs
 
 ## Group Ownership
