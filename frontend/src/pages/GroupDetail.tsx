@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+
 import { getGroupDetail } from "../services/groupService";
-import type { GroupDetailData } from "../types/groupDetail";
 import { createExpense } from "../services/expenseService";
+import { getGroupBalances } from "../services/balanceService"
+
+import type { GroupDetailData } from "../types/groupDetail";
+import type { SimplifiedBalance } from "../types/balance"
+
+
 
 function GroupDetail() {
   const { groupId } = useParams<{ groupId: string }>();
@@ -17,6 +23,9 @@ function GroupDetail() {
   const [payerId, setPayerId] = useState("");
   const [participantIds, setParticipantIds] = useState<string[]>([]);
   const [isCreatingExpense, setIsCreatingExpense] = useState(false);
+
+  const [balances, setBalances] = useState<SimplifiedBalance[]>([]);
+  const [isLoadingBalances, setIsLoadingBalances] = useState(true);
 
 
   const isMissingGroupId = !groupId;
@@ -56,6 +65,45 @@ function GroupDetail() {
     return () => {
       ignore = true;
     };
+  }, [groupId]);
+
+  useEffect(() => {
+        let ignore = false;
+
+        if (!groupId) {
+            return;
+        }
+
+        getGroupBalances(groupId)
+            .then((data) => {
+                console.log("BALANCE RESPONSE:", data);
+
+                if (!ignore) {
+                    setBalances(data.simplifiedBalances);
+                }
+            })
+            .catch((error: unknown) => {
+            if (!ignore) {
+                if (axios.isAxiosError(error)) {
+                setError(
+                    error.response?.data?.message ||
+                    error.response?.data ||
+                    "Failed to fetch balances"
+                );
+                } else {
+                setError("Something went wrong");
+                }
+            }
+            })
+            .finally(() => {
+            if (!ignore) {
+                setIsLoadingBalances(false);
+            }
+            });
+
+        return () => {
+            ignore = true;
+        };
   }, [groupId]);
 
   if (isMissingGroupId) {
@@ -128,6 +176,8 @@ function GroupDetail() {
             ...group,
             expenses: [data.expense, ...group.expenses],
             });
+               
+            await refreshBalances(groupId);
 
             setDescription("");
             setAmount("");
@@ -147,6 +197,31 @@ function GroupDetail() {
             setIsCreatingExpense(false);
         }
     }
+
+    async function refreshBalances(currentGroupId: string) {
+        try {
+            const data = await getGroupBalances(currentGroupId);
+            setBalances(data.simplifiedBalances);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message ||
+                error.response?.data ||
+                "Failed to refresh balances"
+            );
+            } else {
+            setError("Something went wrong");
+            }
+        }
+    }
+
+    function getMemberName(userId: string) {
+        const member = group?.members.find(
+            (member) => member.user.id === userId
+    );
+
+  return member?.user.fullName ?? "Unknown User";
+}
 
   return (
     <div>
@@ -242,6 +317,28 @@ function GroupDetail() {
                 {isCreatingExpense ? "Creating..." : "Create Expense"}
                 </button>
             </form>
+        </section>
+
+<hr />
+        <section>
+            <h2>Balances</h2>
+
+            {isLoadingBalances && <p>Loading balances...</p>}
+
+            {!isLoadingBalances && balances.length === 0 && (
+                <p>No balances yet. Everyone is settled up.</p>
+            )}
+
+            {!isLoadingBalances && balances.length > 0 && (
+                <ul>
+                {balances.map((balance) => (
+                    <li key={`${balance.debtorId}-${balance.creditorId}`}>
+                        {getMemberName(balance.debtorId)} owes{" "}
+                        {getMemberName(balance.creditorId)} ₹{balance.amount}
+                    </li>
+                ))}
+                </ul>
+            )}
         </section>
 
 <hr />
