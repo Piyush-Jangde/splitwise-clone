@@ -189,8 +189,41 @@ const rejectOwnershipTransfer = asyncHandler(async (req, res) => {
   });
 });
 
+const getPendingOwnershipTransfers = asyncHandler(async (req, res) => {
+  const transfers = await prisma.ownershipTransfer.findMany({
+    where: {
+      proposedOwnerId: req.user.id,
+      status: "PENDING",
+    },
+    include: {
+      group: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      currentOwner: {
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  res.json({
+    success: true,
+    transfers,
+  });
+});
+
 module.exports = {
     createOwnershipTransfer,
     acceptOwnershipTransfer,
-    rejectOwnershipTransfer
+    rejectOwnershipTransfer,
+    getPendingOwnershipTransfers,
 }

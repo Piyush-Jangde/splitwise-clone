@@ -6,11 +6,17 @@ const {
   createOwnershipTransfer,
   acceptOwnershipTransfer,
   rejectOwnershipTransfer,
+  getPendingOwnershipTransfers,
 } = require("../controllers/ownershipTransfer.controller");
 
 const router = express.Router();
 
 router.use(protect);
+
+router.get(
+  "/ownership-transfers/pending",
+  getPendingOwnershipTransfers
+);
 
 router.post(
   "/groups/:groupId/ownership-transfer",
