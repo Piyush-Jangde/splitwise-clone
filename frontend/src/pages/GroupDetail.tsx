@@ -4,18 +4,18 @@ import { Link, useParams } from "react-router-dom";
 
 import { getGroupDetail } from "../services/groupService";
 import { createExpense } from "../services/expenseService";
-import { getGroupBalances } from "../services/balanceService"
+import { getGroupBalances } from "../services/balanceService";
 
 import type { GroupDetailData } from "../types/groupDetail";
-import type { SimplifiedBalance } from "../types/balance"
+import type { SimplifiedBalance } from "../types/balance";
 
-
+import SettlementForm from "../components/SettlementForm";
 
 function GroupDetail() {
   const { groupId } = useParams<{ groupId: string }>();
 
   const [group, setGroup] = useState<GroupDetailData | null>(null);
-  const [isLoadingGroup, setIsLoadingGroup] = useState(true);
+  const [isLoadingGroup, setIsLoadingGroup] = useState(Boolean(groupId));
   const [error, setError] = useState("");
 
   const [description, setDescription] = useState("");
@@ -25,88 +25,176 @@ function GroupDetail() {
   const [isCreatingExpense, setIsCreatingExpense] = useState(false);
 
   const [balances, setBalances] = useState<SimplifiedBalance[]>([]);
-  const [isLoadingBalances, setIsLoadingBalances] = useState(true);
+  const [isLoadingBalances, setIsLoadingBalances] = useState(Boolean(groupId));
 
+ useEffect(() => {
+  let ignore = false;
 
-  const isMissingGroupId = !groupId;
+  if (!groupId) {
+    return;
+  }
 
-  useEffect(() => {
-    let ignore = false;
+  const currentGroupId=groupId;
 
+  async function loadGroupAndBalances() {
+    try {
+      setError("");
+
+      const [groupData, balanceData] = await Promise.all([
+        
+        getGroupDetail(currentGroupId),
+        getGroupBalances(currentGroupId),
+      ]);
+
+      if (!ignore) {
+        setGroup(groupData.group);
+        setBalances(balanceData.simplifiedBalances);
+      }
+    } catch (error: unknown) {
+      if (!ignore) {
+        if (axios.isAxiosError(error)) {
+          setError(
+            error.response?.data?.message ||
+              error.response?.data ||
+              "Failed to fetch group details"
+          );
+        } else {
+          setError("Something went wrong");
+        }
+      }
+    } finally {
+      if (!ignore) {
+        setIsLoadingGroup(false);
+        setIsLoadingBalances(false);
+      }
+    }
+  }
+
+  loadGroupAndBalances();
+
+  return () => {
+    ignore = true;
+  };
+}, [groupId]);
+
+  async function refreshBalances() {
     if (!groupId) {
       return;
     }
 
-    getGroupDetail(groupId)
-      .then((data) => {
-        if (!ignore) {
-          setGroup(data.group);
-        }
-      })
-      .catch((error: unknown) => {
-        if (!ignore) {
-          if (axios.isAxiosError(error)) {
-            setError(
-              error.response?.data?.message ||
-                error.response?.data ||
-                "Failed to fetch group details"
-            );
-          } else {
-            setError("Something went wrong");
-          }
-        }
-      })
-      .finally(() => {
-        if (!ignore) {
-          setIsLoadingGroup(false);
-        }
+    try {
+      setIsLoadingBalances(true);
+      setError("");
+
+      const data = await getGroupBalances(groupId);
+      setBalances(data.simplifiedBalances);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(
+          error.response?.data?.message ||
+            error.response?.data ||
+            "Failed to refresh balances"
+        );
+      } else {
+        setError("Something went wrong");
+      }
+    } finally {
+      setIsLoadingBalances(false);
+    }
+  }
+
+  function handleToggleParticipant(userId: string) {
+    setParticipantIds((previousIds) => {
+      if (previousIds.includes(userId)) {
+        return previousIds.filter((id) => id !== userId);
+      }
+
+      return [...previousIds, userId];
+    });
+  }
+
+  async function handleCreateEqualExpense(
+    event: React.SyntheticEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (!group || !groupId) {
+      setError("Group data is missing");
+      return;
+    }
+
+    const numericAmount = Number(amount);
+
+    if (!description.trim()) {
+      setError("Description is required");
+      return;
+    }
+
+    if (Number.isNaN(numericAmount) || numericAmount <= 0) {
+      setError("Amount must be greater than zero");
+      return;
+    }
+
+    if (!payerId) {
+      setError("Please select who paid");
+      return;
+    }
+
+    if (participantIds.length === 0) {
+      setError("Please select at least one participant");
+      return;
+    }
+
+    try {
+      setError("");
+      setIsCreatingExpense(true);
+
+      const data = await createExpense({
+        description: description.trim(),
+        amount: numericAmount,
+        splitType: "EQUAL",
+        payerId,
+        groupId,
+        participants: participantIds.map((userId) => ({
+          userId,
+        })),
       });
 
-    return () => {
-      ignore = true;
-    };
-  }, [groupId]);
+      setGroup({
+        ...group,
+        expenses: [data.expense, ...group.expenses],
+      });
 
-  useEffect(() => {
-        let ignore = false;
+      await refreshBalances();
 
-        if (!groupId) {
-            return;
-        }
+      setDescription("");
+      setAmount("");
+      setPayerId("");
+      setParticipantIds([]);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(
+          error.response?.data?.message ||
+            error.response?.data ||
+            "Failed to create expense"
+        );
+      } else {
+        setError("Something went wrong");
+      }
+    } finally {
+      setIsCreatingExpense(false);
+    }
+  }
 
-        getGroupBalances(groupId)
-            .then((data) => {
-                console.log("BALANCE RESPONSE:", data);
+  function getMemberName(userId: string) {
+    const member = group?.members.find(
+      (member) => member.user.id === userId
+    );
 
-                if (!ignore) {
-                    setBalances(data.simplifiedBalances);
-                }
-            })
-            .catch((error: unknown) => {
-            if (!ignore) {
-                if (axios.isAxiosError(error)) {
-                setError(
-                    error.response?.data?.message ||
-                    error.response?.data ||
-                    "Failed to fetch balances"
-                );
-                } else {
-                setError("Something went wrong");
-                }
-            }
-            })
-            .finally(() => {
-            if (!ignore) {
-                setIsLoadingBalances(false);
-            }
-            });
+    return member?.user.fullName ?? "Unknown User";
+  }
 
-        return () => {
-            ignore = true;
-        };
-  }, [groupId]);
-
-  if (isMissingGroupId) {
+  if (!groupId) {
     return (
       <div>
         <Link to="/dashboard">← Back to Dashboard</Link>
@@ -114,114 +202,6 @@ function GroupDetail() {
       </div>
     );
   }
-
-  function handleToggleParticipant(userId: string) {
-    setParticipantIds((previousIds) => {
-        if (previousIds.includes(userId)) {
-        return previousIds.filter((id) => id !== userId);
-        }
-
-        return [...previousIds, userId];
-    });
-  }
-
-  async function handleCreateEqualExpense(
-        event: React.SyntheticEvent<HTMLFormElement>
-        ) {
-        event.preventDefault();
-
-        if (!group || !groupId) {
-            setError("Group data is missing");
-            return;
-        }
-
-        const numericAmount = Number(amount);
-
-        if (!description.trim()) {
-            setError("Description is required");
-            return;
-        }
-
-        if (!numericAmount || numericAmount <= 0) {
-            setError("Amount must be greater than zero");
-            return;
-        }
-
-        if (!payerId) {
-            setError("Please select who paid");
-            return;
-        }
-
-        if (participantIds.length === 0) {
-            setError("Please select at least one participant");
-            return;
-        }
-
-        setError("");
-        setIsCreatingExpense(true);
-
-        try {
-            const data = await createExpense({
-            description: description.trim(),
-            amount: numericAmount,
-            splitType: "EQUAL",
-            payerId,
-            groupId,
-            participants: participantIds.map((userId) => ({
-                userId,
-            })),
-            });
-
-            setGroup({
-            ...group,
-            expenses: [data.expense, ...group.expenses],
-            });
-               
-            await refreshBalances(groupId);
-
-            setDescription("");
-            setAmount("");
-            setPayerId("");
-            setParticipantIds([]);
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-            setError(
-                error.response?.data?.message ||
-                error.response?.data ||
-                "Failed to create expense"
-            );
-            } else {
-            setError("Something went wrong");
-            }
-        } finally {
-            setIsCreatingExpense(false);
-        }
-    }
-
-    async function refreshBalances(currentGroupId: string) {
-        try {
-            const data = await getGroupBalances(currentGroupId);
-            setBalances(data.simplifiedBalances);
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-            setError(
-                error.response?.data?.message ||
-                error.response?.data ||
-                "Failed to refresh balances"
-            );
-            } else {
-            setError("Something went wrong");
-            }
-        }
-    }
-
-    function getMemberName(userId: string) {
-        const member = group?.members.find(
-            (member) => member.user.id === userId
-    );
-
-  return member?.user.fullName ?? "Unknown User";
-}
 
   return (
     <div>
@@ -261,87 +241,101 @@ function GroupDetail() {
 
           <hr />
 
-        <section>
+          <section>
             <h2>Create Equal Expense</h2>
+
             <form onSubmit={handleCreateEqualExpense}>
-                <div>
-                    <label htmlFor="description">Description</label>
-                    <input
-                        id="description"
-                        type="text"
-                        value={description}
-                        onChange={(event) => setDescription(event.target.value)}
-                        placeholder="Dinner"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="amount">Amount</label>
-                    <input
-                        id="amount"
-                        type="number"
-                        value={amount}
-                        onChange={(event) => setAmount(event.target.value)}
-                        placeholder="1000"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="payerId">Paid By</label>
-                    <select
-                        id="payerId"
-                        value={payerId}
-                        onChange={(event) => setPayerId(event.target.value)}
-                    >
-                        <option value="">Select payer</option>
-                        {group.members.map((member) => (
-                        <option key={member.user.id} value={member.user.id}>
-                            {member.user.fullName}
-                        </option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <p>Participants</p>
+              <div>
+                <label htmlFor="description">Description</label>
+                <input
+                  id="description"
+                  type="text"
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  placeholder="Dinner"
+                />
+              </div>
 
-                    {group.members.map((member) => (
-                        <label key={member.user.id} style={{ display: "block" }}>
-                        <input
-                            type="checkbox"
-                            checked={participantIds.includes(member.user.id)}
-                            onChange={() => handleToggleParticipant(member.user.id)}
-                        />
-                        {member.user.fullName}
-                        </label>
-                    ))}
-                </div>
-                <button type="submit" disabled={isCreatingExpense}>
+              <div>
+                <label htmlFor="amount">Amount</label>
+                <input
+                  id="amount"
+                  type="number"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
+                  placeholder="1000"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="payerId">Paid By</label>
+                <select
+                  id="payerId"
+                  value={payerId}
+                  onChange={(event) => setPayerId(event.target.value)}
+                >
+                  <option value="">Select payer</option>
+                  {group.members.map((member) => (
+                    <option key={member.user.id} value={member.user.id}>
+                      {member.user.fullName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <p>Participants</p>
+
+                {group.members.map((member) => (
+                  <label key={member.user.id} style={{ display: "block" }}>
+                    <input
+                      type="checkbox"
+                      checked={participantIds.includes(member.user.id)}
+                      onChange={() => handleToggleParticipant(member.user.id)}
+                    />
+                    {member.user.fullName}
+                  </label>
+                ))}
+              </div>
+
+              <button type="submit" disabled={isCreatingExpense}>
                 {isCreatingExpense ? "Creating..." : "Create Expense"}
-                </button>
+              </button>
             </form>
-        </section>
+          </section>
 
-<hr />
-        <section>
+          <hr />
+
+          <section>
             <h2>Balances</h2>
 
             {isLoadingBalances && <p>Loading balances...</p>}
 
             {!isLoadingBalances && balances.length === 0 && (
-                <p>No balances yet. Everyone is settled up.</p>
+              <p>No balances yet. Everyone is settled up.</p>
             )}
 
             {!isLoadingBalances && balances.length > 0 && (
-                <ul>
+              <ul>
                 {balances.map((balance) => (
-                    <li key={`${balance.debtorId}-${balance.creditorId}`}>
-                        {getMemberName(balance.debtorId)} owes{" "}
-                        {getMemberName(balance.creditorId)} ₹{balance.amount}
-                    </li>
+                  <li key={`${balance.debtorId}-${balance.creditorId}`}>
+                    {getMemberName(balance.debtorId)} owes{" "}
+                    {getMemberName(balance.creditorId)} ₹{balance.amount}
+                  </li>
                 ))}
-                </ul>
+              </ul>
             )}
-        </section>
+          </section>
 
-<hr />
+          <hr />
+
+          <SettlementForm
+            groupId={groupId}
+            members={group.members}
+            onSettlementCreated={refreshBalances}
+          />
+
+          <hr />
 
           <section>
             <h2>Expenses</h2>

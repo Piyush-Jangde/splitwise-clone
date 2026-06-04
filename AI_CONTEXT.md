@@ -1330,6 +1330,11 @@ Frontend expense update:
 - Connected to POST /api/expenses.
 - On success, new expense is added to group.expenses in local state.
 
+- Frontend Settlement Form completed.
+- Users can record payments between group members.
+- Balances refresh after successful settlement without page reload.
+- Frontend validates empty fields, same payer/receiver, and invalid amount.
+
 # Product Tradeoffs
 
 ## Group Ownership
