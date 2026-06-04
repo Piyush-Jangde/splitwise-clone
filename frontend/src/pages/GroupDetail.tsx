@@ -8,6 +8,7 @@ import { getGroupBalances } from "../services/balanceService";
 
 import type { GroupDetailData } from "../types/groupDetail";
 import type { SimplifiedBalance } from "../types/balance";
+import type { SplitType } from "../types/expense"
 
 import SettlementForm from "../components/SettlementForm";
 
@@ -23,6 +24,9 @@ function GroupDetail() {
   const [payerId, setPayerId] = useState("");
   const [participantIds, setParticipantIds] = useState<string[]>([]);
   const [isCreatingExpense, setIsCreatingExpense] = useState(false);
+
+  const [splitType, setSplitType] = useState<SplitType>("EQUAL");
+  const [unequalAmounts, setUnequalAmounts] = useState<Record<string, string>>({});
 
   const [balances, setBalances] = useState<SimplifiedBalance[]>([]);
   const [isLoadingBalances, setIsLoadingBalances] = useState(Boolean(groupId));
@@ -53,6 +57,8 @@ function GroupDetail() {
     } catch (error: unknown) {
       if (!ignore) {
         if (axios.isAxiosError(error)) {
+            console.log("EXPENSE ERROR:", error.response?.data);
+
           setError(
             error.response?.data?.message ||
               error.response?.data ||
@@ -124,6 +130,20 @@ function GroupDetail() {
     }
 
     const numericAmount = Number(amount);
+    if (splitType === "UNEQUAL") {
+    const unequalTotal = participantIds.reduce(
+        (sum, userId) =>
+        sum + Number(unequalAmounts[userId] || 0),
+        0
+    );
+
+    if (unequalTotal !== numericAmount) {
+        setError(
+        `Unequal amounts must total ₹${numericAmount}`
+        );
+        return;
+    }
+    }
 
     if (!description.trim()) {
       setError("Description is required");
@@ -148,16 +168,33 @@ function GroupDetail() {
     try {
       setError("");
       setIsCreatingExpense(true);
-
+        console.log("EXPENSE PAYLOAD:", {
+            description: description.trim(),
+            amount: numericAmount,
+            splitType,
+            payerId,
+            groupId,
+            participants: participantIds.map((userId) => ({
+                userId,
+                amount:
+                splitType === "UNEQUAL"
+                    ? Number(unequalAmounts[userId])
+                    : undefined,
+            })),
+        });
       const data = await createExpense({
         description: description.trim(),
         amount: numericAmount,
-        splitType: "EQUAL",
+        splitType,
         payerId,
         groupId,
         participants: participantIds.map((userId) => ({
-          userId,
-        })),
+        userId,
+        amountOwed:
+            splitType === "UNEQUAL"
+            ? Number(unequalAmounts[userId])
+            : undefined,
+})),
       });
 
       setGroup({
@@ -171,6 +208,8 @@ function GroupDetail() {
       setAmount("");
       setPayerId("");
       setParticipantIds([]);
+      setSplitType("EQUAL");
+      setUnequalAmounts({});
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setError(
@@ -242,9 +281,22 @@ function GroupDetail() {
           <hr />
 
           <section>
-            <h2>Create Equal Expense</h2>
+            <h2>Create Expense</h2>
 
             <form onSubmit={handleCreateEqualExpense}>
+                <div>
+                    <label>Split Type</label>
+
+                    <select
+                        value={splitType}
+                        onChange={(e) => setSplitType(e.target.value as SplitType)}
+                    >
+                        <option value="EQUAL">Equal</option>
+                        <option value="UNEQUAL">Unequal</option>
+                        <option value="PERCENTAGE">Percentage</option>
+                        <option value="SHARE">Share</option>
+                    </select>
+                </div>
               <div>
                 <label htmlFor="description">Description</label>
                 <input
@@ -297,7 +349,34 @@ function GroupDetail() {
                   </label>
                 ))}
               </div>
+                {splitType === "UNEQUAL" && (
+                    <div>
+                        <h3>Unequal Split Amounts</h3>
 
+                        {participantIds.map((userId) => {
+                        const member = group.members.find(
+                            (m) => m.user.id === userId
+                        );
+
+                        return (
+                            <div key={userId}>
+                            <label>{member?.user.fullName}</label>
+
+                            <input
+                                type="number"
+                                value={unequalAmounts[userId] || ""}
+                                onChange={(e) =>
+                                setUnequalAmounts((prev) => ({
+                                    ...prev,
+                                    [userId]: e.target.value,
+                                }))
+                                }
+                            />
+                            </div>
+                        );
+                        })}
+                    </div>
+                    )}
               <button type="submit" disabled={isCreatingExpense}>
                 {isCreatingExpense ? "Creating..." : "Create Expense"}
               </button>

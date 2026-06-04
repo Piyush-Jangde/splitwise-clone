@@ -49,6 +49,7 @@ export interface CreateExpensePayload {
   groupId: string;
   participants: {
     userId: string;
+    amountOwed?: number;
   }[];
 }
 
