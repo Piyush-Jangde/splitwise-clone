@@ -1310,6 +1310,14 @@ Frontend groups update:
 - Fixed by calling joinGroup() and then refetching GET /api/groups to refresh the dashboard group list.
 - This makes the frontend less dependent on join endpoint response shape.
 
+Frontend group detail update:
+- Added Expense and ExpenseParticipant TypeScript types.
+- Added expenseService.ts with getGroupExpenses(groupId).
+- Added protected GroupDetail page at /groups/:groupId.
+- GroupDetail fetches expenses using GET /api/groups/:id/expenses.
+- Dashboard group links now navigate to GroupDetail.
+- Empty expense state is shown when group has no expenses.
+
 # Product Tradeoffs
 
 ## Group Ownership

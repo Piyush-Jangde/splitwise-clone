@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import GroupDetail from "./pages/GroupDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -18,6 +19,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/groups/:groupId"
+        element={
+          <ProtectedRoute>
+            <GroupDetail />
           </ProtectedRoute>
         }
       />
