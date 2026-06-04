@@ -1353,6 +1353,20 @@ TODO:
 Implemented Join Group by Invite Code UI using POST /groups/join/:inviteCode.
 Chose invite-code flow because no user search endpoint exists yet.
 
+Implemented member removal UI.
+
+Authorization:
+- Only group owner sees Remove button.
+- Owner cannot remove themselves.
+
+Frontend refreshes:
+- Group details
+- Balances
+- Activity feed
+
+Backend endpoint:
+DELETE /groups/:id/members/:userId
+
 # Product Tradeoffs
 
 ## Group Ownership

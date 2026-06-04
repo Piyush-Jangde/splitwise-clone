@@ -46,3 +46,14 @@ export async function renameGroup(
 
   return response.data;
 }
+
+export async function removeMember(
+  groupId: string,
+  userId: string
+) {
+  const response = await api.delete(
+    `/groups/${groupId}/members/${userId}`
+  );
+
+  return response.data;
+}

@@ -1,8 +1,11 @@
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
-import { getGroupDetail, renameGroup } from "../services/groupService";
+import { getGroupDetail, renameGroup, removeMember } from "../services/groupService";
 import { createExpense } from "../services/expenseService";
 import { getGroupBalances } from "../services/balanceService";
 import { getGroupActivity } from "../services/activityService";
@@ -16,6 +19,9 @@ import type { Activity } from "../types/activity";
 import SettlementForm from "../components/SettlementForm";
 
 function GroupDetail() {
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
+
   const { groupId } = useParams<{ groupId: string }>();
 
   const [group, setGroup] = useState<GroupDetailData | null>(null);
@@ -41,6 +47,8 @@ function GroupDetail() {
 
   const [newGroupName, setNewGroupName] = useState("");
   const [isRenaming, setIsRenaming] = useState(false);
+
+  const [isRemovingMember, setIsRemovingMember] = useState(false);
 
  useEffect(() => {
   let ignore = false;
@@ -98,7 +106,7 @@ function GroupDetail() {
   };
 }, [groupId]);
 
-    async function handleRenameGroup() {
+  async function handleRenameGroup() {
         if (!groupId || !group) {
             return;
         }
@@ -139,8 +147,38 @@ function GroupDetail() {
             console.error(error);
         } finally {
             setIsRenaming(false);
+          }
+  }
+
+  async function handleRemoveMember(
+        userId: string
+      ) {
+        if (!groupId || !group) {
+          return;
         }
-    }
+
+        const confirmed = window.confirm(
+          "Remove this member from the group?"
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        try {
+          setIsRemovingMember(true);
+
+          await removeMember(groupId, userId);
+
+          await refreshGroup();
+          await refreshBalances();
+          await refreshActivities();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsRemovingMember(false);
+        }
+  }
 
   async function refreshBalances() {
     if (!groupId) {
@@ -184,7 +222,20 @@ function GroupDetail() {
     } finally {
         setIsLoadingActivities(false);
     }
+  }
+
+  async function refreshGroup() {
+    if (!groupId) {
+      return;
     }
+
+    try {
+      const data = await getGroupDetail(groupId);
+      setGroup(data.group);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   function handleToggleParticipant(userId: string) {
     setParticipantIds((previousIds) => {
@@ -468,7 +519,24 @@ function GroupDetail() {
               <ul>
                 {group.members.map((member) => (
                   <li key={member.user.id}>
-                    {member.user.fullName} ({member.user.email})
+                    {member.user.fullName}
+                    ({member.user.email})
+
+                    {group.owner.id === member.user.id ? (
+                          <span> (Owner)</span>
+                        ) : (
+                          user?.id === group.owner.id && (
+                            <button
+                              type="button"
+                              disabled={isRemovingMember}
+                              onClick={() =>
+                                handleRemoveMember(member.user.id)
+                              }
+                            >
+                              Remove
+                            </button>
+                          )
+                        )}
                   </li>
                 ))}
               </ul>
