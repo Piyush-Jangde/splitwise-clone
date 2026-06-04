@@ -27,6 +27,7 @@ function GroupDetail() {
 
   const [splitType, setSplitType] = useState<SplitType>("EQUAL");
   const [unequalAmounts, setUnequalAmounts] = useState<Record<string, string>>({});
+  const [percentageSplits, setPercentageSplits] = useState<Record<string, string>>({});
 
   const [balances, setBalances] = useState<SimplifiedBalance[]>([]);
   const [isLoadingBalances, setIsLoadingBalances] = useState(Boolean(groupId));
@@ -145,6 +146,19 @@ function GroupDetail() {
     }
     }
 
+    if (splitType === "PERCENTAGE") {
+        const percentageTotal = participantIds.reduce(
+            (sum, userId) =>
+            sum + Number(percentageSplits[userId] || 0),
+            0
+        );
+
+        if (percentageTotal !== 100) {
+            setError("Percentage splits must add up to 100");
+            return;
+        }
+    }
+
     if (!description.trim()) {
       setError("Description is required");
       return;
@@ -177,10 +191,33 @@ function GroupDetail() {
             participants: participantIds.map((userId) => ({
                 userId,
                 amount:
-                splitType === "UNEQUAL"
-                    ? Number(unequalAmounts[userId])
-                    : undefined,
+                    splitType === "UNEQUAL"
+                        ? Number(unequalAmounts[userId])
+                        : undefined,
+                percentage:
+                    splitType === "PERCENTAGE"
+                        ? Number(percentageSplits[userId])
+                        : undefined,
             })),
+        });
+        const participantsPayload = participantIds.map((userId) => {
+            if (splitType === "UNEQUAL") {
+                return {
+                userId,
+                amountOwed: Number(unequalAmounts[userId]),
+                };
+            }
+
+            if (splitType === "PERCENTAGE") {
+                return {
+                userId,
+                percentage: Number(percentageSplits[userId]),
+                };
+            }
+
+            return {
+                userId,
+            };
         });
       const data = await createExpense({
         description: description.trim(),
@@ -188,13 +225,7 @@ function GroupDetail() {
         splitType,
         payerId,
         groupId,
-        participants: participantIds.map((userId) => ({
-        userId,
-        amountOwed:
-            splitType === "UNEQUAL"
-            ? Number(unequalAmounts[userId])
-            : undefined,
-})),
+        participants: participantsPayload,
       });
 
       setGroup({
@@ -210,6 +241,7 @@ function GroupDetail() {
       setParticipantIds([]);
       setSplitType("EQUAL");
       setUnequalAmounts({});
+      setPercentageSplits({});
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setError(
@@ -371,6 +403,35 @@ function GroupDetail() {
                                     [userId]: e.target.value,
                                 }))
                                 }
+                            />
+                            </div>
+                        );
+                        })}
+                    </div>
+                    )}
+                {splitType === "PERCENTAGE" && (
+                    <div>
+                        <h3>Percentage Split</h3>
+
+                        {participantIds.map((userId) => {
+                        const member = group.members.find(
+                            (member) => member.user.id === userId
+                        );
+
+                        return (
+                            <div key={userId}>
+                            <label>{member?.user.fullName}</label>
+
+                            <input
+                                type="number"
+                                value={percentageSplits[userId] || ""}
+                                onChange={(event) =>
+                                setPercentageSplits((previous) => ({
+                                    ...previous,
+                                    [userId]: event.target.value,
+                                }))
+                                }
+                                placeholder="Percentage"
                             />
                             </div>
                         );

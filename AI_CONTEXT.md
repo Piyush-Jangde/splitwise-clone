@@ -1335,6 +1335,12 @@ Frontend expense update:
 - Balances refresh after successful settlement without page reload.
 - Frontend validates empty fields, same payer/receiver, and invalid amount.
 
+- Frontend Unequal Split completed.
+- Added split type dropdown.
+- Added per-participant amountOwed inputs.
+- Frontend validates that unequal split amounts equal total expense amount.
+- Payload now sends amountOwed per participant for UNEQUAL split.
+
 # Product Tradeoffs
 
 ## Group Ownership

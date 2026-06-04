@@ -50,6 +50,7 @@ export interface CreateExpensePayload {
   participants: {
     userId: string;
     amountOwed?: number;
+    percentage?: number;
   }[];
 }
 
