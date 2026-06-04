@@ -9,6 +9,7 @@ import { getGroupDetail, renameGroup, removeMember, deleteGroup } from "../servi
 import { createExpense } from "../services/expenseService";
 import { getGroupBalances } from "../services/balanceService";
 import { getGroupActivity } from "../services/activityService";
+import { createOwnershipTransfer } from "../services/ownershipTransferService"
 
 
 import type { GroupDetailData } from "../types/groupDetail";
@@ -51,6 +52,9 @@ function GroupDetail() {
   const [isRenaming, setIsRenaming] = useState(false);
 
   const [isRemovingMember, setIsRemovingMember] = useState(false);
+
+  const [selectedOwnerId, setSelectedOwnerId] = useState("");
+  const [isTransferringOwnership, setIsTransferringOwnership] = useState(false);
 
  useEffect(() => {
   let ignore = false;
@@ -201,6 +205,36 @@ function GroupDetail() {
       navigate("/");
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async function handleOwnershipTransfer() {
+    if (
+      !groupId ||
+      !selectedOwnerId
+    ) {
+      return;
+    }
+
+    try {
+      setIsTransferringOwnership(true);
+
+      await createOwnershipTransfer(
+        groupId,
+        selectedOwnerId
+      );
+
+      alert(
+        "Ownership transfer request sent"
+      );
+
+      setSelectedOwnerId("");
+
+      await refreshActivities();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsTransferringOwnership(false);
     }
   }
 
@@ -479,360 +513,667 @@ function GroupDetail() {
 
 
   return (
-    <div>
-      <header>
-        <Link to="/dashboard">← Back to Dashboard</Link>
-
-        <h1>{group?.name || "Group Details"}</h1>
-
-        <p>Group ID: {groupId}</p>
-        <p>Invite Code: {group?.inviteCode}</p>
-        {group && user?.id === group.owner.id && (
-          <button
-            type="button"
-            onClick={handleDeleteGroup}
+    <div className="min-h-screen bg-linear-to-br from-teal-50 via-indigo-50 to-amber-50 px-4 py-6">
+      <div className="mx-auto max-w-6xl space-y-6">
+        {/* Header */}
+        <header className="rounded-3xl bg-linear-to-r from-teal-600 via-cyan-600 to-indigo-600 p-6 text-white shadow-lg">
+          <Link
+            to="/dashboard"
+            className="text-sm font-medium text-cyan-100 hover:text-white"
           >
-            Delete Group
-          </button>
-        )}
-        {group && (
-            <section>
-                <h2>Invite Members</h2>
-                <p>
-                    Share this invite code with another user so they can join this group:
-                </p>
-                <strong>{group.inviteCode}</strong>    
-                <button
-                    type="button"
-                    onClick={() => {
-                        navigator.clipboard.writeText(group.inviteCode);
-                    }}
-                    >
-                    Copy Invite Code
-                </button>
-            </section>
-        )}
-        <p>Owner: {group?.owner.fullName || "Unknown Owner"}</p>
-      </header>
+            ← Back to Dashboard
+          </Link>
+          {/* Group Details */}
+          <h1 className="mt-4 text-3xl font-bold">
+            {group?.name || "Group Details"}
+          </h1>
 
-      <hr />
-        <section>
-            <h2>Rename Group</h2>
+          <p className="mt-2 text-cyan-50">
+            Group ID: {groupId}
+          </p>
 
-            <input
-                type="text"
-                value={newGroupName || group?.name || ""}
-                onChange={(e) =>
-                setNewGroupName(e.target.value)
-                }
-            />
+          <p className="text-cyan-50">
+            Invite Code: {group?.inviteCode}
+          </p>
 
+          <p className="text-cyan-50">
+            Owner: {group?.owner.fullName || "Unknown Owner"}
+          </p>
+
+          {group && user?.id === group.owner.id && (
             <button
-                onClick={handleRenameGroup}
-                disabled={isRenaming}
+              type="button"
+              onClick={handleDeleteGroup}
+              className="mt-4 rounded-xl bg-rose-600 px-4 py-2 font-medium text-white hover:bg-rose-700"
             >
-                {isRenaming
-                ? "Renaming..."
-                : "Rename Group"}
+              Delete Group
+            </button> 
+          )}
+
+          {group && (
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-semibold text-slate-900">Invite Members</h2>
+              <p>
+                  Share this invite code with another user so they can join this group:
+              </p>
+              <span className="rounded-full bg-indigo-100 px-3 py-1 font-medium text-indigo-700">
+                {group.inviteCode}
+              </span>   
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(group.inviteCode);
+                }}
+                className="ml-3 rounded-xl bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+              >
+                Copy Invite Code
+              </button>
+            </section>
+          )}
+          
+        </header>
+
+        {/* Rename Group */}
+        <section className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold text-slate-900">
+            Rename Group
+          </h2>
+          <div className="mb-5 rounded-2xl border border-teal-200 bg-linear-to-r from-teal-50 to-cyan-50 p-4">
+            <p className="text-sm font-medium text-slate-500">
+              Current Group Name
+            </p>
+            <h3 className="mt-1 text-xl font-bold text-teal-700">
+              {group?.name}
+            </h3>
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <input
+              type="text"
+              value={newGroupName || ""}
+              placeholder="Enter new group name"
+              onChange={(e) => setNewGroupName(e.target.value)}
+              className="flex-1 rounded-xl border border-slate-300 px-4 py-2 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+            />
+            <button
+              type="button"
+              onClick={handleRenameGroup}
+              disabled={isRenaming}
+              className="rounded-xl bg-teal-600 px-5 py-2 font-medium text-white shadow-sm transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isRenaming ? "Renaming..." : "Rename Group"}
             </button>
+          </div>
         </section>
-      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {isLoadingGroup && <p>Loading group...</p>}
+        {/* Transfer Ownership */}
+        {group && user?.id === group.owner.id && (
+          <section className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold text-slate-900">
+              Transfer Ownership
+            </h2>
 
-      {!isLoadingGroup && group && (
-        <>
-          <section>
-            <h2>Members</h2>
+            <div className="mb-5 rounded-2xl border border-indigo-200 bg-linear-to-r from-indigo-50 to-cyan-50 p-4">
+              <p className="text-sm font-medium text-slate-500">
+                Current Owner
+              </p>
 
-            {group.members.length === 0 ? (
-              <p>No members found.</p>
-            ) : (
-              <ul>
-                {group.members.map((member) => (
-                  <li key={member.user.id}>
-                    {member.user.fullName}
-                    ({member.user.email})
+              <h3 className="mt-1 text-xl font-bold text-indigo-700">
+                {group.owner.fullName}
+              </h3>
+            </div>
 
-                    {group.owner.id === member.user.id ? (
-                          <span> (Owner)</span>
+            <div className="flex flex-col gap-3 md:flex-row">
+              <select
+                value={selectedOwnerId}
+                onChange={(e) => setSelectedOwnerId(e.target.value)}
+                className="flex-1 rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              >
+                <option value="">Select new owner</option>
+
+                {group.members
+                  .filter((member) => member.user.id !== group.owner.id)
+                  .map((member) => (
+                    <option key={member.user.id} value={member.user.id}>
+                      {member.user.fullName}
+                    </option>
+                  ))}
+              </select>
+
+              <button
+                type="button"
+                disabled={!selectedOwnerId || isTransferringOwnership}
+                onClick={handleOwnershipTransfer}
+                className="rounded-xl bg-indigo-600 px-5 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isTransferringOwnership ? "Sending..." : "Transfer Ownership"}
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* Error */}
+        {error && (
+          <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+            {error}
+          </p>
+        )}
+
+        {/* Loading Group */}
+        {isLoadingGroup && <p>Loading group...</p>}
+
+        {/* Group Information Loaded */}
+        {!isLoadingGroup && group && (
+          <>
+            {/* Members List */}
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-teal-600">
+                    Group People
+                  </p>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Members
+                  </h2>
+                </div>
+
+                <span className="rounded-full bg-teal-100 px-3 py-1 text-sm font-medium text-teal-700">
+                  {group.members.length} members
+                </span>
+              </div>
+
+              {group.members.length === 0 ? (
+                <p className="rounded-2xl border border-dashed border-slate-300 p-6 text-center text-slate-600">
+                  No members found.
+                </p>
+              ) : (
+                <ul className="grid gap-4 md:grid-cols-2">
+                  {group.members.map((member) => (
+                    <li
+                      key={member.user.id}
+                      className="rounded-2xl border border-slate-200 bg-linear-to-br from-white to-slate-50 p-4"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="font-semibold text-slate-900">
+                            {member.user.fullName}
+                          </p>
+                          <p className="mt-1 text-sm text-slate-500">
+                            {member.user.email}
+                          </p>
+                        </div>
+
+                        {group.owner.id === member.user.id ? (
+                          <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
+                            Owner
+                          </span>
                         ) : (
                           user?.id === group.owner.id && (
                             <button
                               type="button"
                               disabled={isRemovingMember}
-                              onClick={() =>
-                                handleRemoveMember(member.user.id)
-                              }
+                              onClick={() => handleRemoveMember(member.user.id)}
+                              className="rounded-xl bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                               Remove
                             </button>
                           )
                         )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-
-          <hr />
-
-          <section>
-            <h2>Create Expense</h2>
-
-            <form onSubmit={handleCreateEqualExpense}>
-                <div>
-                    <label>Split Type</label>
-
-                    <select
-                        value={splitType}
-                        onChange={(e) => setSplitType(e.target.value as SplitType)}
-                    >
-                        <option value="EQUAL">Equal</option>
-                        <option value="UNEQUAL">Unequal</option>
-                        <option value="PERCENTAGE">Percentage</option>
-                        <option value="SHARE">Share</option>
-                    </select>
-                </div>
-              <div>
-                <label htmlFor="description">Description</label>
-                <input
-                  id="description"
-                  type="text"
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  placeholder="Dinner"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="amount">Amount</label>
-                <input
-                  id="amount"
-                  type="number"
-                  value={amount}
-                  onChange={(event) => setAmount(event.target.value)}
-                  placeholder="1000"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="payerId">Paid By</label>
-                <select
-                  id="payerId"
-                  value={payerId}
-                  onChange={(event) => setPayerId(event.target.value)}
-                >
-                  <option value="">Select payer</option>
-                  {group.members.map((member) => (
-                    <option key={member.user.id} value={member.user.id}>
-                      {member.user.fullName}
-                    </option>
+                      </div>
+                    </li>
                   ))}
-                </select>
+                </ul>
+              )}
+            </section>
+            
+            {/* Create Expense */}
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+  <div className="mb-5">
+    <p className="text-sm font-medium text-amber-600">
+      Add a shared cost
+    </p>
+    <h2 className="text-xl font-semibold text-slate-900">
+      Create Expense
+    </h2>
+  </div>
+
+  <form onSubmit={handleCreateEqualExpense} className="space-y-5">
+    <div className="grid gap-4 md:grid-cols-2">
+      {/* Split Type */}
+      <div>
+        <label className="text-sm font-medium text-slate-700">
+          Split Type
+        </label>
+        <select
+          value={splitType}
+          onChange={(e) => setSplitType(e.target.value as SplitType)}
+          className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+        >
+          <option value="EQUAL">Equal</option>
+          <option value="UNEQUAL">Unequal</option>
+          <option value="PERCENTAGE">Percentage</option>
+          <option value="SHARE">Share</option>
+        </select>
+      </div>
+
+      {/* Expense Description */}
+      <div>
+        <label
+          htmlFor="description"
+          className="text-sm font-medium text-slate-700"
+        >
+          Description
+        </label>
+        <input
+          id="description"
+          type="text"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Dinner"
+          className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+        />
+      </div>
+
+      {/* Amount */}
+      <div>
+        <label
+          htmlFor="amount"
+          className="text-sm font-medium text-slate-700"
+        >
+          Amount
+        </label>
+        <input
+          id="amount"
+          type="number"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+          placeholder="1000"
+          className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+        />
+      </div>
+
+      {/* Payer Details */}
+      <div>
+        <label
+          htmlFor="payerId"
+          className="text-sm font-medium text-slate-700"
+        >
+          Paid By
+        </label>
+        <select
+          id="payerId"
+          value={payerId}
+          onChange={(event) => setPayerId(event.target.value)}
+          className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+        >
+          <option value="">Select payer</option>
+          {group.members.map((member) => (
+            <option key={member.user.id} value={member.user.id}>
+              {member.user.fullName}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    {/* Participants */}
+    <div>
+      <p className="mb-3 text-sm font-medium text-slate-700">
+        Participants
+      </p>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {group.members.map((member) => (
+          <label
+            key={member.user.id}
+            className="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50"
+          >
+            <input
+              type="checkbox"
+              checked={participantIds.includes(member.user.id)}
+              onChange={() => handleToggleParticipant(member.user.id)}
+              className="h-4 w-4 accent-amber-600"
+            />
+            <span className="font-medium text-slate-700">
+              {member.user.fullName}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    {/* Unequal Split */}
+    {splitType === "UNEQUAL" && (
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+        <h3 className="mb-3 font-semibold text-amber-800">
+          Unequal Split Amounts
+        </h3>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          {participantIds.map((userId) => {
+            const member = group.members.find((m) => m.user.id === userId);
+
+            return (
+              <div key={userId}>
+                <label className="text-sm font-medium text-slate-700">
+                  {member?.user.fullName}
+                </label>
+                <input
+                  type="number"
+                  value={unequalAmounts[userId] || ""}
+                  onChange={(e) =>
+                    setUnequalAmounts((prev) => ({
+                      ...prev,
+                      [userId]: e.target.value,
+                    }))
+                  }
+                  className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                />
               </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
 
-              <div>
-                <p>Participants</p>
+    {/* Percentage Split */}
+    {splitType === "PERCENTAGE" && (
+      <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+        <h3 className="mb-3 font-semibold text-indigo-800">
+          Percentage Split
+        </h3>
 
-                {group.members.map((member) => (
-                  <label key={member.user.id} style={{ display: "block" }}>
-                    <input
-                      type="checkbox"
-                      checked={participantIds.includes(member.user.id)}
-                      onChange={() => handleToggleParticipant(member.user.id)}
-                    />
-                    {member.user.fullName}
-                  </label>
-                ))}
+        <div className="grid gap-3 md:grid-cols-2">
+          {participantIds.map((userId) => {
+            const member = group.members.find(
+              (member) => member.user.id === userId
+            );
+
+            return (
+              <div key={userId}>
+                <label className="text-sm font-medium text-slate-700">
+                  {member?.user.fullName}
+                </label>
+
+                <input
+                  type="number"
+                  value={percentageSplits[userId] || ""}
+                  onChange={(event) =>
+                    setPercentageSplits((previous) => ({
+                      ...previous,
+                      [userId]: event.target.value,
+                    }))
+                  }
+                  placeholder="Percentage"
+                  className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                />
               </div>
-                {splitType === "UNEQUAL" && (
-                    <div>
-                        <h3>Unequal Split Amounts</h3>
+            );
+          })}
+        </div>
+      </div>
+    )}
 
-                        {participantIds.map((userId) => {
-                        const member = group.members.find(
-                            (m) => m.user.id === userId
-                        );
+    {/* Share Split */}
+    {splitType === "SHARE" && (
+      <div className="rounded-2xl border border-teal-200 bg-teal-50 p-4">
+        <h3 className="mb-3 font-semibold text-teal-800">
+          Share Split
+        </h3>
 
-                        return (
-                            <div key={userId}>
-                            <label>{member?.user.fullName}</label>
+        <div className="grid gap-3 md:grid-cols-2">
+          {participantIds.map((userId) => {
+            const member = group.members.find(
+              (member) => member.user.id === userId
+            );
 
-                            <input
-                                type="number"
-                                value={unequalAmounts[userId] || ""}
-                                onChange={(e) =>
-                                setUnequalAmounts((prev) => ({
-                                    ...prev,
-                                    [userId]: e.target.value,
-                                }))
-                                }
-                            />
-                            </div>
-                        );
-                        })}
-                    </div>
-                    )}
-                {splitType === "PERCENTAGE" && (
-                    <div>
-                        <h3>Percentage Split</h3>
+            return (
+              <div key={userId}>
+                <label className="text-sm font-medium text-slate-700">
+                  {member?.user.fullName}
+                </label>
 
-                        {participantIds.map((userId) => {
-                        const member = group.members.find(
-                            (member) => member.user.id === userId
-                        );
+                <input
+                  type="number"
+                  value={shareSplits[userId] || ""}
+                  onChange={(event) =>
+                    setShareSplits((previous) => ({
+                      ...previous,
+                      [userId]: event.target.value,
+                    }))
+                  }
+                  placeholder="Shares"
+                  className="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
 
-                        return (
-                            <div key={userId}>
-                            <label>{member?.user.fullName}</label>
-
-                            <input
-                                type="number"
-                                value={percentageSplits[userId] || ""}
-                                onChange={(event) =>
-                                setPercentageSplits((previous) => ({
-                                    ...previous,
-                                    [userId]: event.target.value,
-                                }))
-                                }
-                                placeholder="Percentage"
-                            />
-                            </div>
-                        );
-                        })}
-                    </div>
-                    )}
-                {splitType === "SHARE" && (
-                    <div>
-                        <h3>Share Split</h3>
-
-                        {participantIds.map((userId) => {
-                        const member = group.members.find(
-                            (member) => member.user.id === userId
-                        );
-
-                        return (
-                            <div key={userId}>
-                            <label>{member?.user.fullName}</label>
-
-                            <input
-                                type="number"
-                                value={shareSplits[userId] || ""}
-                                onChange={(event) =>
-                                setShareSplits((previous) => ({
-                                    ...previous,
-                                    [userId]: event.target.value,
-                                }))
-                                }
-                                placeholder="Shares"
-                            />
-                            </div>
-                        );
-                        })}
-                    </div>
-                    )}
-              <button type="submit" disabled={isCreatingExpense}>
-                {isCreatingExpense ? "Creating..." : "Create Expense"}
-              </button>
-            </form>
-          </section>
-
-          <hr />
-
-          <section>
-            <h2>Balances</h2>
-
-            {isLoadingBalances && <p>Loading balances...</p>}
-
-            {!isLoadingBalances && balances.length === 0 && (
-              <p>No balances yet. Everyone is settled up.</p>
-            )}
-
-            {!isLoadingBalances && balances.length > 0 && (
-              <ul>
-                {balances.map((balance) => (
-                  <li key={`${balance.debtorId}-${balance.creditorId}`}>
-                    {getMemberName(balance.debtorId)} owes{" "}
-                    {getMemberName(balance.creditorId)} ₹{balance.amount}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-
-            <section>
-                <h2>Activity</h2>
-
-                {isLoadingActivities && (
-                    <p>Loading activity...</p>
-                )}
-
-                {!isLoadingActivities &&
-                    activities.length === 0 && (
-                    <p>No activity yet.</p>
-                    )}
-
-                {!isLoadingActivities &&
-                    activities.length > 0 && (
-                    <ul>
-                        {activities.map((activity) => (
-                        <li key={activity.id}>
-                            <strong>
-                            {activity.actor.fullName}
-                            </strong>
-
-                            {" - "}
-
-                            {formatActivityType(activity.activityType)}
-
-                            {" - "}
-
-                            {new Date(
-                            activity.createdAt
-                            ).toLocaleString()}
-                        </li>
-                        ))}
-                    </ul>
-                    )}
+    <button
+      type="submit"
+      disabled={isCreatingExpense}
+      className="w-full rounded-xl bg-amber-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+    >
+      {isCreatingExpense ? "Creating..." : "Create Expense"}
+    </button>
+  </form>
             </section>
 
-          <hr />
+            {/* Balances */}
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-teal-600">
+                    Who owes whom
+                  </p>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Balances
+                  </h2>
+                </div>
 
-          <SettlementForm
-            groupId={groupId}
-            members={group.members}
-            onSettlementCreated={async ()=>{
-                await refreshBalances;
-                await refreshActivities;
-            }}
-          />
+                <span className="rounded-full bg-teal-100 px-3 py-1 text-sm font-medium text-teal-700">
+                  {balances.length} active
+                </span>
+              </div>
 
-          <hr />
+              {isLoadingBalances && (
+                <p className="rounded-2xl border border-dashed border-slate-300 p-6 text-center text-slate-600">
+                  Loading balances...
+                </p>
+              )}
 
-          <section>
-            <h2>Expenses</h2>
+              {!isLoadingBalances && balances.length === 0 && (
+                <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-center">
+                  <p className="text-lg font-semibold text-teal-700">
+                    Everyone is settled up
+                  </p>
+                  <p className="mt-1 text-sm text-teal-600">
+                    No one owes anything in this group right now.
+                  </p>
+                </div>
+              )}
 
-            {group.expenses.length === 0 ? (
-              <p>No expenses yet for this group.</p>
-            ) : (
-              <ul>
-                {group.expenses.map((expense) => (
-                  <li key={expense.id}>
-                    <strong>{expense.description}</strong>
-                    <br />
-                    Amount: ₹{expense.amount}
-                    <br />
-                    Split Type: {expense.splitType}
-                    <br />
-                    Paid by: {expense.payer?.fullName || expense.payerId}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        </>
-      )}
+              {!isLoadingBalances && balances.length > 0 && (
+                <ul className="space-y-3">
+                  {balances.map((balance) => (
+                    <li
+                      key={`${balance.debtorId}-${balance.creditorId}`}
+                      className="rounded-2xl border border-slate-200 bg-linear-to-r from-white to-teal-50 p-4"
+                    >
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="text-slate-700">
+                          <span className="font-semibold text-rose-600">
+                            {getMemberName(balance.debtorId)}
+                          </span>{" "}
+                          owes{" "}
+                          <span className="font-semibold text-teal-700">
+                            {getMemberName(balance.creditorId)}
+                          </span>
+                        </p>
+
+                        <span className="rounded-full bg-white px-4 py-1 text-lg font-bold text-slate-900 shadow-sm">
+                          ₹{balance.amount}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            {/* Activity */}
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-indigo-600">
+                    Timeline
+                  </p>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Activity Feed
+                  </h2>
+                </div>
+
+                <span className="rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
+                  {activities.length} events
+                </span>
+              </div>
+
+              {isLoadingActivities && (
+                <p className="rounded-2xl border border-dashed border-slate-300 p-6 text-center text-slate-600">
+                  Loading activity...
+                </p>
+              )}
+
+              {!isLoadingActivities && activities.length === 0 && (
+                <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-6 text-center">
+                  <p className="font-semibold text-indigo-700">
+                    No activity yet
+                  </p>
+
+                  <p className="mt-1 text-sm text-indigo-600">
+                    Activity will appear here when members interact with the group.
+                  </p>
+                </div>
+              )}
+
+              {!isLoadingActivities && activities.length > 0 && (
+                <ul className="space-y-4">
+                  {activities.map((activity) => (
+                    <li
+                      key={activity.id}
+                      className="rounded-2xl border border-slate-200 bg-linear-to-r from-white to-indigo-50 p-4"
+                    >
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <p className="text-slate-800">
+                            <span className="font-semibold text-indigo-700">
+                              {activity.actor.fullName}
+                            </span>
+
+                            <span className="mx-2 text-slate-400">
+                              •
+                            </span>
+
+                            {formatActivityType(
+                              activity.activityType
+                            )}
+                          </p>
+                        </div>
+
+                        <span className="text-sm text-slate-500">
+                          {new Date(
+                            activity.createdAt
+                          ).toLocaleString()}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            {/* Settlement */}
+            <SettlementForm
+              groupId={groupId}
+              members={group.members}
+              onSettlementCreated={async ()=>{
+                  await refreshBalances();
+                  await refreshActivities();
+              }}
+            />
+
+            {/* Expenses */}
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-amber-600">
+                    Spending History
+                  </p>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Expenses
+                  </h2>
+                </div>
+
+                <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700">
+                  {group.expenses.length} expenses
+                </span>
+              </div>
+
+              {group.expenses.length === 0 ? (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
+                  <p className="font-semibold text-amber-700">
+                    No expenses yet
+                  </p>
+
+                  <p className="mt-1 text-sm text-amber-600">
+                    Create your first expense to start tracking shared costs.
+                  </p>
+                </div>
+              ) : (
+                <ul className="space-y-4">
+                  {group.expenses.map((expense) => (
+                    <li
+                      key={expense.id}
+                      className="rounded-2xl border border-slate-200 bg-linear-to-r from-white to-amber-50 p-5"
+                    >
+                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                        <div>
+                          <h3 className="text-lg font-semibold text-slate-900">
+                            {expense.description}
+                          </h3>
+
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+                              {expense.splitType}
+                            </span>
+
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                              Paid by{" "}
+                              {expense.payer?.fullName || expense.payerId}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="text-left md:text-right">
+                          <p className="text-sm text-slate-500">
+                            Amount
+                          </p>
+
+                          <p className="text-2xl font-bold text-amber-700">
+                            ₹{expense.amount}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </>
+        )}
+      </div>
     </div>
   );
 }

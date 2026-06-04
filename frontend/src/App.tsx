@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import GroupDetail from "./pages/GroupDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import OwnershipTransfers from "./pages/OwnershipTransfers";
 
 function App() {
   return (
@@ -28,6 +29,15 @@ function App() {
         element={
           <ProtectedRoute>
             <GroupDetail />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ownership-transfers"
+        element={
+          <ProtectedRoute>
+            <OwnershipTransfers />
           </ProtectedRoute>
         }
       />
