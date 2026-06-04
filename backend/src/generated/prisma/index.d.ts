@@ -97,10 +97,10 @@ export const ActivityType: {
   SETTLEMENT_CREATED: 'SETTLEMENT_CREATED',
   MEMBER_ADDED: 'MEMBER_ADDED',
   MEMBER_REMOVED: 'MEMBER_REMOVED',
-  GROUP_CREATED: 'GROUP_CREATED',
   GROUP_RENAMED: 'GROUP_RENAMED',
   OWNERSHIP_TRANSFERRED: 'OWNERSHIP_TRANSFERRED',
-  GROUP_DELETED: 'GROUP_DELETED'
+  GROUP_DELETED: 'GROUP_DELETED',
+  GROUP_CREATED: 'GROUP_CREATED'
 };
 
 export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
@@ -1658,33 +1658,33 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    ownedGroups: number
-    groupMemberships: number
+    activities: number
     createdExpenses: number
     paidExpenses: number
     expenseParticipations: number
-    settlementsPaid: number
-    settlementsReceived: number
-    activities: number
     friendshipsAsUser1: number
     friendshipsAsUser2: number
+    ownedGroups: number
+    groupMemberships: number
     ownershipTransfersStarted: number
     ownershipTransfersReceived: number
+    settlementsPaid: number
+    settlementsReceived: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    ownedGroups?: boolean | UserCountOutputTypeCountOwnedGroupsArgs
-    groupMemberships?: boolean | UserCountOutputTypeCountGroupMembershipsArgs
+    activities?: boolean | UserCountOutputTypeCountActivitiesArgs
     createdExpenses?: boolean | UserCountOutputTypeCountCreatedExpensesArgs
     paidExpenses?: boolean | UserCountOutputTypeCountPaidExpensesArgs
     expenseParticipations?: boolean | UserCountOutputTypeCountExpenseParticipationsArgs
-    settlementsPaid?: boolean | UserCountOutputTypeCountSettlementsPaidArgs
-    settlementsReceived?: boolean | UserCountOutputTypeCountSettlementsReceivedArgs
-    activities?: boolean | UserCountOutputTypeCountActivitiesArgs
     friendshipsAsUser1?: boolean | UserCountOutputTypeCountFriendshipsAsUser1Args
     friendshipsAsUser2?: boolean | UserCountOutputTypeCountFriendshipsAsUser2Args
+    ownedGroups?: boolean | UserCountOutputTypeCountOwnedGroupsArgs
+    groupMemberships?: boolean | UserCountOutputTypeCountGroupMembershipsArgs
     ownershipTransfersStarted?: boolean | UserCountOutputTypeCountOwnershipTransfersStartedArgs
     ownershipTransfersReceived?: boolean | UserCountOutputTypeCountOwnershipTransfersReceivedArgs
+    settlementsPaid?: boolean | UserCountOutputTypeCountSettlementsPaidArgs
+    settlementsReceived?: boolean | UserCountOutputTypeCountSettlementsReceivedArgs
   }
 
   // Custom InputTypes
@@ -1701,15 +1701,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountOwnedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountGroupMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupMemberWhereInput
+  export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityWhereInput
   }
 
   /**
@@ -1736,27 +1729,6 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSettlementsPaidArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SettlementWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountSettlementsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SettlementWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountFriendshipsAsUser1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FriendshipWhereInput
   }
@@ -1766,6 +1738,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFriendshipsAsUser2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FriendshipWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOwnedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GroupWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountGroupMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GroupMemberWhereInput
   }
 
   /**
@@ -1782,25 +1768,39 @@ export namespace Prisma {
     where?: OwnershipTransferWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSettlementsPaidArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SettlementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSettlementsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SettlementWhereInput
+  }
+
 
   /**
    * Count Type GroupCountOutputType
    */
 
   export type GroupCountOutputType = {
-    members: number
-    expenses: number
-    settlements: number
     activities: number
+    expenses: number
+    members: number
     ownershipTransfers: number
+    settlements: number
   }
 
   export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    members?: boolean | GroupCountOutputTypeCountMembersArgs
-    expenses?: boolean | GroupCountOutputTypeCountExpensesArgs
-    settlements?: boolean | GroupCountOutputTypeCountSettlementsArgs
     activities?: boolean | GroupCountOutputTypeCountActivitiesArgs
+    expenses?: boolean | GroupCountOutputTypeCountExpensesArgs
+    members?: boolean | GroupCountOutputTypeCountMembersArgs
     ownershipTransfers?: boolean | GroupCountOutputTypeCountOwnershipTransfersArgs
+    settlements?: boolean | GroupCountOutputTypeCountSettlementsArgs
   }
 
   // Custom InputTypes
@@ -1817,8 +1817,8 @@ export namespace Prisma {
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupMemberWhereInput
+  export type GroupCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityWhereInput
   }
 
   /**
@@ -1831,15 +1831,8 @@ export namespace Prisma {
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountSettlementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SettlementWhereInput
-  }
-
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityWhereInput
+  export type GroupCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GroupMemberWhereInput
   }
 
   /**
@@ -1847,6 +1840,13 @@ export namespace Prisma {
    */
   export type GroupCountOutputTypeCountOwnershipTransfersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OwnershipTransferWhereInput
+  }
+
+  /**
+   * GroupCountOutputType without action
+   */
+  export type GroupCountOutputTypeCountSettlementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SettlementWhereInput
   }
 
 
@@ -1904,9 +1904,9 @@ export namespace Prisma {
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider | null
     passwordHash: string | null
-    googleId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    googleId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1918,9 +1918,9 @@ export namespace Prisma {
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider | null
     passwordHash: string | null
-    googleId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    googleId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1932,9 +1932,9 @@ export namespace Prisma {
     profilePhotoUrl: number
     authProvider: number
     passwordHash: number
-    googleId: number
     createdAt: number
     updatedAt: number
+    googleId: number
     _all: number
   }
 
@@ -1948,9 +1948,9 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
-    googleId?: true
     createdAt?: true
     updatedAt?: true
+    googleId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1962,9 +1962,9 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
-    googleId?: true
     createdAt?: true
     updatedAt?: true
+    googleId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1976,9 +1976,9 @@ export namespace Prisma {
     profilePhotoUrl?: true
     authProvider?: true
     passwordHash?: true
-    googleId?: true
     createdAt?: true
     updatedAt?: true
+    googleId?: true
     _all?: true
   }
 
@@ -2063,9 +2063,9 @@ export namespace Prisma {
     profilePhotoUrl: string | null
     authProvider: $Enums.AuthProvider
     passwordHash: string | null
-    googleId: string | null
     createdAt: Date
     updatedAt: Date
+    googleId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2094,21 +2094,21 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
-    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
-    groupMemberships?: boolean | User$groupMembershipsArgs<ExtArgs>
+    googleId?: boolean
+    activities?: boolean | User$activitiesArgs<ExtArgs>
     createdExpenses?: boolean | User$createdExpensesArgs<ExtArgs>
     paidExpenses?: boolean | User$paidExpensesArgs<ExtArgs>
     expenseParticipations?: boolean | User$expenseParticipationsArgs<ExtArgs>
-    settlementsPaid?: boolean | User$settlementsPaidArgs<ExtArgs>
-    settlementsReceived?: boolean | User$settlementsReceivedArgs<ExtArgs>
-    activities?: boolean | User$activitiesArgs<ExtArgs>
     friendshipsAsUser1?: boolean | User$friendshipsAsUser1Args<ExtArgs>
     friendshipsAsUser2?: boolean | User$friendshipsAsUser2Args<ExtArgs>
+    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
+    groupMemberships?: boolean | User$groupMembershipsArgs<ExtArgs>
     ownershipTransfersStarted?: boolean | User$ownershipTransfersStartedArgs<ExtArgs>
     ownershipTransfersReceived?: boolean | User$ownershipTransfersReceivedArgs<ExtArgs>
+    settlementsPaid?: boolean | User$settlementsPaidArgs<ExtArgs>
+    settlementsReceived?: boolean | User$settlementsReceivedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2121,9 +2121,9 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
-    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2135,9 +2135,9 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
-    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2149,25 +2149,25 @@ export namespace Prisma {
     profilePhotoUrl?: boolean
     authProvider?: boolean
     passwordHash?: boolean
-    googleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    googleId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phoneNumber" | "username" | "profilePhotoUrl" | "authProvider" | "passwordHash" | "googleId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phoneNumber" | "username" | "profilePhotoUrl" | "authProvider" | "passwordHash" | "createdAt" | "updatedAt" | "googleId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
-    groupMemberships?: boolean | User$groupMembershipsArgs<ExtArgs>
+    activities?: boolean | User$activitiesArgs<ExtArgs>
     createdExpenses?: boolean | User$createdExpensesArgs<ExtArgs>
     paidExpenses?: boolean | User$paidExpensesArgs<ExtArgs>
     expenseParticipations?: boolean | User$expenseParticipationsArgs<ExtArgs>
-    settlementsPaid?: boolean | User$settlementsPaidArgs<ExtArgs>
-    settlementsReceived?: boolean | User$settlementsReceivedArgs<ExtArgs>
-    activities?: boolean | User$activitiesArgs<ExtArgs>
     friendshipsAsUser1?: boolean | User$friendshipsAsUser1Args<ExtArgs>
     friendshipsAsUser2?: boolean | User$friendshipsAsUser2Args<ExtArgs>
+    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
+    groupMemberships?: boolean | User$groupMembershipsArgs<ExtArgs>
     ownershipTransfersStarted?: boolean | User$ownershipTransfersStartedArgs<ExtArgs>
     ownershipTransfersReceived?: boolean | User$ownershipTransfersReceivedArgs<ExtArgs>
+    settlementsPaid?: boolean | User$settlementsPaidArgs<ExtArgs>
+    settlementsReceived?: boolean | User$settlementsReceivedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2176,18 +2176,18 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      ownedGroups: Prisma.$GroupPayload<ExtArgs>[]
-      groupMemberships: Prisma.$GroupMemberPayload<ExtArgs>[]
+      activities: Prisma.$ActivityPayload<ExtArgs>[]
       createdExpenses: Prisma.$ExpensePayload<ExtArgs>[]
       paidExpenses: Prisma.$ExpensePayload<ExtArgs>[]
       expenseParticipations: Prisma.$ExpenseParticipantPayload<ExtArgs>[]
-      settlementsPaid: Prisma.$SettlementPayload<ExtArgs>[]
-      settlementsReceived: Prisma.$SettlementPayload<ExtArgs>[]
-      activities: Prisma.$ActivityPayload<ExtArgs>[]
       friendshipsAsUser1: Prisma.$FriendshipPayload<ExtArgs>[]
       friendshipsAsUser2: Prisma.$FriendshipPayload<ExtArgs>[]
+      ownedGroups: Prisma.$GroupPayload<ExtArgs>[]
+      groupMemberships: Prisma.$GroupMemberPayload<ExtArgs>[]
       ownershipTransfersStarted: Prisma.$OwnershipTransferPayload<ExtArgs>[]
       ownershipTransfersReceived: Prisma.$OwnershipTransferPayload<ExtArgs>[]
+      settlementsPaid: Prisma.$SettlementPayload<ExtArgs>[]
+      settlementsReceived: Prisma.$SettlementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2198,9 +2198,9 @@ export namespace Prisma {
       profilePhotoUrl: string | null
       authProvider: $Enums.AuthProvider
       passwordHash: string | null
-      googleId: string | null
       createdAt: Date
       updatedAt: Date
+      googleId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2595,18 +2595,18 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    ownedGroups<T extends User$ownedGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    groupMemberships<T extends User$groupMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    activities<T extends User$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdExpenses<T extends User$createdExpensesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paidExpenses<T extends User$paidExpensesArgs<ExtArgs> = {}>(args?: Subset<T, User$paidExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     expenseParticipations<T extends User$expenseParticipationsArgs<ExtArgs> = {}>(args?: Subset<T, User$expenseParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    settlementsPaid<T extends User$settlementsPaidArgs<ExtArgs> = {}>(args?: Subset<T, User$settlementsPaidArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    settlementsReceived<T extends User$settlementsReceivedArgs<ExtArgs> = {}>(args?: Subset<T, User$settlementsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    activities<T extends User$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     friendshipsAsUser1<T extends User$friendshipsAsUser1Args<ExtArgs> = {}>(args?: Subset<T, User$friendshipsAsUser1Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     friendshipsAsUser2<T extends User$friendshipsAsUser2Args<ExtArgs> = {}>(args?: Subset<T, User$friendshipsAsUser2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ownedGroups<T extends User$ownedGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    groupMemberships<T extends User$groupMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ownershipTransfersStarted<T extends User$ownershipTransfersStartedArgs<ExtArgs> = {}>(args?: Subset<T, User$ownershipTransfersStartedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OwnershipTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ownershipTransfersReceived<T extends User$ownershipTransfersReceivedArgs<ExtArgs> = {}>(args?: Subset<T, User$ownershipTransfersReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OwnershipTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    settlementsPaid<T extends User$settlementsPaidArgs<ExtArgs> = {}>(args?: Subset<T, User$settlementsPaidArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    settlementsReceived<T extends User$settlementsReceivedArgs<ExtArgs> = {}>(args?: Subset<T, User$settlementsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2644,9 +2644,9 @@ export namespace Prisma {
     readonly profilePhotoUrl: FieldRef<"User", 'String'>
     readonly authProvider: FieldRef<"User", 'AuthProvider'>
     readonly passwordHash: FieldRef<"User", 'String'>
-    readonly googleId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly googleId: FieldRef<"User", 'String'>
   }
     
 
@@ -3040,51 +3040,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.ownedGroups
+   * User.activities
    */
-  export type User$ownedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Group
+     * Select specific fields to fetch from the Activity
      */
-    select?: GroupSelect<ExtArgs> | null
+    select?: ActivitySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Group
+     * Omit specific fields from the Activity
      */
-    omit?: GroupOmit<ExtArgs> | null
+    omit?: ActivityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupInclude<ExtArgs> | null
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    cursor?: GroupWhereUniqueInput
+    include?: ActivityInclude<ExtArgs> | null
+    where?: ActivityWhereInput
+    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
+    cursor?: ActivityWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
-   * User.groupMemberships
-   */
-  export type User$groupMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the GroupMember
-     */
-    select?: GroupMemberSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the GroupMember
-     */
-    omit?: GroupMemberOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupMemberInclude<ExtArgs> | null
-    where?: GroupMemberWhereInput
-    orderBy?: GroupMemberOrderByWithRelationInput | GroupMemberOrderByWithRelationInput[]
-    cursor?: GroupMemberWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GroupMemberScalarFieldEnum | GroupMemberScalarFieldEnum[]
+    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
   }
 
   /**
@@ -3160,78 +3136,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.settlementsPaid
-   */
-  export type User$settlementsPaidArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Settlement
-     */
-    select?: SettlementSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Settlement
-     */
-    omit?: SettlementOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SettlementInclude<ExtArgs> | null
-    where?: SettlementWhereInput
-    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
-    cursor?: SettlementWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
-  }
-
-  /**
-   * User.settlementsReceived
-   */
-  export type User$settlementsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Settlement
-     */
-    select?: SettlementSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Settlement
-     */
-    omit?: SettlementOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SettlementInclude<ExtArgs> | null
-    where?: SettlementWhereInput
-    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
-    cursor?: SettlementWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
-  }
-
-  /**
-   * User.activities
-   */
-  export type User$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    where?: ActivityWhereInput
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    cursor?: ActivityWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
-  }
-
-  /**
    * User.friendshipsAsUser1
    */
   export type User$friendshipsAsUser1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3280,6 +3184,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.ownedGroups
+   */
+  export type User$ownedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Group
+     */
+    select?: GroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Group
+     */
+    omit?: GroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GroupInclude<ExtArgs> | null
+    where?: GroupWhereInput
+    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
+    cursor?: GroupWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
+  }
+
+  /**
+   * User.groupMemberships
+   */
+  export type User$groupMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GroupMember
+     */
+    select?: GroupMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GroupMember
+     */
+    omit?: GroupMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GroupMemberInclude<ExtArgs> | null
+    where?: GroupMemberWhereInput
+    orderBy?: GroupMemberOrderByWithRelationInput | GroupMemberOrderByWithRelationInput[]
+    cursor?: GroupMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GroupMemberScalarFieldEnum | GroupMemberScalarFieldEnum[]
+  }
+
+  /**
    * User.ownershipTransfersStarted
    */
   export type User$ownershipTransfersStartedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3325,6 +3277,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OwnershipTransferScalarFieldEnum | OwnershipTransferScalarFieldEnum[]
+  }
+
+  /**
+   * User.settlementsPaid
+   */
+  export type User$settlementsPaidArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Settlement
+     */
+    select?: SettlementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Settlement
+     */
+    omit?: SettlementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettlementInclude<ExtArgs> | null
+    where?: SettlementWhereInput
+    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
+    cursor?: SettlementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
+  }
+
+  /**
+   * User.settlementsReceived
+   */
+  export type User$settlementsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Settlement
+     */
+    select?: SettlementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Settlement
+     */
+    omit?: SettlementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettlementInclude<ExtArgs> | null
+    where?: SettlementWhereInput
+    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
+    cursor?: SettlementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
   }
 
   /**
@@ -4576,12 +4576,12 @@ export namespace Prisma {
     inviteCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    activities?: boolean | Group$activitiesArgs<ExtArgs>
+    expenses?: boolean | Group$expensesArgs<ExtArgs>
     owner?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Group$membersArgs<ExtArgs>
-    expenses?: boolean | Group$expensesArgs<ExtArgs>
-    settlements?: boolean | Group$settlementsArgs<ExtArgs>
-    activities?: boolean | Group$activitiesArgs<ExtArgs>
     ownershipTransfers?: boolean | Group$ownershipTransfersArgs<ExtArgs>
+    settlements?: boolean | Group$settlementsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -4616,12 +4616,12 @@ export namespace Prisma {
 
   export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "ownerId" | "inviteCode" | "createdAt" | "updatedAt", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activities?: boolean | Group$activitiesArgs<ExtArgs>
+    expenses?: boolean | Group$expensesArgs<ExtArgs>
     owner?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Group$membersArgs<ExtArgs>
-    expenses?: boolean | Group$expensesArgs<ExtArgs>
-    settlements?: boolean | Group$settlementsArgs<ExtArgs>
-    activities?: boolean | Group$activitiesArgs<ExtArgs>
     ownershipTransfers?: boolean | Group$ownershipTransfersArgs<ExtArgs>
+    settlements?: boolean | Group$settlementsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4634,12 +4634,12 @@ export namespace Prisma {
   export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Group"
     objects: {
+      activities: Prisma.$ActivityPayload<ExtArgs>[]
+      expenses: Prisma.$ExpensePayload<ExtArgs>[]
       owner: Prisma.$UserPayload<ExtArgs>
       members: Prisma.$GroupMemberPayload<ExtArgs>[]
-      expenses: Prisma.$ExpensePayload<ExtArgs>[]
-      settlements: Prisma.$SettlementPayload<ExtArgs>[]
-      activities: Prisma.$ActivityPayload<ExtArgs>[]
       ownershipTransfers: Prisma.$OwnershipTransferPayload<ExtArgs>[]
+      settlements: Prisma.$SettlementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5042,12 +5042,12 @@ export namespace Prisma {
    */
   export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    activities<T extends Group$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, Group$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    expenses<T extends Group$expensesArgs<ExtArgs> = {}>(args?: Subset<T, Group$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     members<T extends Group$membersArgs<ExtArgs> = {}>(args?: Subset<T, Group$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    expenses<T extends Group$expensesArgs<ExtArgs> = {}>(args?: Subset<T, Group$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    settlements<T extends Group$settlementsArgs<ExtArgs> = {}>(args?: Subset<T, Group$settlementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    activities<T extends Group$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, Group$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ownershipTransfers<T extends Group$ownershipTransfersArgs<ExtArgs> = {}>(args?: Subset<T, Group$ownershipTransfersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OwnershipTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    settlements<T extends Group$settlementsArgs<ExtArgs> = {}>(args?: Subset<T, Group$settlementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5484,27 +5484,27 @@ export namespace Prisma {
   }
 
   /**
-   * Group.members
+   * Group.activities
    */
-  export type Group$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Group$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupMember
+     * Select specific fields to fetch from the Activity
      */
-    select?: GroupMemberSelect<ExtArgs> | null
+    select?: ActivitySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupMember
+     * Omit specific fields from the Activity
      */
-    omit?: GroupMemberOmit<ExtArgs> | null
+    omit?: ActivityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupMemberInclude<ExtArgs> | null
-    where?: GroupMemberWhereInput
-    orderBy?: GroupMemberOrderByWithRelationInput | GroupMemberOrderByWithRelationInput[]
-    cursor?: GroupMemberWhereUniqueInput
+    include?: ActivityInclude<ExtArgs> | null
+    where?: ActivityWhereInput
+    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
+    cursor?: ActivityWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GroupMemberScalarFieldEnum | GroupMemberScalarFieldEnum[]
+    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
   }
 
   /**
@@ -5532,51 +5532,27 @@ export namespace Prisma {
   }
 
   /**
-   * Group.settlements
+   * Group.members
    */
-  export type Group$settlementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Group$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Settlement
+     * Select specific fields to fetch from the GroupMember
      */
-    select?: SettlementSelect<ExtArgs> | null
+    select?: GroupMemberSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Settlement
+     * Omit specific fields from the GroupMember
      */
-    omit?: SettlementOmit<ExtArgs> | null
+    omit?: GroupMemberOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SettlementInclude<ExtArgs> | null
-    where?: SettlementWhereInput
-    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
-    cursor?: SettlementWhereUniqueInput
+    include?: GroupMemberInclude<ExtArgs> | null
+    where?: GroupMemberWhereInput
+    orderBy?: GroupMemberOrderByWithRelationInput | GroupMemberOrderByWithRelationInput[]
+    cursor?: GroupMemberWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
-  }
-
-  /**
-   * Group.activities
-   */
-  export type Group$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    where?: ActivityWhereInput
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    cursor?: ActivityWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
+    distinct?: GroupMemberScalarFieldEnum | GroupMemberScalarFieldEnum[]
   }
 
   /**
@@ -5601,6 +5577,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OwnershipTransferScalarFieldEnum | OwnershipTransferScalarFieldEnum[]
+  }
+
+  /**
+   * Group.settlements
+   */
+  export type Group$settlementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Settlement
+     */
+    select?: SettlementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Settlement
+     */
+    omit?: SettlementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettlementInclude<ExtArgs> | null
+    where?: SettlementWhereInput
+    orderBy?: SettlementOrderByWithRelationInput | SettlementOrderByWithRelationInput[]
+    cursor?: SettlementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SettlementScalarFieldEnum | SettlementScalarFieldEnum[]
   }
 
   /**
@@ -6918,9 +6918,9 @@ export namespace Prisma {
     receiptUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
     participants?: boolean | Expense$participantsArgs<ExtArgs>
     _count?: boolean | ExpenseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["expense"]>
@@ -6936,9 +6936,9 @@ export namespace Prisma {
     receiptUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["expense"]>
 
   export type ExpenseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6952,9 +6952,9 @@ export namespace Prisma {
     receiptUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["expense"]>
 
   export type ExpenseSelectScalar = {
@@ -6972,29 +6972,29 @@ export namespace Prisma {
 
   export type ExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "description" | "amount" | "splitType" | "payerId" | "creatorId" | "groupId" | "receiptUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["expense"]>
   export type ExpenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
     participants?: boolean | Expense$participantsArgs<ExtArgs>
     _count?: boolean | ExpenseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ExpenseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ExpenseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    payer?: boolean | UserDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Expense$groupArgs<ExtArgs>
+    payer?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ExpensePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Expense"
     objects: {
-      payer: Prisma.$UserPayload<ExtArgs>
       creator: Prisma.$UserPayload<ExtArgs>
       group: Prisma.$GroupPayload<ExtArgs> | null
+      payer: Prisma.$UserPayload<ExtArgs>
       participants: Prisma.$ExpenseParticipantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -7402,9 +7402,9 @@ export namespace Prisma {
    */
   export interface Prisma__ExpenseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    payer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     group<T extends Expense$groupArgs<ExtArgs> = {}>(args?: Subset<T, Expense$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    payer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     participants<T extends Expense$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Expense$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9255,9 +9255,9 @@ export namespace Prisma {
     note?: boolean
     screenshotUrl?: boolean
     createdAt?: boolean
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }, ExtArgs["result"]["settlement"]>
 
   export type SettlementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9269,9 +9269,9 @@ export namespace Prisma {
     note?: boolean
     screenshotUrl?: boolean
     createdAt?: boolean
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }, ExtArgs["result"]["settlement"]>
 
   export type SettlementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9283,9 +9283,9 @@ export namespace Prisma {
     note?: boolean
     screenshotUrl?: boolean
     createdAt?: boolean
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }, ExtArgs["result"]["settlement"]>
 
   export type SettlementSelectScalar = {
@@ -9301,27 +9301,27 @@ export namespace Prisma {
 
   export type SettlementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "payerId" | "receiverId" | "groupId" | "note" | "screenshotUrl" | "createdAt", ExtArgs["result"]["settlement"]>
   export type SettlementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }
   export type SettlementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }
   export type SettlementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    group?: boolean | Settlement$groupArgs<ExtArgs>
     payer?: boolean | UserDefaultArgs<ExtArgs>
     receiver?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | Settlement$groupArgs<ExtArgs>
   }
 
   export type $SettlementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Settlement"
     objects: {
+      group: Prisma.$GroupPayload<ExtArgs> | null
       payer: Prisma.$UserPayload<ExtArgs>
       receiver: Prisma.$UserPayload<ExtArgs>
-      group: Prisma.$GroupPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9726,9 +9726,9 @@ export namespace Prisma {
    */
   export interface Prisma__SettlementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    group<T extends Settlement$groupArgs<ExtArgs> = {}>(args?: Subset<T, Settlement$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     payer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     receiver<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    group<T extends Settlement$groupArgs<ExtArgs> = {}>(args?: Subset<T, Settlement$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11496,8 +11496,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     respondedAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ownershipTransfer"]>
 
@@ -11509,8 +11509,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     respondedAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ownershipTransfer"]>
 
@@ -11522,8 +11522,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     respondedAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ownershipTransfer"]>
 
@@ -11539,26 +11539,26 @@ export namespace Prisma {
 
   export type OwnershipTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "groupId" | "currentOwnerId" | "proposedOwnerId" | "status" | "createdAt" | "respondedAt", ExtArgs["result"]["ownershipTransfer"]>
   export type OwnershipTransferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type OwnershipTransferIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type OwnershipTransferIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
     currentOwner?: boolean | UserDefaultArgs<ExtArgs>
+    group?: boolean | GroupDefaultArgs<ExtArgs>
     proposedOwner?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $OwnershipTransferPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OwnershipTransfer"
     objects: {
-      group: Prisma.$GroupPayload<ExtArgs>
       currentOwner: Prisma.$UserPayload<ExtArgs>
+      group: Prisma.$GroupPayload<ExtArgs>
       proposedOwner: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -11963,8 +11963,8 @@ export namespace Prisma {
    */
   export interface Prisma__OwnershipTransferClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     currentOwner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     proposedOwner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -12444,9 +12444,9 @@ export namespace Prisma {
     profilePhotoUrl: 'profilePhotoUrl',
     authProvider: 'authProvider',
     passwordHash: 'passwordHash',
-    googleId: 'googleId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    googleId: 'googleId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -12753,21 +12753,21 @@ export namespace Prisma {
     profilePhotoUrl?: StringNullableFilter<"User"> | string | null
     authProvider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
     passwordHash?: StringNullableFilter<"User"> | string | null
-    googleId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    ownedGroups?: GroupListRelationFilter
-    groupMemberships?: GroupMemberListRelationFilter
+    googleId?: StringNullableFilter<"User"> | string | null
+    activities?: ActivityListRelationFilter
     createdExpenses?: ExpenseListRelationFilter
     paidExpenses?: ExpenseListRelationFilter
     expenseParticipations?: ExpenseParticipantListRelationFilter
-    settlementsPaid?: SettlementListRelationFilter
-    settlementsReceived?: SettlementListRelationFilter
-    activities?: ActivityListRelationFilter
     friendshipsAsUser1?: FriendshipListRelationFilter
     friendshipsAsUser2?: FriendshipListRelationFilter
+    ownedGroups?: GroupListRelationFilter
+    groupMemberships?: GroupMemberListRelationFilter
     ownershipTransfersStarted?: OwnershipTransferListRelationFilter
     ownershipTransfersReceived?: OwnershipTransferListRelationFilter
+    settlementsPaid?: SettlementListRelationFilter
+    settlementsReceived?: SettlementListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12779,21 +12779,21 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrderInput | SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
-    googleId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    ownedGroups?: GroupOrderByRelationAggregateInput
-    groupMemberships?: GroupMemberOrderByRelationAggregateInput
+    googleId?: SortOrderInput | SortOrder
+    activities?: ActivityOrderByRelationAggregateInput
     createdExpenses?: ExpenseOrderByRelationAggregateInput
     paidExpenses?: ExpenseOrderByRelationAggregateInput
     expenseParticipations?: ExpenseParticipantOrderByRelationAggregateInput
-    settlementsPaid?: SettlementOrderByRelationAggregateInput
-    settlementsReceived?: SettlementOrderByRelationAggregateInput
-    activities?: ActivityOrderByRelationAggregateInput
     friendshipsAsUser1?: FriendshipOrderByRelationAggregateInput
     friendshipsAsUser2?: FriendshipOrderByRelationAggregateInput
+    ownedGroups?: GroupOrderByRelationAggregateInput
+    groupMemberships?: GroupMemberOrderByRelationAggregateInput
     ownershipTransfersStarted?: OwnershipTransferOrderByRelationAggregateInput
     ownershipTransfersReceived?: OwnershipTransferOrderByRelationAggregateInput
+    settlementsPaid?: SettlementOrderByRelationAggregateInput
+    settlementsReceived?: SettlementOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12811,18 +12811,18 @@ export namespace Prisma {
     passwordHash?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    ownedGroups?: GroupListRelationFilter
-    groupMemberships?: GroupMemberListRelationFilter
+    activities?: ActivityListRelationFilter
     createdExpenses?: ExpenseListRelationFilter
     paidExpenses?: ExpenseListRelationFilter
     expenseParticipations?: ExpenseParticipantListRelationFilter
-    settlementsPaid?: SettlementListRelationFilter
-    settlementsReceived?: SettlementListRelationFilter
-    activities?: ActivityListRelationFilter
     friendshipsAsUser1?: FriendshipListRelationFilter
     friendshipsAsUser2?: FriendshipListRelationFilter
+    ownedGroups?: GroupListRelationFilter
+    groupMemberships?: GroupMemberListRelationFilter
     ownershipTransfersStarted?: OwnershipTransferListRelationFilter
     ownershipTransfersReceived?: OwnershipTransferListRelationFilter
+    settlementsPaid?: SettlementListRelationFilter
+    settlementsReceived?: SettlementListRelationFilter
   }, "id" | "email" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
@@ -12834,9 +12834,9 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrderInput | SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
-    googleId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    googleId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -12854,9 +12854,9 @@ export namespace Prisma {
     profilePhotoUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     authProvider?: EnumAuthProviderWithAggregatesFilter<"User"> | $Enums.AuthProvider
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
-    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type FriendshipWhereInput = {
@@ -12923,12 +12923,12 @@ export namespace Prisma {
     inviteCode?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
+    activities?: ActivityListRelationFilter
+    expenses?: ExpenseListRelationFilter
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: GroupMemberListRelationFilter
-    expenses?: ExpenseListRelationFilter
-    settlements?: SettlementListRelationFilter
-    activities?: ActivityListRelationFilter
     ownershipTransfers?: OwnershipTransferListRelationFilter
+    settlements?: SettlementListRelationFilter
   }
 
   export type GroupOrderByWithRelationInput = {
@@ -12938,12 +12938,12 @@ export namespace Prisma {
     inviteCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    activities?: ActivityOrderByRelationAggregateInput
+    expenses?: ExpenseOrderByRelationAggregateInput
     owner?: UserOrderByWithRelationInput
     members?: GroupMemberOrderByRelationAggregateInput
-    expenses?: ExpenseOrderByRelationAggregateInput
-    settlements?: SettlementOrderByRelationAggregateInput
-    activities?: ActivityOrderByRelationAggregateInput
     ownershipTransfers?: OwnershipTransferOrderByRelationAggregateInput
+    settlements?: SettlementOrderByRelationAggregateInput
   }
 
   export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -12956,12 +12956,12 @@ export namespace Prisma {
     ownerId?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
+    activities?: ActivityListRelationFilter
+    expenses?: ExpenseListRelationFilter
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: GroupMemberListRelationFilter
-    expenses?: ExpenseListRelationFilter
-    settlements?: SettlementListRelationFilter
-    activities?: ActivityListRelationFilter
     ownershipTransfers?: OwnershipTransferListRelationFilter
+    settlements?: SettlementListRelationFilter
   }, "id" | "inviteCode">
 
   export type GroupOrderByWithAggregationInput = {
@@ -13056,9 +13056,9 @@ export namespace Prisma {
     receiptUrl?: StringNullableFilter<"Expense"> | string | null
     createdAt?: DateTimeFilter<"Expense"> | Date | string
     updatedAt?: DateTimeFilter<"Expense"> | Date | string
-    payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+    payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     participants?: ExpenseParticipantListRelationFilter
   }
 
@@ -13073,9 +13073,9 @@ export namespace Prisma {
     receiptUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    payer?: UserOrderByWithRelationInput
     creator?: UserOrderByWithRelationInput
     group?: GroupOrderByWithRelationInput
+    payer?: UserOrderByWithRelationInput
     participants?: ExpenseParticipantOrderByRelationAggregateInput
   }
 
@@ -13093,9 +13093,9 @@ export namespace Prisma {
     receiptUrl?: StringNullableFilter<"Expense"> | string | null
     createdAt?: DateTimeFilter<"Expense"> | Date | string
     updatedAt?: DateTimeFilter<"Expense"> | Date | string
-    payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+    payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     participants?: ExpenseParticipantListRelationFilter
   }, "id">
 
@@ -13211,9 +13211,9 @@ export namespace Prisma {
     note?: StringNullableFilter<"Settlement"> | string | null
     screenshotUrl?: StringNullableFilter<"Settlement"> | string | null
     createdAt?: DateTimeFilter<"Settlement"> | Date | string
+    group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     receiver?: XOR<UserScalarRelationFilter, UserWhereInput>
-    group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
   }
 
   export type SettlementOrderByWithRelationInput = {
@@ -13225,9 +13225,9 @@ export namespace Prisma {
     note?: SortOrderInput | SortOrder
     screenshotUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    group?: GroupOrderByWithRelationInput
     payer?: UserOrderByWithRelationInput
     receiver?: UserOrderByWithRelationInput
-    group?: GroupOrderByWithRelationInput
   }
 
   export type SettlementWhereUniqueInput = Prisma.AtLeast<{
@@ -13242,9 +13242,9 @@ export namespace Prisma {
     note?: StringNullableFilter<"Settlement"> | string | null
     screenshotUrl?: StringNullableFilter<"Settlement"> | string | null
     createdAt?: DateTimeFilter<"Settlement"> | Date | string
+    group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     payer?: XOR<UserScalarRelationFilter, UserWhereInput>
     receiver?: XOR<UserScalarRelationFilter, UserWhereInput>
-    group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
   }, "id">
 
   export type SettlementOrderByWithAggregationInput = {
@@ -13356,8 +13356,8 @@ export namespace Prisma {
     status?: EnumOwnershipTransferStatusFilter<"OwnershipTransfer"> | $Enums.OwnershipTransferStatus
     createdAt?: DateTimeFilter<"OwnershipTransfer"> | Date | string
     respondedAt?: DateTimeNullableFilter<"OwnershipTransfer"> | Date | string | null
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
     currentOwner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
     proposedOwner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -13369,8 +13369,8 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     respondedAt?: SortOrderInput | SortOrder
-    group?: GroupOrderByWithRelationInput
     currentOwner?: UserOrderByWithRelationInput
+    group?: GroupOrderByWithRelationInput
     proposedOwner?: UserOrderByWithRelationInput
   }
 
@@ -13385,8 +13385,8 @@ export namespace Prisma {
     status?: EnumOwnershipTransferStatusFilter<"OwnershipTransfer"> | $Enums.OwnershipTransferStatus
     createdAt?: DateTimeFilter<"OwnershipTransfer"> | Date | string
     respondedAt?: DateTimeNullableFilter<"OwnershipTransfer"> | Date | string | null
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
     currentOwner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
     proposedOwner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -13425,21 +13425,21 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13451,21 +13451,21 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUpdateInput = {
@@ -13477,21 +13477,21 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13503,21 +13503,21 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13529,9 +13529,9 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    googleId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -13543,9 +13543,9 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -13557,9 +13557,9 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FriendshipCreateInput = {
@@ -13615,12 +13615,12 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    activities?: ActivityCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
     owner: UserCreateNestedOneWithoutOwnedGroupsInput
     members?: GroupMemberCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
-    activities?: ActivityCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateInput = {
@@ -13630,11 +13630,11 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
     activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUpdateInput = {
@@ -13643,12 +13643,12 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateInput = {
@@ -13658,11 +13658,11 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyInput = {
@@ -13746,9 +13746,9 @@ export namespace Prisma {
     receiptUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    payer: UserCreateNestedOneWithoutPaidExpensesInput
     creator: UserCreateNestedOneWithoutCreatedExpensesInput
     group?: GroupCreateNestedOneWithoutExpensesInput
+    payer: UserCreateNestedOneWithoutPaidExpensesInput
     participants?: ExpenseParticipantCreateNestedManyWithoutExpenseInput
   }
 
@@ -13774,9 +13774,9 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedExpensesNestedInput
     group?: GroupUpdateOneWithoutExpensesNestedInput
+    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     participants?: ExpenseParticipantUpdateManyWithoutExpenseNestedInput
   }
 
@@ -13897,9 +13897,9 @@ export namespace Prisma {
     note?: string | null
     screenshotUrl?: string | null
     createdAt?: Date | string
+    group?: GroupCreateNestedOneWithoutSettlementsInput
     payer: UserCreateNestedOneWithoutSettlementsPaidInput
     receiver: UserCreateNestedOneWithoutSettlementsReceivedInput
-    group?: GroupCreateNestedOneWithoutSettlementsInput
   }
 
   export type SettlementUncheckedCreateInput = {
@@ -13919,9 +13919,9 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneWithoutSettlementsNestedInput
     payer?: UserUpdateOneRequiredWithoutSettlementsPaidNestedInput
     receiver?: UserUpdateOneRequiredWithoutSettlementsReceivedNestedInput
-    group?: GroupUpdateOneWithoutSettlementsNestedInput
   }
 
   export type SettlementUncheckedUpdateInput = {
@@ -14038,8 +14038,8 @@ export namespace Prisma {
     status?: $Enums.OwnershipTransferStatus
     createdAt?: Date | string
     respondedAt?: Date | string | null
-    group: GroupCreateNestedOneWithoutOwnershipTransfersInput
     currentOwner: UserCreateNestedOneWithoutOwnershipTransfersStartedInput
+    group: GroupCreateNestedOneWithoutOwnershipTransfersInput
     proposedOwner: UserCreateNestedOneWithoutOwnershipTransfersReceivedInput
   }
 
@@ -14058,8 +14058,8 @@ export namespace Prisma {
     status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    group?: GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput
     currentOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersStartedNestedInput
+    group?: GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput
     proposedOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersReceivedNestedInput
   }
 
@@ -14148,16 +14148,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type GroupListRelationFilter = {
-    every?: GroupWhereInput
-    some?: GroupWhereInput
-    none?: GroupWhereInput
-  }
-
-  export type GroupMemberListRelationFilter = {
-    every?: GroupMemberWhereInput
-    some?: GroupMemberWhereInput
-    none?: GroupMemberWhereInput
+  export type ActivityListRelationFilter = {
+    every?: ActivityWhereInput
+    some?: ActivityWhereInput
+    none?: ActivityWhereInput
   }
 
   export type ExpenseListRelationFilter = {
@@ -14172,22 +14166,22 @@ export namespace Prisma {
     none?: ExpenseParticipantWhereInput
   }
 
-  export type SettlementListRelationFilter = {
-    every?: SettlementWhereInput
-    some?: SettlementWhereInput
-    none?: SettlementWhereInput
-  }
-
-  export type ActivityListRelationFilter = {
-    every?: ActivityWhereInput
-    some?: ActivityWhereInput
-    none?: ActivityWhereInput
-  }
-
   export type FriendshipListRelationFilter = {
     every?: FriendshipWhereInput
     some?: FriendshipWhereInput
     none?: FriendshipWhereInput
+  }
+
+  export type GroupListRelationFilter = {
+    every?: GroupWhereInput
+    some?: GroupWhereInput
+    none?: GroupWhereInput
+  }
+
+  export type GroupMemberListRelationFilter = {
+    every?: GroupMemberWhereInput
+    some?: GroupMemberWhereInput
+    none?: GroupMemberWhereInput
   }
 
   export type OwnershipTransferListRelationFilter = {
@@ -14196,16 +14190,18 @@ export namespace Prisma {
     none?: OwnershipTransferWhereInput
   }
 
+  export type SettlementListRelationFilter = {
+    every?: SettlementWhereInput
+    some?: SettlementWhereInput
+    none?: SettlementWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
-  export type GroupOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type GroupMemberOrderByRelationAggregateInput = {
+  export type ActivityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14217,19 +14213,23 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type SettlementOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ActivityOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type FriendshipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
+  export type GroupOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GroupMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type OwnershipTransferOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SettlementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14242,9 +14242,9 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
-    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -14256,9 +14256,9 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
-    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -14270,9 +14270,9 @@ export namespace Prisma {
     profilePhotoUrl?: SortOrder
     authProvider?: SortOrder
     passwordHash?: SortOrder
-    googleId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    googleId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -14830,18 +14830,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type GroupCreateNestedManyWithoutOwnerInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-  }
-
-  export type GroupMemberCreateNestedManyWithoutUserInput = {
-    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
-    createMany?: GroupMemberCreateManyUserInputEnvelope
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+  export type ActivityCreateNestedManyWithoutActorInput = {
+    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
+    createMany?: ActivityCreateManyActorInputEnvelope
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
   export type ExpenseCreateNestedManyWithoutCreatorInput = {
@@ -14865,27 +14858,6 @@ export namespace Prisma {
     connect?: ExpenseParticipantWhereUniqueInput | ExpenseParticipantWhereUniqueInput[]
   }
 
-  export type SettlementCreateNestedManyWithoutPayerInput = {
-    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
-    createMany?: SettlementCreateManyPayerInputEnvelope
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-  }
-
-  export type SettlementCreateNestedManyWithoutReceiverInput = {
-    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
-    createMany?: SettlementCreateManyReceiverInputEnvelope
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-  }
-
-  export type ActivityCreateNestedManyWithoutActorInput = {
-    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
-    createMany?: ActivityCreateManyActorInputEnvelope
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-  }
-
   export type FriendshipCreateNestedManyWithoutUser1Input = {
     create?: XOR<FriendshipCreateWithoutUser1Input, FriendshipUncheckedCreateWithoutUser1Input> | FriendshipCreateWithoutUser1Input[] | FriendshipUncheckedCreateWithoutUser1Input[]
     connectOrCreate?: FriendshipCreateOrConnectWithoutUser1Input | FriendshipCreateOrConnectWithoutUser1Input[]
@@ -14898,6 +14870,20 @@ export namespace Prisma {
     connectOrCreate?: FriendshipCreateOrConnectWithoutUser2Input | FriendshipCreateOrConnectWithoutUser2Input[]
     createMany?: FriendshipCreateManyUser2InputEnvelope
     connect?: FriendshipWhereUniqueInput | FriendshipWhereUniqueInput[]
+  }
+
+  export type GroupCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
+    createMany?: GroupCreateManyOwnerInputEnvelope
+    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  }
+
+  export type GroupMemberCreateNestedManyWithoutUserInput = {
+    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
+    createMany?: GroupMemberCreateManyUserInputEnvelope
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
   }
 
   export type OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput = {
@@ -14914,18 +14900,25 @@ export namespace Prisma {
     connect?: OwnershipTransferWhereUniqueInput | OwnershipTransferWhereUniqueInput[]
   }
 
-  export type GroupUncheckedCreateNestedManyWithoutOwnerInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type SettlementCreateNestedManyWithoutPayerInput = {
+    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
+    createMany?: SettlementCreateManyPayerInputEnvelope
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
   }
 
-  export type GroupMemberUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
-    createMany?: GroupMemberCreateManyUserInputEnvelope
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+  export type SettlementCreateNestedManyWithoutReceiverInput = {
+    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
+    createMany?: SettlementCreateManyReceiverInputEnvelope
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+  }
+
+  export type ActivityUncheckedCreateNestedManyWithoutActorInput = {
+    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
+    createMany?: ActivityCreateManyActorInputEnvelope
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
   export type ExpenseUncheckedCreateNestedManyWithoutCreatorInput = {
@@ -14949,27 +14942,6 @@ export namespace Prisma {
     connect?: ExpenseParticipantWhereUniqueInput | ExpenseParticipantWhereUniqueInput[]
   }
 
-  export type SettlementUncheckedCreateNestedManyWithoutPayerInput = {
-    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
-    createMany?: SettlementCreateManyPayerInputEnvelope
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-  }
-
-  export type SettlementUncheckedCreateNestedManyWithoutReceiverInput = {
-    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
-    createMany?: SettlementCreateManyReceiverInputEnvelope
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-  }
-
-  export type ActivityUncheckedCreateNestedManyWithoutActorInput = {
-    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
-    createMany?: ActivityCreateManyActorInputEnvelope
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-  }
-
   export type FriendshipUncheckedCreateNestedManyWithoutUser1Input = {
     create?: XOR<FriendshipCreateWithoutUser1Input, FriendshipUncheckedCreateWithoutUser1Input> | FriendshipCreateWithoutUser1Input[] | FriendshipUncheckedCreateWithoutUser1Input[]
     connectOrCreate?: FriendshipCreateOrConnectWithoutUser1Input | FriendshipCreateOrConnectWithoutUser1Input[]
@@ -14984,6 +14956,20 @@ export namespace Prisma {
     connect?: FriendshipWhereUniqueInput | FriendshipWhereUniqueInput[]
   }
 
+  export type GroupUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
+    createMany?: GroupCreateManyOwnerInputEnvelope
+    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  }
+
+  export type GroupMemberUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
+    createMany?: GroupMemberCreateManyUserInputEnvelope
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+  }
+
   export type OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput = {
     create?: XOR<OwnershipTransferCreateWithoutCurrentOwnerInput, OwnershipTransferUncheckedCreateWithoutCurrentOwnerInput> | OwnershipTransferCreateWithoutCurrentOwnerInput[] | OwnershipTransferUncheckedCreateWithoutCurrentOwnerInput[]
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutCurrentOwnerInput | OwnershipTransferCreateOrConnectWithoutCurrentOwnerInput[]
@@ -14996,6 +14982,20 @@ export namespace Prisma {
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutProposedOwnerInput | OwnershipTransferCreateOrConnectWithoutProposedOwnerInput[]
     createMany?: OwnershipTransferCreateManyProposedOwnerInputEnvelope
     connect?: OwnershipTransferWhereUniqueInput | OwnershipTransferWhereUniqueInput[]
+  }
+
+  export type SettlementUncheckedCreateNestedManyWithoutPayerInput = {
+    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
+    createMany?: SettlementCreateManyPayerInputEnvelope
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+  }
+
+  export type SettlementUncheckedCreateNestedManyWithoutReceiverInput = {
+    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
+    createMany?: SettlementCreateManyReceiverInputEnvelope
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15014,32 +15014,18 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type GroupUpdateManyWithoutOwnerNestedInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
-  }
-
-  export type GroupMemberUpdateManyWithoutUserNestedInput = {
-    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
-    upsert?: GroupMemberUpsertWithWhereUniqueWithoutUserInput | GroupMemberUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: GroupMemberCreateManyUserInputEnvelope
-    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    update?: GroupMemberUpdateWithWhereUniqueWithoutUserInput | GroupMemberUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: GroupMemberUpdateManyWithWhereWithoutUserInput | GroupMemberUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
+  export type ActivityUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
+    upsert?: ActivityUpsertWithWhereUniqueWithoutActorInput | ActivityUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ActivityCreateManyActorInputEnvelope
+    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    update?: ActivityUpdateWithWhereUniqueWithoutActorInput | ActivityUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ActivityUpdateManyWithWhereWithoutActorInput | ActivityUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
   }
 
   export type ExpenseUpdateManyWithoutCreatorNestedInput = {
@@ -15084,48 +15070,6 @@ export namespace Prisma {
     deleteMany?: ExpenseParticipantScalarWhereInput | ExpenseParticipantScalarWhereInput[]
   }
 
-  export type SettlementUpdateManyWithoutPayerNestedInput = {
-    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
-    upsert?: SettlementUpsertWithWhereUniqueWithoutPayerInput | SettlementUpsertWithWhereUniqueWithoutPayerInput[]
-    createMany?: SettlementCreateManyPayerInputEnvelope
-    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    update?: SettlementUpdateWithWhereUniqueWithoutPayerInput | SettlementUpdateWithWhereUniqueWithoutPayerInput[]
-    updateMany?: SettlementUpdateManyWithWhereWithoutPayerInput | SettlementUpdateManyWithWhereWithoutPayerInput[]
-    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-  }
-
-  export type SettlementUpdateManyWithoutReceiverNestedInput = {
-    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
-    upsert?: SettlementUpsertWithWhereUniqueWithoutReceiverInput | SettlementUpsertWithWhereUniqueWithoutReceiverInput[]
-    createMany?: SettlementCreateManyReceiverInputEnvelope
-    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    update?: SettlementUpdateWithWhereUniqueWithoutReceiverInput | SettlementUpdateWithWhereUniqueWithoutReceiverInput[]
-    updateMany?: SettlementUpdateManyWithWhereWithoutReceiverInput | SettlementUpdateManyWithWhereWithoutReceiverInput[]
-    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-  }
-
-  export type ActivityUpdateManyWithoutActorNestedInput = {
-    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
-    upsert?: ActivityUpsertWithWhereUniqueWithoutActorInput | ActivityUpsertWithWhereUniqueWithoutActorInput[]
-    createMany?: ActivityCreateManyActorInputEnvelope
-    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    update?: ActivityUpdateWithWhereUniqueWithoutActorInput | ActivityUpdateWithWhereUniqueWithoutActorInput[]
-    updateMany?: ActivityUpdateManyWithWhereWithoutActorInput | ActivityUpdateManyWithWhereWithoutActorInput[]
-    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-  }
-
   export type FriendshipUpdateManyWithoutUser1NestedInput = {
     create?: XOR<FriendshipCreateWithoutUser1Input, FriendshipUncheckedCreateWithoutUser1Input> | FriendshipCreateWithoutUser1Input[] | FriendshipUncheckedCreateWithoutUser1Input[]
     connectOrCreate?: FriendshipCreateOrConnectWithoutUser1Input | FriendshipCreateOrConnectWithoutUser1Input[]
@@ -15152,6 +15096,34 @@ export namespace Prisma {
     update?: FriendshipUpdateWithWhereUniqueWithoutUser2Input | FriendshipUpdateWithWhereUniqueWithoutUser2Input[]
     updateMany?: FriendshipUpdateManyWithWhereWithoutUser2Input | FriendshipUpdateManyWithWhereWithoutUser2Input[]
     deleteMany?: FriendshipScalarWhereInput | FriendshipScalarWhereInput[]
+  }
+
+  export type GroupUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
+    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: GroupCreateManyOwnerInputEnvelope
+    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  }
+
+  export type GroupMemberUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
+    upsert?: GroupMemberUpsertWithWhereUniqueWithoutUserInput | GroupMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GroupMemberCreateManyUserInputEnvelope
+    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    update?: GroupMemberUpdateWithWhereUniqueWithoutUserInput | GroupMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GroupMemberUpdateManyWithWhereWithoutUserInput | GroupMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
   }
 
   export type OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput = {
@@ -15182,32 +15154,46 @@ export namespace Prisma {
     deleteMany?: OwnershipTransferScalarWhereInput | OwnershipTransferScalarWhereInput[]
   }
 
-  export type GroupUncheckedUpdateManyWithoutOwnerNestedInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  export type SettlementUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
+    upsert?: SettlementUpsertWithWhereUniqueWithoutPayerInput | SettlementUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: SettlementCreateManyPayerInputEnvelope
+    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    update?: SettlementUpdateWithWhereUniqueWithoutPayerInput | SettlementUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: SettlementUpdateManyWithWhereWithoutPayerInput | SettlementUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
   }
 
-  export type GroupMemberUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
-    upsert?: GroupMemberUpsertWithWhereUniqueWithoutUserInput | GroupMemberUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: GroupMemberCreateManyUserInputEnvelope
-    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    update?: GroupMemberUpdateWithWhereUniqueWithoutUserInput | GroupMemberUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: GroupMemberUpdateManyWithWhereWithoutUserInput | GroupMemberUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
+  export type SettlementUpdateManyWithoutReceiverNestedInput = {
+    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
+    upsert?: SettlementUpsertWithWhereUniqueWithoutReceiverInput | SettlementUpsertWithWhereUniqueWithoutReceiverInput[]
+    createMany?: SettlementCreateManyReceiverInputEnvelope
+    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    update?: SettlementUpdateWithWhereUniqueWithoutReceiverInput | SettlementUpdateWithWhereUniqueWithoutReceiverInput[]
+    updateMany?: SettlementUpdateManyWithWhereWithoutReceiverInput | SettlementUpdateManyWithWhereWithoutReceiverInput[]
+    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
+  }
+
+  export type ActivityUncheckedUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
+    upsert?: ActivityUpsertWithWhereUniqueWithoutActorInput | ActivityUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ActivityCreateManyActorInputEnvelope
+    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    update?: ActivityUpdateWithWhereUniqueWithoutActorInput | ActivityUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ActivityUpdateManyWithWhereWithoutActorInput | ActivityUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
   }
 
   export type ExpenseUncheckedUpdateManyWithoutCreatorNestedInput = {
@@ -15252,48 +15238,6 @@ export namespace Prisma {
     deleteMany?: ExpenseParticipantScalarWhereInput | ExpenseParticipantScalarWhereInput[]
   }
 
-  export type SettlementUncheckedUpdateManyWithoutPayerNestedInput = {
-    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
-    upsert?: SettlementUpsertWithWhereUniqueWithoutPayerInput | SettlementUpsertWithWhereUniqueWithoutPayerInput[]
-    createMany?: SettlementCreateManyPayerInputEnvelope
-    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    update?: SettlementUpdateWithWhereUniqueWithoutPayerInput | SettlementUpdateWithWhereUniqueWithoutPayerInput[]
-    updateMany?: SettlementUpdateManyWithWhereWithoutPayerInput | SettlementUpdateManyWithWhereWithoutPayerInput[]
-    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-  }
-
-  export type SettlementUncheckedUpdateManyWithoutReceiverNestedInput = {
-    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
-    upsert?: SettlementUpsertWithWhereUniqueWithoutReceiverInput | SettlementUpsertWithWhereUniqueWithoutReceiverInput[]
-    createMany?: SettlementCreateManyReceiverInputEnvelope
-    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    update?: SettlementUpdateWithWhereUniqueWithoutReceiverInput | SettlementUpdateWithWhereUniqueWithoutReceiverInput[]
-    updateMany?: SettlementUpdateManyWithWhereWithoutReceiverInput | SettlementUpdateManyWithWhereWithoutReceiverInput[]
-    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-  }
-
-  export type ActivityUncheckedUpdateManyWithoutActorNestedInput = {
-    create?: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput> | ActivityCreateWithoutActorInput[] | ActivityUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutActorInput | ActivityCreateOrConnectWithoutActorInput[]
-    upsert?: ActivityUpsertWithWhereUniqueWithoutActorInput | ActivityUpsertWithWhereUniqueWithoutActorInput[]
-    createMany?: ActivityCreateManyActorInputEnvelope
-    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    update?: ActivityUpdateWithWhereUniqueWithoutActorInput | ActivityUpdateWithWhereUniqueWithoutActorInput[]
-    updateMany?: ActivityUpdateManyWithWhereWithoutActorInput | ActivityUpdateManyWithWhereWithoutActorInput[]
-    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-  }
-
   export type FriendshipUncheckedUpdateManyWithoutUser1NestedInput = {
     create?: XOR<FriendshipCreateWithoutUser1Input, FriendshipUncheckedCreateWithoutUser1Input> | FriendshipCreateWithoutUser1Input[] | FriendshipUncheckedCreateWithoutUser1Input[]
     connectOrCreate?: FriendshipCreateOrConnectWithoutUser1Input | FriendshipCreateOrConnectWithoutUser1Input[]
@@ -15320,6 +15264,34 @@ export namespace Prisma {
     update?: FriendshipUpdateWithWhereUniqueWithoutUser2Input | FriendshipUpdateWithWhereUniqueWithoutUser2Input[]
     updateMany?: FriendshipUpdateManyWithWhereWithoutUser2Input | FriendshipUpdateManyWithWhereWithoutUser2Input[]
     deleteMany?: FriendshipScalarWhereInput | FriendshipScalarWhereInput[]
+  }
+
+  export type GroupUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
+    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: GroupCreateManyOwnerInputEnvelope
+    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  }
+
+  export type GroupMemberUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput> | GroupMemberCreateWithoutUserInput[] | GroupMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutUserInput | GroupMemberCreateOrConnectWithoutUserInput[]
+    upsert?: GroupMemberUpsertWithWhereUniqueWithoutUserInput | GroupMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GroupMemberCreateManyUserInputEnvelope
+    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    update?: GroupMemberUpdateWithWhereUniqueWithoutUserInput | GroupMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GroupMemberUpdateManyWithWhereWithoutUserInput | GroupMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
   }
 
   export type OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput = {
@@ -15350,6 +15322,34 @@ export namespace Prisma {
     deleteMany?: OwnershipTransferScalarWhereInput | OwnershipTransferScalarWhereInput[]
   }
 
+  export type SettlementUncheckedUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput> | SettlementCreateWithoutPayerInput[] | SettlementUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutPayerInput | SettlementCreateOrConnectWithoutPayerInput[]
+    upsert?: SettlementUpsertWithWhereUniqueWithoutPayerInput | SettlementUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: SettlementCreateManyPayerInputEnvelope
+    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    update?: SettlementUpdateWithWhereUniqueWithoutPayerInput | SettlementUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: SettlementUpdateManyWithWhereWithoutPayerInput | SettlementUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
+  }
+
+  export type SettlementUncheckedUpdateManyWithoutReceiverNestedInput = {
+    create?: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput> | SettlementCreateWithoutReceiverInput[] | SettlementUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutReceiverInput | SettlementCreateOrConnectWithoutReceiverInput[]
+    upsert?: SettlementUpsertWithWhereUniqueWithoutReceiverInput | SettlementUpsertWithWhereUniqueWithoutReceiverInput[]
+    createMany?: SettlementCreateManyReceiverInputEnvelope
+    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    update?: SettlementUpdateWithWhereUniqueWithoutReceiverInput | SettlementUpdateWithWhereUniqueWithoutReceiverInput[]
+    updateMany?: SettlementUpdateManyWithWhereWithoutReceiverInput | SettlementUpdateManyWithWhereWithoutReceiverInput[]
+    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutFriendshipsAsUser1Input = {
     create?: XOR<UserCreateWithoutFriendshipsAsUser1Input, UserUncheckedCreateWithoutFriendshipsAsUser1Input>
     connectOrCreate?: UserCreateOrConnectWithoutFriendshipsAsUser1Input
@@ -15378,6 +15378,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFriendshipsAsUser2Input, UserUpdateWithoutFriendshipsAsUser2Input>, UserUncheckedUpdateWithoutFriendshipsAsUser2Input>
   }
 
+  export type ActivityCreateNestedManyWithoutGroupInput = {
+    create?: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput> | ActivityCreateWithoutGroupInput[] | ActivityUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutGroupInput | ActivityCreateOrConnectWithoutGroupInput[]
+    createMany?: ActivityCreateManyGroupInputEnvelope
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+  }
+
+  export type ExpenseCreateNestedManyWithoutGroupInput = {
+    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
+    createMany?: ExpenseCreateManyGroupInputEnvelope
+    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutOwnedGroupsInput = {
     create?: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
     connectOrCreate?: UserCreateOrConnectWithoutOwnedGroupsInput
@@ -15391,27 +15405,6 @@ export namespace Prisma {
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
   }
 
-  export type ExpenseCreateNestedManyWithoutGroupInput = {
-    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
-    createMany?: ExpenseCreateManyGroupInputEnvelope
-    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-  }
-
-  export type SettlementCreateNestedManyWithoutGroupInput = {
-    create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
-    createMany?: SettlementCreateManyGroupInputEnvelope
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-  }
-
-  export type ActivityCreateNestedManyWithoutGroupInput = {
-    create?: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput> | ActivityCreateWithoutGroupInput[] | ActivityUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutGroupInput | ActivityCreateOrConnectWithoutGroupInput[]
-    createMany?: ActivityCreateManyGroupInputEnvelope
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-  }
-
   export type OwnershipTransferCreateNestedManyWithoutGroupInput = {
     create?: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput> | OwnershipTransferCreateWithoutGroupInput[] | OwnershipTransferUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutGroupInput | OwnershipTransferCreateOrConnectWithoutGroupInput[]
@@ -15419,21 +15412,7 @@ export namespace Prisma {
     connect?: OwnershipTransferWhereUniqueInput | OwnershipTransferWhereUniqueInput[]
   }
 
-  export type GroupMemberUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<GroupMemberCreateWithoutGroupInput, GroupMemberUncheckedCreateWithoutGroupInput> | GroupMemberCreateWithoutGroupInput[] | GroupMemberUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutGroupInput | GroupMemberCreateOrConnectWithoutGroupInput[]
-    createMany?: GroupMemberCreateManyGroupInputEnvelope
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-  }
-
-  export type ExpenseUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
-    createMany?: ExpenseCreateManyGroupInputEnvelope
-    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-  }
-
-  export type SettlementUncheckedCreateNestedManyWithoutGroupInput = {
+  export type SettlementCreateNestedManyWithoutGroupInput = {
     create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
     createMany?: SettlementCreateManyGroupInputEnvelope
@@ -15447,11 +15426,60 @@ export namespace Prisma {
     connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
+  export type ExpenseUncheckedCreateNestedManyWithoutGroupInput = {
+    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
+    createMany?: ExpenseCreateManyGroupInputEnvelope
+    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+  }
+
+  export type GroupMemberUncheckedCreateNestedManyWithoutGroupInput = {
+    create?: XOR<GroupMemberCreateWithoutGroupInput, GroupMemberUncheckedCreateWithoutGroupInput> | GroupMemberCreateWithoutGroupInput[] | GroupMemberUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutGroupInput | GroupMemberCreateOrConnectWithoutGroupInput[]
+    createMany?: GroupMemberCreateManyGroupInputEnvelope
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+  }
+
   export type OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput = {
     create?: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput> | OwnershipTransferCreateWithoutGroupInput[] | OwnershipTransferUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutGroupInput | OwnershipTransferCreateOrConnectWithoutGroupInput[]
     createMany?: OwnershipTransferCreateManyGroupInputEnvelope
     connect?: OwnershipTransferWhereUniqueInput | OwnershipTransferWhereUniqueInput[]
+  }
+
+  export type SettlementUncheckedCreateNestedManyWithoutGroupInput = {
+    create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
+    createMany?: SettlementCreateManyGroupInputEnvelope
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+  }
+
+  export type ActivityUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput> | ActivityCreateWithoutGroupInput[] | ActivityUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivityCreateOrConnectWithoutGroupInput | ActivityCreateOrConnectWithoutGroupInput[]
+    upsert?: ActivityUpsertWithWhereUniqueWithoutGroupInput | ActivityUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: ActivityCreateManyGroupInputEnvelope
+    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
+    update?: ActivityUpdateWithWhereUniqueWithoutGroupInput | ActivityUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: ActivityUpdateManyWithWhereWithoutGroupInput | ActivityUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
+  }
+
+  export type ExpenseUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
+    upsert?: ExpenseUpsertWithWhereUniqueWithoutGroupInput | ExpenseUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: ExpenseCreateManyGroupInputEnvelope
+    set?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    disconnect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    delete?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    update?: ExpenseUpdateWithWhereUniqueWithoutGroupInput | ExpenseUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: ExpenseUpdateManyWithWhereWithoutGroupInput | ExpenseUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutOwnedGroupsNestedInput = {
@@ -15476,48 +15504,6 @@ export namespace Prisma {
     deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
   }
 
-  export type ExpenseUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
-    upsert?: ExpenseUpsertWithWhereUniqueWithoutGroupInput | ExpenseUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: ExpenseCreateManyGroupInputEnvelope
-    set?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    disconnect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    delete?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    update?: ExpenseUpdateWithWhereUniqueWithoutGroupInput | ExpenseUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: ExpenseUpdateManyWithWhereWithoutGroupInput | ExpenseUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
-  }
-
-  export type SettlementUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
-    upsert?: SettlementUpsertWithWhereUniqueWithoutGroupInput | SettlementUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: SettlementCreateManyGroupInputEnvelope
-    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
-    update?: SettlementUpdateWithWhereUniqueWithoutGroupInput | SettlementUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: SettlementUpdateManyWithWhereWithoutGroupInput | SettlementUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-  }
-
-  export type ActivityUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput> | ActivityCreateWithoutGroupInput[] | ActivityUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutGroupInput | ActivityCreateOrConnectWithoutGroupInput[]
-    upsert?: ActivityUpsertWithWhereUniqueWithoutGroupInput | ActivityUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: ActivityCreateManyGroupInputEnvelope
-    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    update?: ActivityUpdateWithWhereUniqueWithoutGroupInput | ActivityUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: ActivityUpdateManyWithWhereWithoutGroupInput | ActivityUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-  }
-
   export type OwnershipTransferUpdateManyWithoutGroupNestedInput = {
     create?: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput> | OwnershipTransferCreateWithoutGroupInput[] | OwnershipTransferUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutGroupInput | OwnershipTransferCreateOrConnectWithoutGroupInput[]
@@ -15532,35 +15518,7 @@ export namespace Prisma {
     deleteMany?: OwnershipTransferScalarWhereInput | OwnershipTransferScalarWhereInput[]
   }
 
-  export type GroupMemberUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<GroupMemberCreateWithoutGroupInput, GroupMemberUncheckedCreateWithoutGroupInput> | GroupMemberCreateWithoutGroupInput[] | GroupMemberUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutGroupInput | GroupMemberCreateOrConnectWithoutGroupInput[]
-    upsert?: GroupMemberUpsertWithWhereUniqueWithoutGroupInput | GroupMemberUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: GroupMemberCreateManyGroupInputEnvelope
-    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    update?: GroupMemberUpdateWithWhereUniqueWithoutGroupInput | GroupMemberUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: GroupMemberUpdateManyWithWhereWithoutGroupInput | GroupMemberUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
-  }
-
-  export type ExpenseUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
-    upsert?: ExpenseUpsertWithWhereUniqueWithoutGroupInput | ExpenseUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: ExpenseCreateManyGroupInputEnvelope
-    set?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    disconnect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    delete?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
-    update?: ExpenseUpdateWithWhereUniqueWithoutGroupInput | ExpenseUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: ExpenseUpdateManyWithWhereWithoutGroupInput | ExpenseUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
-  }
-
-  export type SettlementUncheckedUpdateManyWithoutGroupNestedInput = {
+  export type SettlementUpdateManyWithoutGroupNestedInput = {
     create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
     upsert?: SettlementUpsertWithWhereUniqueWithoutGroupInput | SettlementUpsertWithWhereUniqueWithoutGroupInput[]
@@ -15588,6 +15546,34 @@ export namespace Prisma {
     deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
   }
 
+  export type ExpenseUncheckedUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput> | ExpenseCreateWithoutGroupInput[] | ExpenseUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ExpenseCreateOrConnectWithoutGroupInput | ExpenseCreateOrConnectWithoutGroupInput[]
+    upsert?: ExpenseUpsertWithWhereUniqueWithoutGroupInput | ExpenseUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: ExpenseCreateManyGroupInputEnvelope
+    set?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    disconnect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    delete?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+    update?: ExpenseUpdateWithWhereUniqueWithoutGroupInput | ExpenseUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: ExpenseUpdateManyWithWhereWithoutGroupInput | ExpenseUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
+  }
+
+  export type GroupMemberUncheckedUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<GroupMemberCreateWithoutGroupInput, GroupMemberUncheckedCreateWithoutGroupInput> | GroupMemberCreateWithoutGroupInput[] | GroupMemberUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutGroupInput | GroupMemberCreateOrConnectWithoutGroupInput[]
+    upsert?: GroupMemberUpsertWithWhereUniqueWithoutGroupInput | GroupMemberUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: GroupMemberCreateManyGroupInputEnvelope
+    set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
+    update?: GroupMemberUpdateWithWhereUniqueWithoutGroupInput | GroupMemberUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: GroupMemberUpdateManyWithWhereWithoutGroupInput | GroupMemberUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
+  }
+
   export type OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput = {
     create?: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput> | OwnershipTransferCreateWithoutGroupInput[] | OwnershipTransferUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: OwnershipTransferCreateOrConnectWithoutGroupInput | OwnershipTransferCreateOrConnectWithoutGroupInput[]
@@ -15600,6 +15586,20 @@ export namespace Prisma {
     update?: OwnershipTransferUpdateWithWhereUniqueWithoutGroupInput | OwnershipTransferUpdateWithWhereUniqueWithoutGroupInput[]
     updateMany?: OwnershipTransferUpdateManyWithWhereWithoutGroupInput | OwnershipTransferUpdateManyWithWhereWithoutGroupInput[]
     deleteMany?: OwnershipTransferScalarWhereInput | OwnershipTransferScalarWhereInput[]
+  }
+
+  export type SettlementUncheckedUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<SettlementCreateWithoutGroupInput, SettlementUncheckedCreateWithoutGroupInput> | SettlementCreateWithoutGroupInput[] | SettlementUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: SettlementCreateOrConnectWithoutGroupInput | SettlementCreateOrConnectWithoutGroupInput[]
+    upsert?: SettlementUpsertWithWhereUniqueWithoutGroupInput | SettlementUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: SettlementCreateManyGroupInputEnvelope
+    set?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    disconnect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    delete?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    connect?: SettlementWhereUniqueInput | SettlementWhereUniqueInput[]
+    update?: SettlementUpdateWithWhereUniqueWithoutGroupInput | SettlementUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: SettlementUpdateManyWithWhereWithoutGroupInput | SettlementUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
   }
 
   export type GroupCreateNestedOneWithoutMembersInput = {
@@ -15630,12 +15630,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGroupMembershipsInput, UserUpdateWithoutGroupMembershipsInput>, UserUncheckedUpdateWithoutGroupMembershipsInput>
   }
 
-  export type UserCreateNestedOneWithoutPaidExpensesInput = {
-    create?: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPaidExpensesInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutCreatedExpensesInput = {
     create?: XOR<UserCreateWithoutCreatedExpensesInput, UserUncheckedCreateWithoutCreatedExpensesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedExpensesInput
@@ -15646,6 +15640,12 @@ export namespace Prisma {
     create?: XOR<GroupCreateWithoutExpensesInput, GroupUncheckedCreateWithoutExpensesInput>
     connectOrCreate?: GroupCreateOrConnectWithoutExpensesInput
     connect?: GroupWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPaidExpensesInput = {
+    create?: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaidExpensesInput
+    connect?: UserWhereUniqueInput
   }
 
   export type ExpenseParticipantCreateNestedManyWithoutExpenseInput = {
@@ -15674,14 +15674,6 @@ export namespace Prisma {
     set?: $Enums.SplitType
   }
 
-  export type UserUpdateOneRequiredWithoutPaidExpensesNestedInput = {
-    create?: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPaidExpensesInput
-    upsert?: UserUpsertWithoutPaidExpensesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaidExpensesInput, UserUpdateWithoutPaidExpensesInput>, UserUncheckedUpdateWithoutPaidExpensesInput>
-  }
-
   export type UserUpdateOneRequiredWithoutCreatedExpensesNestedInput = {
     create?: XOR<UserCreateWithoutCreatedExpensesInput, UserUncheckedCreateWithoutCreatedExpensesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedExpensesInput
@@ -15698,6 +15690,14 @@ export namespace Prisma {
     delete?: GroupWhereInput | boolean
     connect?: GroupWhereUniqueInput
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutExpensesInput, GroupUpdateWithoutExpensesInput>, GroupUncheckedUpdateWithoutExpensesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutPaidExpensesNestedInput = {
+    create?: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaidExpensesInput
+    upsert?: UserUpsertWithoutPaidExpensesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaidExpensesInput, UserUpdateWithoutPaidExpensesInput>, UserUncheckedUpdateWithoutPaidExpensesInput>
   }
 
   export type ExpenseParticipantUpdateManyWithoutExpenseNestedInput = {
@@ -15772,6 +15772,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutExpenseParticipationsInput, UserUpdateWithoutExpenseParticipationsInput>, UserUncheckedUpdateWithoutExpenseParticipationsInput>
   }
 
+  export type GroupCreateNestedOneWithoutSettlementsInput = {
+    create?: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutSettlementsInput
+    connect?: GroupWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutSettlementsPaidInput = {
     create?: XOR<UserCreateWithoutSettlementsPaidInput, UserUncheckedCreateWithoutSettlementsPaidInput>
     connectOrCreate?: UserCreateOrConnectWithoutSettlementsPaidInput
@@ -15784,10 +15790,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type GroupCreateNestedOneWithoutSettlementsInput = {
+  export type GroupUpdateOneWithoutSettlementsNestedInput = {
     create?: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
     connectOrCreate?: GroupCreateOrConnectWithoutSettlementsInput
+    upsert?: GroupUpsertWithoutSettlementsInput
+    disconnect?: GroupWhereInput | boolean
+    delete?: GroupWhereInput | boolean
     connect?: GroupWhereUniqueInput
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutSettlementsInput, GroupUpdateWithoutSettlementsInput>, GroupUncheckedUpdateWithoutSettlementsInput>
   }
 
   export type UserUpdateOneRequiredWithoutSettlementsPaidNestedInput = {
@@ -15804,16 +15814,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutSettlementsReceivedInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettlementsReceivedInput, UserUpdateWithoutSettlementsReceivedInput>, UserUncheckedUpdateWithoutSettlementsReceivedInput>
-  }
-
-  export type GroupUpdateOneWithoutSettlementsNestedInput = {
-    create?: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutSettlementsInput
-    upsert?: GroupUpsertWithoutSettlementsInput
-    disconnect?: GroupWhereInput | boolean
-    delete?: GroupWhereInput | boolean
-    connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutSettlementsInput, GroupUpdateWithoutSettlementsInput>, GroupUncheckedUpdateWithoutSettlementsInput>
   }
 
   export type UserCreateNestedOneWithoutActivitiesInput = {
@@ -15850,16 +15850,16 @@ export namespace Prisma {
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutActivitiesInput, GroupUpdateWithoutActivitiesInput>, GroupUncheckedUpdateWithoutActivitiesInput>
   }
 
-  export type GroupCreateNestedOneWithoutOwnershipTransfersInput = {
-    create?: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnershipTransfersInput
-    connect?: GroupWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutOwnershipTransfersStartedInput = {
     create?: XOR<UserCreateWithoutOwnershipTransfersStartedInput, UserUncheckedCreateWithoutOwnershipTransfersStartedInput>
     connectOrCreate?: UserCreateOrConnectWithoutOwnershipTransfersStartedInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type GroupCreateNestedOneWithoutOwnershipTransfersInput = {
+    create?: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnershipTransfersInput
+    connect?: GroupWhereUniqueInput
   }
 
   export type UserCreateNestedOneWithoutOwnershipTransfersReceivedInput = {
@@ -15876,20 +15876,20 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput = {
-    create?: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnershipTransfersInput
-    upsert?: GroupUpsertWithoutOwnershipTransfersInput
-    connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutOwnershipTransfersInput, GroupUpdateWithoutOwnershipTransfersInput>, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
-  }
-
   export type UserUpdateOneRequiredWithoutOwnershipTransfersStartedNestedInput = {
     create?: XOR<UserCreateWithoutOwnershipTransfersStartedInput, UserUncheckedCreateWithoutOwnershipTransfersStartedInput>
     connectOrCreate?: UserCreateOrConnectWithoutOwnershipTransfersStartedInput
     upsert?: UserUpsertWithoutOwnershipTransfersStartedInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnershipTransfersStartedInput, UserUpdateWithoutOwnershipTransfersStartedInput>, UserUncheckedUpdateWithoutOwnershipTransfersStartedInput>
+  }
+
+  export type GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput = {
+    create?: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutOwnershipTransfersInput
+    upsert?: GroupUpsertWithoutOwnershipTransfersInput
+    connect?: GroupWhereUniqueInput
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutOwnershipTransfersInput, GroupUpdateWithoutOwnershipTransfersInput>, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
   }
 
   export type UserUpdateOneRequiredWithoutOwnershipTransfersReceivedNestedInput = {
@@ -16206,61 +16206,31 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type GroupCreateWithoutOwnerInput = {
+  export type ActivityCreateWithoutActorInput = {
     id?: string
-    name: string
-    inviteCode: string
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupMemberCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
-    activities?: ActivityCreateNestedManyWithoutGroupInput
-    ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    group?: GroupCreateNestedOneWithoutActivitiesInput
   }
 
-  export type GroupUncheckedCreateWithoutOwnerInput = {
+  export type ActivityUncheckedCreateWithoutActorInput = {
     id?: string
-    name: string
-    inviteCode: string
+    groupId?: string | null
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
-    ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
   }
 
-  export type GroupCreateOrConnectWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
+  export type ActivityCreateOrConnectWithoutActorInput = {
+    where: ActivityWhereUniqueInput
+    create: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput>
   }
 
-  export type GroupCreateManyOwnerInputEnvelope = {
-    data: GroupCreateManyOwnerInput | GroupCreateManyOwnerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type GroupMemberCreateWithoutUserInput = {
-    id?: string
-    joinedAt?: Date | string
-    group: GroupCreateNestedOneWithoutMembersInput
-  }
-
-  export type GroupMemberUncheckedCreateWithoutUserInput = {
-    id?: string
-    groupId: string
-    joinedAt?: Date | string
-  }
-
-  export type GroupMemberCreateOrConnectWithoutUserInput = {
-    where: GroupMemberWhereUniqueInput
-    create: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput>
-  }
-
-  export type GroupMemberCreateManyUserInputEnvelope = {
-    data: GroupMemberCreateManyUserInput | GroupMemberCreateManyUserInput[]
+  export type ActivityCreateManyActorInputEnvelope = {
+    data: ActivityCreateManyActorInput | ActivityCreateManyActorInput[]
     skipDuplicates?: boolean
   }
 
@@ -16272,8 +16242,8 @@ export namespace Prisma {
     receiptUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    payer: UserCreateNestedOneWithoutPaidExpensesInput
     group?: GroupCreateNestedOneWithoutExpensesInput
+    payer: UserCreateNestedOneWithoutPaidExpensesInput
     participants?: ExpenseParticipantCreateNestedManyWithoutExpenseInput
   }
 
@@ -16362,94 +16332,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SettlementCreateWithoutPayerInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-    receiver: UserCreateNestedOneWithoutSettlementsReceivedInput
-    group?: GroupCreateNestedOneWithoutSettlementsInput
-  }
-
-  export type SettlementUncheckedCreateWithoutPayerInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    receiverId: string
-    groupId?: string | null
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type SettlementCreateOrConnectWithoutPayerInput = {
-    where: SettlementWhereUniqueInput
-    create: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput>
-  }
-
-  export type SettlementCreateManyPayerInputEnvelope = {
-    data: SettlementCreateManyPayerInput | SettlementCreateManyPayerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SettlementCreateWithoutReceiverInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-    payer: UserCreateNestedOneWithoutSettlementsPaidInput
-    group?: GroupCreateNestedOneWithoutSettlementsInput
-  }
-
-  export type SettlementUncheckedCreateWithoutReceiverInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    payerId: string
-    groupId?: string | null
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type SettlementCreateOrConnectWithoutReceiverInput = {
-    where: SettlementWhereUniqueInput
-    create: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput>
-  }
-
-  export type SettlementCreateManyReceiverInputEnvelope = {
-    data: SettlementCreateManyReceiverInput | SettlementCreateManyReceiverInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ActivityCreateWithoutActorInput = {
-    id?: string
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    group?: GroupCreateNestedOneWithoutActivitiesInput
-  }
-
-  export type ActivityUncheckedCreateWithoutActorInput = {
-    id?: string
-    groupId?: string | null
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityCreateOrConnectWithoutActorInput = {
-    where: ActivityWhereUniqueInput
-    create: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput>
-  }
-
-  export type ActivityCreateManyActorInputEnvelope = {
-    data: ActivityCreateManyActorInput | ActivityCreateManyActorInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FriendshipCreateWithoutUser1Input = {
     id?: string
     createdAt?: Date | string
@@ -16494,6 +16376,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GroupCreateWithoutOwnerInput = {
+    id?: string
+    name: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
+    members?: GroupMemberCreateNestedManyWithoutGroupInput
+    ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupUncheckedCreateWithoutOwnerInput = {
+    id?: string
+    name: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+    ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupCreateOrConnectWithoutOwnerInput = {
+    where: GroupWhereUniqueInput
+    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type GroupCreateManyOwnerInputEnvelope = {
+    data: GroupCreateManyOwnerInput | GroupCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GroupMemberCreateWithoutUserInput = {
+    id?: string
+    joinedAt?: Date | string
+    group: GroupCreateNestedOneWithoutMembersInput
+  }
+
+  export type GroupMemberUncheckedCreateWithoutUserInput = {
+    id?: string
+    groupId: string
+    joinedAt?: Date | string
+  }
+
+  export type GroupMemberCreateOrConnectWithoutUserInput = {
+    where: GroupMemberWhereUniqueInput
+    create: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type GroupMemberCreateManyUserInputEnvelope = {
+    data: GroupMemberCreateManyUserInput | GroupMemberCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OwnershipTransferCreateWithoutCurrentOwnerInput = {
     id?: string
     status?: $Enums.OwnershipTransferStatus
@@ -16527,8 +16467,8 @@ export namespace Prisma {
     status?: $Enums.OwnershipTransferStatus
     createdAt?: Date | string
     respondedAt?: Date | string | null
-    group: GroupCreateNestedOneWithoutOwnershipTransfersInput
     currentOwner: UserCreateNestedOneWithoutOwnershipTransfersStartedInput
+    group: GroupCreateNestedOneWithoutOwnershipTransfersInput
   }
 
   export type OwnershipTransferUncheckedCreateWithoutProposedOwnerInput = {
@@ -16550,58 +16490,93 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GroupUpsertWithWhereUniqueWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    update: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
-    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
+  export type SettlementCreateWithoutPayerInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
+    group?: GroupCreateNestedOneWithoutSettlementsInput
+    receiver: UserCreateNestedOneWithoutSettlementsReceivedInput
   }
 
-  export type GroupUpdateWithWhereUniqueWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    data: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
+  export type SettlementUncheckedCreateWithoutPayerInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiverId: string
+    groupId?: string | null
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
   }
 
-  export type GroupUpdateManyWithWhereWithoutOwnerInput = {
-    where: GroupScalarWhereInput
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutOwnerInput>
+  export type SettlementCreateOrConnectWithoutPayerInput = {
+    where: SettlementWhereUniqueInput
+    create: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput>
   }
 
-  export type GroupScalarWhereInput = {
-    AND?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    OR?: GroupScalarWhereInput[]
-    NOT?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    id?: StringFilter<"Group"> | string
-    name?: StringFilter<"Group"> | string
-    ownerId?: StringFilter<"Group"> | string
-    inviteCode?: StringFilter<"Group"> | string
-    createdAt?: DateTimeFilter<"Group"> | Date | string
-    updatedAt?: DateTimeFilter<"Group"> | Date | string
+  export type SettlementCreateManyPayerInputEnvelope = {
+    data: SettlementCreateManyPayerInput | SettlementCreateManyPayerInput[]
+    skipDuplicates?: boolean
   }
 
-  export type GroupMemberUpsertWithWhereUniqueWithoutUserInput = {
-    where: GroupMemberWhereUniqueInput
-    update: XOR<GroupMemberUpdateWithoutUserInput, GroupMemberUncheckedUpdateWithoutUserInput>
-    create: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput>
+  export type SettlementCreateWithoutReceiverInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
+    group?: GroupCreateNestedOneWithoutSettlementsInput
+    payer: UserCreateNestedOneWithoutSettlementsPaidInput
   }
 
-  export type GroupMemberUpdateWithWhereUniqueWithoutUserInput = {
-    where: GroupMemberWhereUniqueInput
-    data: XOR<GroupMemberUpdateWithoutUserInput, GroupMemberUncheckedUpdateWithoutUserInput>
+  export type SettlementUncheckedCreateWithoutReceiverInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payerId: string
+    groupId?: string | null
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
   }
 
-  export type GroupMemberUpdateManyWithWhereWithoutUserInput = {
-    where: GroupMemberScalarWhereInput
-    data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutUserInput>
+  export type SettlementCreateOrConnectWithoutReceiverInput = {
+    where: SettlementWhereUniqueInput
+    create: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput>
   }
 
-  export type GroupMemberScalarWhereInput = {
-    AND?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
-    OR?: GroupMemberScalarWhereInput[]
-    NOT?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
-    id?: StringFilter<"GroupMember"> | string
-    groupId?: StringFilter<"GroupMember"> | string
-    userId?: StringFilter<"GroupMember"> | string
-    joinedAt?: DateTimeFilter<"GroupMember"> | Date | string
+  export type SettlementCreateManyReceiverInputEnvelope = {
+    data: SettlementCreateManyReceiverInput | SettlementCreateManyReceiverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ActivityUpsertWithWhereUniqueWithoutActorInput = {
+    where: ActivityWhereUniqueInput
+    update: XOR<ActivityUpdateWithoutActorInput, ActivityUncheckedUpdateWithoutActorInput>
+    create: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput>
+  }
+
+  export type ActivityUpdateWithWhereUniqueWithoutActorInput = {
+    where: ActivityWhereUniqueInput
+    data: XOR<ActivityUpdateWithoutActorInput, ActivityUncheckedUpdateWithoutActorInput>
+  }
+
+  export type ActivityUpdateManyWithWhereWithoutActorInput = {
+    where: ActivityScalarWhereInput
+    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutActorInput>
+  }
+
+  export type ActivityScalarWhereInput = {
+    AND?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
+    OR?: ActivityScalarWhereInput[]
+    NOT?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
+    id?: StringFilter<"Activity"> | string
+    actorId?: StringFilter<"Activity"> | string
+    groupId?: StringNullableFilter<"Activity"> | string | null
+    activityType?: EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
+    entityId?: StringNullableFilter<"Activity"> | string | null
+    metadata?: JsonNullableFilter<"Activity">
+    createdAt?: DateTimeFilter<"Activity"> | Date | string
   }
 
   export type ExpenseUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -16680,81 +16655,6 @@ export namespace Prisma {
     shares?: IntNullableFilter<"ExpenseParticipant"> | number | null
   }
 
-  export type SettlementUpsertWithWhereUniqueWithoutPayerInput = {
-    where: SettlementWhereUniqueInput
-    update: XOR<SettlementUpdateWithoutPayerInput, SettlementUncheckedUpdateWithoutPayerInput>
-    create: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput>
-  }
-
-  export type SettlementUpdateWithWhereUniqueWithoutPayerInput = {
-    where: SettlementWhereUniqueInput
-    data: XOR<SettlementUpdateWithoutPayerInput, SettlementUncheckedUpdateWithoutPayerInput>
-  }
-
-  export type SettlementUpdateManyWithWhereWithoutPayerInput = {
-    where: SettlementScalarWhereInput
-    data: XOR<SettlementUpdateManyMutationInput, SettlementUncheckedUpdateManyWithoutPayerInput>
-  }
-
-  export type SettlementScalarWhereInput = {
-    AND?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-    OR?: SettlementScalarWhereInput[]
-    NOT?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
-    id?: StringFilter<"Settlement"> | string
-    amount?: DecimalFilter<"Settlement"> | Decimal | DecimalJsLike | number | string
-    payerId?: StringFilter<"Settlement"> | string
-    receiverId?: StringFilter<"Settlement"> | string
-    groupId?: StringNullableFilter<"Settlement"> | string | null
-    note?: StringNullableFilter<"Settlement"> | string | null
-    screenshotUrl?: StringNullableFilter<"Settlement"> | string | null
-    createdAt?: DateTimeFilter<"Settlement"> | Date | string
-  }
-
-  export type SettlementUpsertWithWhereUniqueWithoutReceiverInput = {
-    where: SettlementWhereUniqueInput
-    update: XOR<SettlementUpdateWithoutReceiverInput, SettlementUncheckedUpdateWithoutReceiverInput>
-    create: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput>
-  }
-
-  export type SettlementUpdateWithWhereUniqueWithoutReceiverInput = {
-    where: SettlementWhereUniqueInput
-    data: XOR<SettlementUpdateWithoutReceiverInput, SettlementUncheckedUpdateWithoutReceiverInput>
-  }
-
-  export type SettlementUpdateManyWithWhereWithoutReceiverInput = {
-    where: SettlementScalarWhereInput
-    data: XOR<SettlementUpdateManyMutationInput, SettlementUncheckedUpdateManyWithoutReceiverInput>
-  }
-
-  export type ActivityUpsertWithWhereUniqueWithoutActorInput = {
-    where: ActivityWhereUniqueInput
-    update: XOR<ActivityUpdateWithoutActorInput, ActivityUncheckedUpdateWithoutActorInput>
-    create: XOR<ActivityCreateWithoutActorInput, ActivityUncheckedCreateWithoutActorInput>
-  }
-
-  export type ActivityUpdateWithWhereUniqueWithoutActorInput = {
-    where: ActivityWhereUniqueInput
-    data: XOR<ActivityUpdateWithoutActorInput, ActivityUncheckedUpdateWithoutActorInput>
-  }
-
-  export type ActivityUpdateManyWithWhereWithoutActorInput = {
-    where: ActivityScalarWhereInput
-    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutActorInput>
-  }
-
-  export type ActivityScalarWhereInput = {
-    AND?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-    OR?: ActivityScalarWhereInput[]
-    NOT?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-    id?: StringFilter<"Activity"> | string
-    actorId?: StringFilter<"Activity"> | string
-    groupId?: StringNullableFilter<"Activity"> | string | null
-    activityType?: EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
-    entityId?: StringNullableFilter<"Activity"> | string | null
-    metadata?: JsonNullableFilter<"Activity">
-    createdAt?: DateTimeFilter<"Activity"> | Date | string
-  }
-
   export type FriendshipUpsertWithWhereUniqueWithoutUser1Input = {
     where: FriendshipWhereUniqueInput
     update: XOR<FriendshipUpdateWithoutUser1Input, FriendshipUncheckedUpdateWithoutUser1Input>
@@ -16795,6 +16695,60 @@ export namespace Prisma {
   export type FriendshipUpdateManyWithWhereWithoutUser2Input = {
     where: FriendshipScalarWhereInput
     data: XOR<FriendshipUpdateManyMutationInput, FriendshipUncheckedUpdateManyWithoutUser2Input>
+  }
+
+  export type GroupUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: GroupWhereUniqueInput
+    update: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
+    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type GroupUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: GroupWhereUniqueInput
+    data: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type GroupUpdateManyWithWhereWithoutOwnerInput = {
+    where: GroupScalarWhereInput
+    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type GroupScalarWhereInput = {
+    AND?: GroupScalarWhereInput | GroupScalarWhereInput[]
+    OR?: GroupScalarWhereInput[]
+    NOT?: GroupScalarWhereInput | GroupScalarWhereInput[]
+    id?: StringFilter<"Group"> | string
+    name?: StringFilter<"Group"> | string
+    ownerId?: StringFilter<"Group"> | string
+    inviteCode?: StringFilter<"Group"> | string
+    createdAt?: DateTimeFilter<"Group"> | Date | string
+    updatedAt?: DateTimeFilter<"Group"> | Date | string
+  }
+
+  export type GroupMemberUpsertWithWhereUniqueWithoutUserInput = {
+    where: GroupMemberWhereUniqueInput
+    update: XOR<GroupMemberUpdateWithoutUserInput, GroupMemberUncheckedUpdateWithoutUserInput>
+    create: XOR<GroupMemberCreateWithoutUserInput, GroupMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type GroupMemberUpdateWithWhereUniqueWithoutUserInput = {
+    where: GroupMemberWhereUniqueInput
+    data: XOR<GroupMemberUpdateWithoutUserInput, GroupMemberUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GroupMemberUpdateManyWithWhereWithoutUserInput = {
+    where: GroupMemberScalarWhereInput
+    data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type GroupMemberScalarWhereInput = {
+    AND?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
+    OR?: GroupMemberScalarWhereInput[]
+    NOT?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
+    id?: StringFilter<"GroupMember"> | string
+    groupId?: StringFilter<"GroupMember"> | string
+    userId?: StringFilter<"GroupMember"> | string
+    joinedAt?: DateTimeFilter<"GroupMember"> | Date | string
   }
 
   export type OwnershipTransferUpsertWithWhereUniqueWithoutCurrentOwnerInput = {
@@ -16842,6 +16796,52 @@ export namespace Prisma {
     data: XOR<OwnershipTransferUpdateManyMutationInput, OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerInput>
   }
 
+  export type SettlementUpsertWithWhereUniqueWithoutPayerInput = {
+    where: SettlementWhereUniqueInput
+    update: XOR<SettlementUpdateWithoutPayerInput, SettlementUncheckedUpdateWithoutPayerInput>
+    create: XOR<SettlementCreateWithoutPayerInput, SettlementUncheckedCreateWithoutPayerInput>
+  }
+
+  export type SettlementUpdateWithWhereUniqueWithoutPayerInput = {
+    where: SettlementWhereUniqueInput
+    data: XOR<SettlementUpdateWithoutPayerInput, SettlementUncheckedUpdateWithoutPayerInput>
+  }
+
+  export type SettlementUpdateManyWithWhereWithoutPayerInput = {
+    where: SettlementScalarWhereInput
+    data: XOR<SettlementUpdateManyMutationInput, SettlementUncheckedUpdateManyWithoutPayerInput>
+  }
+
+  export type SettlementScalarWhereInput = {
+    AND?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
+    OR?: SettlementScalarWhereInput[]
+    NOT?: SettlementScalarWhereInput | SettlementScalarWhereInput[]
+    id?: StringFilter<"Settlement"> | string
+    amount?: DecimalFilter<"Settlement"> | Decimal | DecimalJsLike | number | string
+    payerId?: StringFilter<"Settlement"> | string
+    receiverId?: StringFilter<"Settlement"> | string
+    groupId?: StringNullableFilter<"Settlement"> | string | null
+    note?: StringNullableFilter<"Settlement"> | string | null
+    screenshotUrl?: StringNullableFilter<"Settlement"> | string | null
+    createdAt?: DateTimeFilter<"Settlement"> | Date | string
+  }
+
+  export type SettlementUpsertWithWhereUniqueWithoutReceiverInput = {
+    where: SettlementWhereUniqueInput
+    update: XOR<SettlementUpdateWithoutReceiverInput, SettlementUncheckedUpdateWithoutReceiverInput>
+    create: XOR<SettlementCreateWithoutReceiverInput, SettlementUncheckedCreateWithoutReceiverInput>
+  }
+
+  export type SettlementUpdateWithWhereUniqueWithoutReceiverInput = {
+    where: SettlementWhereUniqueInput
+    data: XOR<SettlementUpdateWithoutReceiverInput, SettlementUncheckedUpdateWithoutReceiverInput>
+  }
+
+  export type SettlementUpdateManyWithWhereWithoutReceiverInput = {
+    where: SettlementScalarWhereInput
+    data: XOR<SettlementUpdateManyMutationInput, SettlementUncheckedUpdateManyWithoutReceiverInput>
+  }
+
   export type UserCreateWithoutFriendshipsAsUser1Input = {
     id?: string
     fullName: string
@@ -16851,20 +16851,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutFriendshipsAsUser1Input = {
@@ -16876,20 +16876,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutFriendshipsAsUser1Input = {
@@ -16906,20 +16906,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutFriendshipsAsUser2Input = {
@@ -16931,20 +16931,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutFriendshipsAsUser2Input = {
@@ -16972,20 +16972,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFriendshipsAsUser1Input = {
@@ -16997,20 +16997,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUpsertWithoutFriendshipsAsUser2Input = {
@@ -17033,20 +17033,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFriendshipsAsUser2Input = {
@@ -17058,20 +17058,84 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type ActivityCreateWithoutGroupInput = {
+    id?: string
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    actor: UserCreateNestedOneWithoutActivitiesInput
+  }
+
+  export type ActivityUncheckedCreateWithoutGroupInput = {
+    id?: string
+    actorId: string
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ActivityCreateOrConnectWithoutGroupInput = {
+    where: ActivityWhereUniqueInput
+    create: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput>
+  }
+
+  export type ActivityCreateManyGroupInputEnvelope = {
+    data: ActivityCreateManyGroupInput | ActivityCreateManyGroupInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpenseCreateWithoutGroupInput = {
+    id?: string
+    description: string
+    amount: Decimal | DecimalJsLike | number | string
+    splitType: $Enums.SplitType
+    receiptUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator: UserCreateNestedOneWithoutCreatedExpensesInput
+    payer: UserCreateNestedOneWithoutPaidExpensesInput
+    participants?: ExpenseParticipantCreateNestedManyWithoutExpenseInput
+  }
+
+  export type ExpenseUncheckedCreateWithoutGroupInput = {
+    id?: string
+    description: string
+    amount: Decimal | DecimalJsLike | number | string
+    splitType: $Enums.SplitType
+    payerId: string
+    creatorId: string
+    receiptUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    participants?: ExpenseParticipantUncheckedCreateNestedManyWithoutExpenseInput
+  }
+
+  export type ExpenseCreateOrConnectWithoutGroupInput = {
+    where: ExpenseWhereUniqueInput
+    create: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput>
+  }
+
+  export type ExpenseCreateManyGroupInputEnvelope = {
+    data: ExpenseCreateManyGroupInput | ExpenseCreateManyGroupInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserCreateWithoutOwnedGroupsInput = {
@@ -17083,20 +17147,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutOwnedGroupsInput = {
@@ -17108,20 +17172,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutOwnedGroupsInput = {
@@ -17151,39 +17215,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ExpenseCreateWithoutGroupInput = {
+  export type OwnershipTransferCreateWithoutGroupInput = {
     id?: string
-    description: string
-    amount: Decimal | DecimalJsLike | number | string
-    splitType: $Enums.SplitType
-    receiptUrl?: string | null
+    status?: $Enums.OwnershipTransferStatus
     createdAt?: Date | string
-    updatedAt?: Date | string
-    payer: UserCreateNestedOneWithoutPaidExpensesInput
-    creator: UserCreateNestedOneWithoutCreatedExpensesInput
-    participants?: ExpenseParticipantCreateNestedManyWithoutExpenseInput
+    respondedAt?: Date | string | null
+    currentOwner: UserCreateNestedOneWithoutOwnershipTransfersStartedInput
+    proposedOwner: UserCreateNestedOneWithoutOwnershipTransfersReceivedInput
   }
 
-  export type ExpenseUncheckedCreateWithoutGroupInput = {
+  export type OwnershipTransferUncheckedCreateWithoutGroupInput = {
     id?: string
-    description: string
-    amount: Decimal | DecimalJsLike | number | string
-    splitType: $Enums.SplitType
-    payerId: string
-    creatorId: string
-    receiptUrl?: string | null
+    currentOwnerId: string
+    proposedOwnerId: string
+    status?: $Enums.OwnershipTransferStatus
     createdAt?: Date | string
-    updatedAt?: Date | string
-    participants?: ExpenseParticipantUncheckedCreateNestedManyWithoutExpenseInput
+    respondedAt?: Date | string | null
   }
 
-  export type ExpenseCreateOrConnectWithoutGroupInput = {
-    where: ExpenseWhereUniqueInput
-    create: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput>
+  export type OwnershipTransferCreateOrConnectWithoutGroupInput = {
+    where: OwnershipTransferWhereUniqueInput
+    create: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput>
   }
 
-  export type ExpenseCreateManyGroupInputEnvelope = {
-    data: ExpenseCreateManyGroupInput | ExpenseCreateManyGroupInput[]
+  export type OwnershipTransferCreateManyGroupInputEnvelope = {
+    data: OwnershipTransferCreateManyGroupInput | OwnershipTransferCreateManyGroupInput[]
     skipDuplicates?: boolean
   }
 
@@ -17217,60 +17273,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ActivityCreateWithoutGroupInput = {
-    id?: string
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    actor: UserCreateNestedOneWithoutActivitiesInput
-  }
-
-  export type ActivityUncheckedCreateWithoutGroupInput = {
-    id?: string
-    actorId: string
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityCreateOrConnectWithoutGroupInput = {
+  export type ActivityUpsertWithWhereUniqueWithoutGroupInput = {
     where: ActivityWhereUniqueInput
+    update: XOR<ActivityUpdateWithoutGroupInput, ActivityUncheckedUpdateWithoutGroupInput>
     create: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput>
   }
 
-  export type ActivityCreateManyGroupInputEnvelope = {
-    data: ActivityCreateManyGroupInput | ActivityCreateManyGroupInput[]
-    skipDuplicates?: boolean
+  export type ActivityUpdateWithWhereUniqueWithoutGroupInput = {
+    where: ActivityWhereUniqueInput
+    data: XOR<ActivityUpdateWithoutGroupInput, ActivityUncheckedUpdateWithoutGroupInput>
   }
 
-  export type OwnershipTransferCreateWithoutGroupInput = {
-    id?: string
-    status?: $Enums.OwnershipTransferStatus
-    createdAt?: Date | string
-    respondedAt?: Date | string | null
-    currentOwner: UserCreateNestedOneWithoutOwnershipTransfersStartedInput
-    proposedOwner: UserCreateNestedOneWithoutOwnershipTransfersReceivedInput
+  export type ActivityUpdateManyWithWhereWithoutGroupInput = {
+    where: ActivityScalarWhereInput
+    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutGroupInput>
   }
 
-  export type OwnershipTransferUncheckedCreateWithoutGroupInput = {
-    id?: string
-    currentOwnerId: string
-    proposedOwnerId: string
-    status?: $Enums.OwnershipTransferStatus
-    createdAt?: Date | string
-    respondedAt?: Date | string | null
+  export type ExpenseUpsertWithWhereUniqueWithoutGroupInput = {
+    where: ExpenseWhereUniqueInput
+    update: XOR<ExpenseUpdateWithoutGroupInput, ExpenseUncheckedUpdateWithoutGroupInput>
+    create: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput>
   }
 
-  export type OwnershipTransferCreateOrConnectWithoutGroupInput = {
-    where: OwnershipTransferWhereUniqueInput
-    create: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput>
+  export type ExpenseUpdateWithWhereUniqueWithoutGroupInput = {
+    where: ExpenseWhereUniqueInput
+    data: XOR<ExpenseUpdateWithoutGroupInput, ExpenseUncheckedUpdateWithoutGroupInput>
   }
 
-  export type OwnershipTransferCreateManyGroupInputEnvelope = {
-    data: OwnershipTransferCreateManyGroupInput | OwnershipTransferCreateManyGroupInput[]
-    skipDuplicates?: boolean
+  export type ExpenseUpdateManyWithWhereWithoutGroupInput = {
+    where: ExpenseScalarWhereInput
+    data: XOR<ExpenseUpdateManyMutationInput, ExpenseUncheckedUpdateManyWithoutGroupInput>
   }
 
   export type UserUpsertWithoutOwnedGroupsInput = {
@@ -17293,20 +17325,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedGroupsInput = {
@@ -17318,20 +17350,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type GroupMemberUpsertWithWhereUniqueWithoutGroupInput = {
@@ -17350,20 +17382,20 @@ export namespace Prisma {
     data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutGroupInput>
   }
 
-  export type ExpenseUpsertWithWhereUniqueWithoutGroupInput = {
-    where: ExpenseWhereUniqueInput
-    update: XOR<ExpenseUpdateWithoutGroupInput, ExpenseUncheckedUpdateWithoutGroupInput>
-    create: XOR<ExpenseCreateWithoutGroupInput, ExpenseUncheckedCreateWithoutGroupInput>
+  export type OwnershipTransferUpsertWithWhereUniqueWithoutGroupInput = {
+    where: OwnershipTransferWhereUniqueInput
+    update: XOR<OwnershipTransferUpdateWithoutGroupInput, OwnershipTransferUncheckedUpdateWithoutGroupInput>
+    create: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput>
   }
 
-  export type ExpenseUpdateWithWhereUniqueWithoutGroupInput = {
-    where: ExpenseWhereUniqueInput
-    data: XOR<ExpenseUpdateWithoutGroupInput, ExpenseUncheckedUpdateWithoutGroupInput>
+  export type OwnershipTransferUpdateWithWhereUniqueWithoutGroupInput = {
+    where: OwnershipTransferWhereUniqueInput
+    data: XOR<OwnershipTransferUpdateWithoutGroupInput, OwnershipTransferUncheckedUpdateWithoutGroupInput>
   }
 
-  export type ExpenseUpdateManyWithWhereWithoutGroupInput = {
-    where: ExpenseScalarWhereInput
-    data: XOR<ExpenseUpdateManyMutationInput, ExpenseUncheckedUpdateManyWithoutGroupInput>
+  export type OwnershipTransferUpdateManyWithWhereWithoutGroupInput = {
+    where: OwnershipTransferScalarWhereInput
+    data: XOR<OwnershipTransferUpdateManyMutationInput, OwnershipTransferUncheckedUpdateManyWithoutGroupInput>
   }
 
   export type SettlementUpsertWithWhereUniqueWithoutGroupInput = {
@@ -17382,49 +17414,17 @@ export namespace Prisma {
     data: XOR<SettlementUpdateManyMutationInput, SettlementUncheckedUpdateManyWithoutGroupInput>
   }
 
-  export type ActivityUpsertWithWhereUniqueWithoutGroupInput = {
-    where: ActivityWhereUniqueInput
-    update: XOR<ActivityUpdateWithoutGroupInput, ActivityUncheckedUpdateWithoutGroupInput>
-    create: XOR<ActivityCreateWithoutGroupInput, ActivityUncheckedCreateWithoutGroupInput>
-  }
-
-  export type ActivityUpdateWithWhereUniqueWithoutGroupInput = {
-    where: ActivityWhereUniqueInput
-    data: XOR<ActivityUpdateWithoutGroupInput, ActivityUncheckedUpdateWithoutGroupInput>
-  }
-
-  export type ActivityUpdateManyWithWhereWithoutGroupInput = {
-    where: ActivityScalarWhereInput
-    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutGroupInput>
-  }
-
-  export type OwnershipTransferUpsertWithWhereUniqueWithoutGroupInput = {
-    where: OwnershipTransferWhereUniqueInput
-    update: XOR<OwnershipTransferUpdateWithoutGroupInput, OwnershipTransferUncheckedUpdateWithoutGroupInput>
-    create: XOR<OwnershipTransferCreateWithoutGroupInput, OwnershipTransferUncheckedCreateWithoutGroupInput>
-  }
-
-  export type OwnershipTransferUpdateWithWhereUniqueWithoutGroupInput = {
-    where: OwnershipTransferWhereUniqueInput
-    data: XOR<OwnershipTransferUpdateWithoutGroupInput, OwnershipTransferUncheckedUpdateWithoutGroupInput>
-  }
-
-  export type OwnershipTransferUpdateManyWithWhereWithoutGroupInput = {
-    where: OwnershipTransferScalarWhereInput
-    data: XOR<OwnershipTransferUpdateManyMutationInput, OwnershipTransferUncheckedUpdateManyWithoutGroupInput>
-  }
-
   export type GroupCreateWithoutMembersInput = {
     id?: string
     name: string
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutOwnedGroupsInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
     activities?: ActivityCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
+    owner: UserCreateNestedOneWithoutOwnedGroupsInput
     ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutMembersInput = {
@@ -17434,10 +17434,10 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
     activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutMembersInput = {
@@ -17454,20 +17454,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutGroupMembershipsInput = {
@@ -17479,20 +17479,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutGroupMembershipsInput = {
@@ -17517,11 +17517,11 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
     activities?: ActivityUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
+    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
     ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutMembersInput = {
@@ -17531,10 +17531,10 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserUpsertWithoutGroupMembershipsInput = {
@@ -17557,20 +17557,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
@@ -17582,75 +17582,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
-  }
-
-  export type UserCreateWithoutPaidExpensesInput = {
-    id?: string
-    fullName: string
-    email: string
-    phoneNumber?: string | null
-    username?: string | null
-    profilePhotoUrl?: string | null
-    authProvider?: $Enums.AuthProvider
-    passwordHash?: string | null
-    googleId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
-    createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
-    expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
-    friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
-    friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
-    ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
-    ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
-  }
-
-  export type UserUncheckedCreateWithoutPaidExpensesInput = {
-    id?: string
-    fullName: string
-    email: string
-    phoneNumber?: string | null
-    username?: string | null
-    profilePhotoUrl?: string | null
-    authProvider?: $Enums.AuthProvider
-    passwordHash?: string | null
-    googleId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
-    createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
-    expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
-    friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
-    friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
-    ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
-    ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
-  }
-
-  export type UserCreateOrConnectWithoutPaidExpensesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserCreateWithoutCreatedExpensesInput = {
@@ -17662,20 +17607,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutCreatedExpensesInput = {
@@ -17687,20 +17632,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutCreatedExpensesInput = {
@@ -17714,11 +17659,11 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    activities?: ActivityCreateNestedManyWithoutGroupInput
     owner: UserCreateNestedOneWithoutOwnedGroupsInput
     members?: GroupMemberCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
-    activities?: ActivityCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutExpensesInput = {
@@ -17728,15 +17673,70 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
     activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutExpensesInput = {
     where: GroupWhereUniqueInput
     create: XOR<GroupCreateWithoutExpensesInput, GroupUncheckedCreateWithoutExpensesInput>
+  }
+
+  export type UserCreateWithoutPaidExpensesInput = {
+    id?: string
+    fullName: string
+    email: string
+    phoneNumber?: string | null
+    username?: string | null
+    profilePhotoUrl?: string | null
+    authProvider?: $Enums.AuthProvider
+    passwordHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
+    createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
+    expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
+    friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
+    friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
+    ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
+  }
+
+  export type UserUncheckedCreateWithoutPaidExpensesInput = {
+    id?: string
+    fullName: string
+    email: string
+    phoneNumber?: string | null
+    username?: string | null
+    profilePhotoUrl?: string | null
+    authProvider?: $Enums.AuthProvider
+    passwordHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
+    createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
+    expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
+    friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
+    friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
+    ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
+  }
+
+  export type UserCreateOrConnectWithoutPaidExpensesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
   }
 
   export type ExpenseParticipantCreateWithoutExpenseInput = {
@@ -17765,67 +17765,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutPaidExpensesInput = {
-    update: XOR<UserUpdateWithoutPaidExpensesInput, UserUncheckedUpdateWithoutPaidExpensesInput>
-    create: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutPaidExpensesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutPaidExpensesInput, UserUncheckedUpdateWithoutPaidExpensesInput>
-  }
-
-  export type UserUpdateWithoutPaidExpensesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
-    createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
-    expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
-    friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
-    friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
-    ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
-    ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutPaidExpensesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
-    createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
-    expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
-    friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
-    friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
-    ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
-    ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
-  }
-
   export type UserUpsertWithoutCreatedExpensesInput = {
     update: XOR<UserUpdateWithoutCreatedExpensesInput, UserUncheckedUpdateWithoutCreatedExpensesInput>
     create: XOR<UserCreateWithoutCreatedExpensesInput, UserUncheckedCreateWithoutCreatedExpensesInput>
@@ -17846,20 +17785,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedExpensesInput = {
@@ -17871,20 +17810,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type GroupUpsertWithoutExpensesInput = {
@@ -17904,11 +17843,11 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUpdateManyWithoutGroupNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutExpensesInput = {
@@ -17918,10 +17857,71 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
+  }
+
+  export type UserUpsertWithoutPaidExpensesInput = {
+    update: XOR<UserUpdateWithoutPaidExpensesInput, UserUncheckedUpdateWithoutPaidExpensesInput>
+    create: XOR<UserCreateWithoutPaidExpensesInput, UserUncheckedCreateWithoutPaidExpensesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPaidExpensesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPaidExpensesInput, UserUncheckedUpdateWithoutPaidExpensesInput>
+  }
+
+  export type UserUpdateWithoutPaidExpensesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
+    createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
+    expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
+    friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
+    friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
+    ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPaidExpensesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
+    createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
+    expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
+    friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
+    friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
+    ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type ExpenseParticipantUpsertWithWhereUniqueWithoutExpenseInput = {
@@ -17948,9 +17948,9 @@ export namespace Prisma {
     receiptUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    payer: UserCreateNestedOneWithoutPaidExpensesInput
     creator: UserCreateNestedOneWithoutCreatedExpensesInput
     group?: GroupCreateNestedOneWithoutExpensesInput
+    payer: UserCreateNestedOneWithoutPaidExpensesInput
   }
 
   export type ExpenseUncheckedCreateWithoutParticipantsInput = {
@@ -17980,20 +17980,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutExpenseParticipationsInput = {
@@ -18005,20 +18005,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutExpenseParticipationsInput = {
@@ -18045,9 +18045,9 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedExpensesNestedInput
     group?: GroupUpdateOneWithoutExpensesNestedInput
+    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
   }
 
   export type ExpenseUncheckedUpdateWithoutParticipantsInput = {
@@ -18083,20 +18083,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseParticipationsInput = {
@@ -18108,20 +18108,51 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type GroupCreateWithoutSettlementsInput = {
+    id?: string
+    name: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
+    owner: UserCreateNestedOneWithoutOwnedGroupsInput
+    members?: GroupMemberCreateNestedManyWithoutGroupInput
+    ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupUncheckedCreateWithoutSettlementsInput = {
+    id?: string
+    name: string
+    ownerId: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+    ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupCreateOrConnectWithoutSettlementsInput = {
+    where: GroupWhereUniqueInput
+    create: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
   }
 
   export type UserCreateWithoutSettlementsPaidInput = {
@@ -18133,20 +18164,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutSettlementsPaidInput = {
@@ -18158,20 +18189,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutSettlementsPaidInput = {
@@ -18188,20 +18219,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
   }
 
   export type UserUncheckedCreateWithoutSettlementsReceivedInput = {
@@ -18213,20 +18244,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type UserCreateOrConnectWithoutSettlementsReceivedInput = {
@@ -18234,35 +18265,41 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutSettlementsReceivedInput, UserUncheckedCreateWithoutSettlementsReceivedInput>
   }
 
-  export type GroupCreateWithoutSettlementsInput = {
-    id?: string
-    name: string
-    inviteCode: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutOwnedGroupsInput
-    members?: GroupMemberCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    activities?: ActivityCreateNestedManyWithoutGroupInput
-    ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupUncheckedCreateWithoutSettlementsInput = {
-    id?: string
-    name: string
-    ownerId: string
-    inviteCode: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
-    ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupCreateOrConnectWithoutSettlementsInput = {
-    where: GroupWhereUniqueInput
+  export type GroupUpsertWithoutSettlementsInput = {
+    update: XOR<GroupUpdateWithoutSettlementsInput, GroupUncheckedUpdateWithoutSettlementsInput>
     create: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
+    where?: GroupWhereInput
+  }
+
+  export type GroupUpdateToOneWithWhereWithoutSettlementsInput = {
+    where?: GroupWhereInput
+    data: XOR<GroupUpdateWithoutSettlementsInput, GroupUncheckedUpdateWithoutSettlementsInput>
+  }
+
+  export type GroupUpdateWithoutSettlementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
+    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
+    members?: GroupMemberUpdateManyWithoutGroupNestedInput
+    ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+  }
+
+  export type GroupUncheckedUpdateWithoutSettlementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+    ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserUpsertWithoutSettlementsPaidInput = {
@@ -18285,20 +18322,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettlementsPaidInput = {
@@ -18310,20 +18347,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUpsertWithoutSettlementsReceivedInput = {
@@ -18346,20 +18383,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettlementsReceivedInput = {
@@ -18371,57 +18408,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
-  }
-
-  export type GroupUpsertWithoutSettlementsInput = {
-    update: XOR<GroupUpdateWithoutSettlementsInput, GroupUncheckedUpdateWithoutSettlementsInput>
-    create: XOR<GroupCreateWithoutSettlementsInput, GroupUncheckedCreateWithoutSettlementsInput>
-    where?: GroupWhereInput
-  }
-
-  export type GroupUpdateToOneWithWhereWithoutSettlementsInput = {
-    where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutSettlementsInput, GroupUncheckedUpdateWithoutSettlementsInput>
-  }
-
-  export type GroupUpdateWithoutSettlementsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
-    members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUpdateManyWithoutGroupNestedInput
-    ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
-  }
-
-  export type GroupUncheckedUpdateWithoutSettlementsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
-    ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
   }
 
   export type UserCreateWithoutActivitiesInput = {
@@ -18433,20 +18433,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -18458,20 +18458,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -18485,11 +18485,11 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
     owner: UserCreateNestedOneWithoutOwnedGroupsInput
     members?: GroupMemberCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutActivitiesInput = {
@@ -18499,10 +18499,10 @@ export namespace Prisma {
     inviteCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     ownershipTransfers?: OwnershipTransferUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutActivitiesInput = {
@@ -18530,20 +18530,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -18555,20 +18555,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type GroupUpsertWithoutActivitiesInput = {
@@ -18588,11 +18588,11 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutActivitiesInput = {
@@ -18602,41 +18602,10 @@ export namespace Prisma {
     inviteCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
-  }
-
-  export type GroupCreateWithoutOwnershipTransfersInput = {
-    id?: string
-    name: string
-    inviteCode: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutOwnedGroupsInput
-    members?: GroupMemberCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseCreateNestedManyWithoutGroupInput
-    settlements?: SettlementCreateNestedManyWithoutGroupInput
-    activities?: ActivityCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupUncheckedCreateWithoutOwnershipTransfersInput = {
-    id?: string
-    name: string
-    ownerId: string
-    inviteCode: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
-    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupCreateOrConnectWithoutOwnershipTransfersInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserCreateWithoutOwnershipTransfersStartedInput = {
@@ -18648,20 +18617,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersReceived?: OwnershipTransferCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutOwnershipTransfersStartedInput = {
@@ -18673,25 +18642,56 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedCreateNestedManyWithoutProposedOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutOwnershipTransfersStartedInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutOwnershipTransfersStartedInput, UserUncheckedCreateWithoutOwnershipTransfersStartedInput>
+  }
+
+  export type GroupCreateWithoutOwnershipTransfersInput = {
+    id?: string
+    name: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseCreateNestedManyWithoutGroupInput
+    owner: UserCreateNestedOneWithoutOwnedGroupsInput
+    members?: GroupMemberCreateNestedManyWithoutGroupInput
+    settlements?: SettlementCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupUncheckedCreateWithoutOwnershipTransfersInput = {
+    id?: string
+    name: string
+    ownerId: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activities?: ActivityUncheckedCreateNestedManyWithoutGroupInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutGroupInput
+    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+    settlements?: SettlementUncheckedCreateNestedManyWithoutGroupInput
+  }
+
+  export type GroupCreateOrConnectWithoutOwnershipTransfersInput = {
+    where: GroupWhereUniqueInput
+    create: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
   }
 
   export type UserCreateWithoutOwnershipTransfersReceivedInput = {
@@ -18703,20 +18703,20 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
-    activities?: ActivityCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferCreateNestedManyWithoutCurrentOwnerInput
+    settlementsPaid?: SettlementCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateWithoutOwnershipTransfersReceivedInput = {
@@ -18728,62 +18728,25 @@ export namespace Prisma {
     profilePhotoUrl?: string | null
     authProvider?: $Enums.AuthProvider
     passwordHash?: string | null
-    googleId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    googleId?: string | null
+    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     createdExpenses?: ExpenseUncheckedCreateNestedManyWithoutCreatorInput
     paidExpenses?: ExpenseUncheckedCreateNestedManyWithoutPayerInput
     expenseParticipations?: ExpenseParticipantUncheckedCreateNestedManyWithoutUserInput
-    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
-    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutActorInput
     friendshipsAsUser1?: FriendshipUncheckedCreateNestedManyWithoutUser1Input
     friendshipsAsUser2?: FriendshipUncheckedCreateNestedManyWithoutUser2Input
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    groupMemberships?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedCreateNestedManyWithoutCurrentOwnerInput
+    settlementsPaid?: SettlementUncheckedCreateNestedManyWithoutPayerInput
+    settlementsReceived?: SettlementUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserCreateOrConnectWithoutOwnershipTransfersReceivedInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutOwnershipTransfersReceivedInput, UserUncheckedCreateWithoutOwnershipTransfersReceivedInput>
-  }
-
-  export type GroupUpsertWithoutOwnershipTransfersInput = {
-    update: XOR<GroupUpdateWithoutOwnershipTransfersInput, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
-    create: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
-    where?: GroupWhereInput
-  }
-
-  export type GroupUpdateToOneWithWhereWithoutOwnershipTransfersInput = {
-    where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutOwnershipTransfersInput, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
-  }
-
-  export type GroupUpdateWithoutOwnershipTransfersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
-    members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUpdateManyWithoutGroupNestedInput
-  }
-
-  export type GroupUncheckedUpdateWithoutOwnershipTransfersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserUpsertWithoutOwnershipTransfersStartedInput = {
@@ -18806,20 +18769,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersReceived?: OwnershipTransferUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnershipTransfersStartedInput = {
@@ -18831,20 +18794,57 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersReceived?: OwnershipTransferUncheckedUpdateManyWithoutProposedOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type GroupUpsertWithoutOwnershipTransfersInput = {
+    update: XOR<GroupUpdateWithoutOwnershipTransfersInput, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
+    create: XOR<GroupCreateWithoutOwnershipTransfersInput, GroupUncheckedCreateWithoutOwnershipTransfersInput>
+    where?: GroupWhereInput
+  }
+
+  export type GroupUpdateToOneWithWhereWithoutOwnershipTransfersInput = {
+    where?: GroupWhereInput
+    data: XOR<GroupUpdateWithoutOwnershipTransfersInput, GroupUncheckedUpdateWithoutOwnershipTransfersInput>
+  }
+
+  export type GroupUpdateWithoutOwnershipTransfersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
+    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
+    members?: GroupMemberUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
+  }
+
+  export type GroupUncheckedUpdateWithoutOwnershipTransfersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserUpsertWithoutOwnershipTransfersReceivedInput = {
@@ -18867,20 +18867,20 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUpdateManyWithoutCurrentOwnerNestedInput
+    settlementsPaid?: SettlementUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnershipTransfersReceivedInput = {
@@ -18892,34 +18892,29 @@ export namespace Prisma {
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     authProvider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     createdExpenses?: ExpenseUncheckedUpdateManyWithoutCreatorNestedInput
     paidExpenses?: ExpenseUncheckedUpdateManyWithoutPayerNestedInput
     expenseParticipations?: ExpenseParticipantUncheckedUpdateManyWithoutUserNestedInput
-    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
-    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutActorNestedInput
     friendshipsAsUser1?: FriendshipUncheckedUpdateManyWithoutUser1NestedInput
     friendshipsAsUser2?: FriendshipUncheckedUpdateManyWithoutUser2NestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    groupMemberships?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     ownershipTransfersStarted?: OwnershipTransferUncheckedUpdateManyWithoutCurrentOwnerNestedInput
+    settlementsPaid?: SettlementUncheckedUpdateManyWithoutPayerNestedInput
+    settlementsReceived?: SettlementUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
-  export type GroupCreateManyOwnerInput = {
+  export type ActivityCreateManyActorInput = {
     id?: string
-    name: string
-    inviteCode: string
+    groupId?: string | null
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type GroupMemberCreateManyUserInput = {
-    id?: string
-    groupId: string
-    joinedAt?: Date | string
   }
 
   export type ExpenseCreateManyCreatorInput = {
@@ -18954,35 +18949,6 @@ export namespace Prisma {
     shares?: number | null
   }
 
-  export type SettlementCreateManyPayerInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    receiverId: string
-    groupId?: string | null
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type SettlementCreateManyReceiverInput = {
-    id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    payerId: string
-    groupId?: string | null
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ActivityCreateManyActorInput = {
-    id?: string
-    groupId?: string | null
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
   export type FriendshipCreateManyUser1Input = {
     id?: string
     user2Id: string
@@ -18993,6 +18959,20 @@ export namespace Prisma {
     id?: string
     user1Id: string
     createdAt?: Date | string
+  }
+
+  export type GroupCreateManyOwnerInput = {
+    id?: string
+    name: string
+    inviteCode: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GroupMemberCreateManyUserInput = {
+    id?: string
+    groupId: string
+    joinedAt?: Date | string
   }
 
   export type OwnershipTransferCreateManyCurrentOwnerInput = {
@@ -19013,56 +18993,51 @@ export namespace Prisma {
     respondedAt?: Date | string | null
   }
 
-  export type GroupUpdateWithoutOwnerInput = {
+  export type SettlementCreateManyPayerInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiverId: string
+    groupId?: string | null
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SettlementCreateManyReceiverInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payerId: string
+    groupId?: string | null
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ActivityUpdateWithoutActorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUpdateManyWithoutGroupNestedInput
-    ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    group?: GroupUpdateOneWithoutActivitiesNestedInput
   }
 
-  export type GroupUncheckedUpdateWithoutOwnerInput = {
+  export type ActivityUncheckedUpdateWithoutActorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
-    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
-    ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
   }
 
-  export type GroupUncheckedUpdateManyWithoutOwnerInput = {
+  export type ActivityUncheckedUpdateManyWithoutActorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    inviteCode?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupMemberUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneRequiredWithoutMembersNestedInput
-  }
-
-  export type GroupMemberUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupMemberUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExpenseUpdateWithoutCreatorInput = {
@@ -19073,8 +19048,8 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     group?: GroupUpdateOneWithoutExpensesNestedInput
+    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     participants?: ExpenseParticipantUpdateManyWithoutExpenseNestedInput
   }
 
@@ -19165,93 +19140,6 @@ export namespace Prisma {
     shares?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
-  export type SettlementUpdateWithoutPayerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    receiver?: UserUpdateOneRequiredWithoutSettlementsReceivedNestedInput
-    group?: GroupUpdateOneWithoutSettlementsNestedInput
-  }
-
-  export type SettlementUncheckedUpdateWithoutPayerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    receiverId?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SettlementUncheckedUpdateManyWithoutPayerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    receiverId?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SettlementUpdateWithoutReceiverInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payer?: UserUpdateOneRequiredWithoutSettlementsPaidNestedInput
-    group?: GroupUpdateOneWithoutSettlementsNestedInput
-  }
-
-  export type SettlementUncheckedUpdateWithoutReceiverInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    payerId?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SettlementUncheckedUpdateManyWithoutReceiverInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    payerId?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUpdateWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneWithoutActivitiesNestedInput
-  }
-
-  export type ActivityUncheckedUpdateWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUncheckedUpdateManyWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type FriendshipUpdateWithoutUser1Input = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19288,6 +19176,58 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GroupUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUpdateManyWithoutGroupNestedInput
+    ownershipTransfers?: OwnershipTransferUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUpdateManyWithoutGroupNestedInput
+  }
+
+  export type GroupUncheckedUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activities?: ActivityUncheckedUpdateManyWithoutGroupNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutGroupNestedInput
+    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+    ownershipTransfers?: OwnershipTransferUncheckedUpdateManyWithoutGroupNestedInput
+    settlements?: SettlementUncheckedUpdateManyWithoutGroupNestedInput
+  }
+
+  export type GroupUncheckedUpdateManyWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupMemberUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type GroupMemberUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    groupId?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupMemberUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    groupId?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OwnershipTransferUpdateWithoutCurrentOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
@@ -19320,8 +19260,8 @@ export namespace Prisma {
     status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    group?: GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput
     currentOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersStartedNestedInput
+    group?: GroupUpdateOneRequiredWithoutOwnershipTransfersNestedInput
   }
 
   export type OwnershipTransferUncheckedUpdateWithoutProposedOwnerInput = {
@@ -19342,10 +19282,73 @@ export namespace Prisma {
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type GroupMemberCreateManyGroupInput = {
+  export type SettlementUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneWithoutSettlementsNestedInput
+    receiver?: UserUpdateOneRequiredWithoutSettlementsReceivedNestedInput
+  }
+
+  export type SettlementUncheckedUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiverId?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SettlementUncheckedUpdateManyWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiverId?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SettlementUpdateWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneWithoutSettlementsNestedInput
+    payer?: UserUpdateOneRequiredWithoutSettlementsPaidNestedInput
+  }
+
+  export type SettlementUncheckedUpdateWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SettlementUncheckedUpdateManyWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityCreateManyGroupInput = {
     id?: string
-    userId: string
-    joinedAt?: Date | string
+    actorId: string
+    activityType: $Enums.ActivityType
+    entityId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
   }
 
   export type ExpenseCreateManyGroupInput = {
@@ -19360,23 +19363,10 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SettlementCreateManyGroupInput = {
+  export type GroupMemberCreateManyGroupInput = {
     id?: string
-    amount: Decimal | DecimalJsLike | number | string
-    payerId: string
-    receiverId: string
-    note?: string | null
-    screenshotUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ActivityCreateManyGroupInput = {
-    id?: string
-    actorId: string
-    activityType: $Enums.ActivityType
-    entityId?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
+    userId: string
+    joinedAt?: Date | string
   }
 
   export type OwnershipTransferCreateManyGroupInput = {
@@ -19388,22 +19378,41 @@ export namespace Prisma {
     respondedAt?: Date | string | null
   }
 
-  export type GroupMemberUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutGroupMembershipsNestedInput
+  export type SettlementCreateManyGroupInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payerId: string
+    receiverId: string
+    note?: string | null
+    screenshotUrl?: string | null
+    createdAt?: Date | string
   }
 
-  export type GroupMemberUncheckedUpdateWithoutGroupInput = {
+  export type ActivityUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actor?: UserUpdateOneRequiredWithoutActivitiesNestedInput
   }
 
-  export type GroupMemberUncheckedUpdateManyWithoutGroupInput = {
+  export type ActivityUncheckedUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: StringFieldUpdateOperationsInput | string
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityUncheckedUpdateManyWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actorId?: StringFieldUpdateOperationsInput | string
+    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExpenseUpdateWithoutGroupInput = {
@@ -19414,8 +19423,8 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedExpensesNestedInput
+    payer?: UserUpdateOneRequiredWithoutPaidExpensesNestedInput
     participants?: ExpenseParticipantUpdateManyWithoutExpenseNestedInput
   }
 
@@ -19442,6 +19451,51 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupMemberUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutGroupMembershipsNestedInput
+  }
+
+  export type GroupMemberUncheckedUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupMemberUncheckedUpdateManyWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OwnershipTransferUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersStartedNestedInput
+    proposedOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersReceivedNestedInput
+  }
+
+  export type OwnershipTransferUncheckedUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currentOwnerId?: StringFieldUpdateOperationsInput | string
+    proposedOwnerId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OwnershipTransferUncheckedUpdateManyWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currentOwnerId?: StringFieldUpdateOperationsInput | string
+    proposedOwnerId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SettlementUpdateWithoutGroupInput = {
@@ -19472,60 +19526,6 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    actor?: UserUpdateOneRequiredWithoutActivitiesNestedInput
-  }
-
-  export type ActivityUncheckedUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorId?: StringFieldUpdateOperationsInput | string
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUncheckedUpdateManyWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorId?: StringFieldUpdateOperationsInput | string
-    activityType?: EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
-    entityId?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type OwnershipTransferUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    currentOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersStartedNestedInput
-    proposedOwner?: UserUpdateOneRequiredWithoutOwnershipTransfersReceivedNestedInput
-  }
-
-  export type OwnershipTransferUncheckedUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    currentOwnerId?: StringFieldUpdateOperationsInput | string
-    proposedOwnerId?: StringFieldUpdateOperationsInput | string
-    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type OwnershipTransferUncheckedUpdateManyWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    currentOwnerId?: StringFieldUpdateOperationsInput | string
-    proposedOwnerId?: StringFieldUpdateOperationsInput | string
-    status?: EnumOwnershipTransferStatusFieldUpdateOperationsInput | $Enums.OwnershipTransferStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ExpenseParticipantCreateManyExpenseInput = {

@@ -129,9 +129,9 @@ exports.Prisma.UserScalarFieldEnum = {
   profilePhotoUrl: 'profilePhotoUrl',
   authProvider: 'authProvider',
   passwordHash: 'passwordHash',
-  googleId: 'googleId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  googleId: 'googleId'
 };
 
 exports.Prisma.FriendshipScalarFieldEnum = {
@@ -254,10 +254,10 @@ exports.ActivityType = exports.$Enums.ActivityType = {
   SETTLEMENT_CREATED: 'SETTLEMENT_CREATED',
   MEMBER_ADDED: 'MEMBER_ADDED',
   MEMBER_REMOVED: 'MEMBER_REMOVED',
-  GROUP_CREATED: 'GROUP_CREATED',
   GROUP_RENAMED: 'GROUP_RENAMED',
   OWNERSHIP_TRANSFERRED: 'OWNERSHIP_TRANSFERRED',
-  GROUP_DELETED: 'GROUP_DELETED'
+  GROUP_DELETED: 'GROUP_DELETED',
+  GROUP_CREATED: 'GROUP_CREATED'
 };
 
 exports.OwnershipTransferStatus = exports.$Enums.OwnershipTransferStatus = {
