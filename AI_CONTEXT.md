@@ -2,1433 +2,1090 @@
 
 # Splitwise-Inspired Expense Sharing Application
 
-## Project Purpose
+## 1. Project Purpose
 
-This document is the single source of truth for the Splitwise Clone Internship Assignment.
+This project is a Splitwise-inspired full-stack expense sharing application built for the Spreetail internship assignment.
 
-The assignment is to reverse engineer Splitwise, scope a realistic MVP, and build a working deployed full-stack app using AI as the main development collaborator. The AI is expected to behave like a junior engineer, ask product and engineering questions before building, and help maintain context throughout the project.
+The assignment required acting as both Product Manager and Developer: studying Splitwise, scoping a realistic MVP, building a deployed working app, and using AI as a primary development collaborator.
 
-Any engineer or evaluator should be able to read this file and understand:
+This document is the source of truth for the application. It captures the final product scope, architecture, database design, API behavior, frontend structure, testing status, tradeoffs, and known limitations.
 
-- Product requirements
-- MVP scope
-- Business rules
-- User flows
-- Permissions
-- Database schema
-- Backend architecture
-- Balance calculation rules
-- Testing strategy
-- Implementation progress
-- Tradeoffs and known limitations
-
-The project is being built as a Splitwise-inspired expense sharing platform with emphasis on correctness, clarity, and interview-readiness.
+The goal of this file is that another developer or AI agent should be able to understand and recreate a similar app from this context.
 
 ---
 
-# Assignment Goals
+## 2. Product Understanding
 
-The application must demonstrate:
+Splitwise solves the problem of shared expenses between groups of people. Its core behavior is:
 
-1. Product understanding
-2. Ability to scope a realistic MVP
-3. Strong relational database design
-4. Working backend and frontend implementation
-5. AI-assisted development process
-6. Continuously maintained documentation
-7. A codebase that can be explained and modified during interview evaluation
+* Users create groups.
+* Members add expenses.
+* Expenses can be split in different ways.
+* The system calculates who owes whom.
+* Users can record settlements/payments.
+* Balances update based on expenses and settlements.
 
-Primary priorities:
+This clone focuses on the core financial workflows:
 
-1. Balance correctness
-2. User experience
-3. Engineering quality
-4. Ability to explain decisions clearly
+* Authentication
+* Group creation and membership
+* Expense creation
+* Multiple split types
+* Balance calculation
+* Settlement recording
+* Activity tracking
+* Ownership transfer
 
----
-
-# Current Implementation Status
-
-## Completed
-
-- Product scope discussion
-- AI_CONTEXT.md initial version
-- BUILD_PLAN.md initial version
-- ERD.md
-- PostgreSQL local setup
-- Prisma 7 setup
-- Prisma schema design
-- Full schema.prisma
-- Database migrations
-- Seed data
-- Prisma Studio verification
-- Split engine service
-- Balance engine service
-- Split engine tests
-- Balance engine tests
-- Express setup
-- Prisma client setup
-- Health check endpoint
-- Error middleware
-- Auth APIs
-- Group API  
-## Current Phase
-
-- Expense APIs
-
-## Current Backend API Plan
-
-Planned order:
-
-- Settlement APIs
-- Balance APIs
-- Activity APIs
-- Frontend
-- Realtime
-- Deployment
-
-### Backend API - Auth APIs
-
-Completed:
-- Email/password registration
-- Password hashing with bcrypt
-- JWT login
-- Protected route middleware
-- Logged-in user endpoint
-
-Decision:
-- Email/password auth implemented first for demo reliability.
-- Google login remains planned/future because OAuth setup can slow down MVP delivery.
-
-Endpoints:
-- POST /api/auth/register
-- POST /api/auth/login
-- GET /api/auth/me
-
-Auth Implementation Decision:
-Although Google Login is a must-have requirement, email/password authentication was implemented first to make backend testing faster and easier. Google Login remains required for the final MVP and will be implemented before submission.
+The app prioritizes correctness of balances over advanced social features.
 
 ---
 
-### Group APIs
+## 3. Final MVP Scope
 
-Completed:
-- Create group
-- Get my groups
-- Get group details
-- Rename group
-- Delete group
-- Add member
-- Remove member
-- Join via invite code
-
-Business Rules:
-- Only owner can add/remove members.
-- Any member can rename group.
-- Only owner can delete group.
-- Invite codes are unique and reusable.
-
-### Expense APIs v1
-
-Completed:
-- Created expense API
-- Tested equal split
-- Tested unequal split
-- Tested percentage split
-- Tested share split
-- ExpenseParticipant rows verified in Prisma Studio
-
-Decision:
-- Split calculations are handled by split.service.js.
-- Expense controller handles authorization, validation, and database persistence.
-
-Completed:
-- Edit expense API
-- Delete expense API
-
-Decision:
-- Expense edits rebuild participant allocations instead of updating rows individually.
-- This keeps split recalculation simple and reliable for MVP scale.
-
-### Balance APIs v1
-
-Completed:
-- Group raw balances
-- Group simplified balances
-- Logged-in user balance summary
-
-Temporary Decision:
-- Settlement data is passed as an empty array until Settlement APIs are implemented.
-
-### Settlement APIs
-
-Completed:
-- Record group settlement
-- Get group settlement history
-- Settlements integrated into group balance calculation
-- Settlements integrated into user balance summary
-
-Decision:
-- Settlements are stored as independent records instead of modifying old expenses.
-- This preserves audit history and keeps expenses as source-of-truth records.
-
-### Activity System
-
-Completed:
-- Group activity feed API
-- User activity feed API
-- Activity service helper
-- Activity entries for group changes
-- Activity entries for expenses
-- Activity entries for settlements
-
-Decision:
-- Activity records are stored separately as an audit trail.
-- Metadata is JSON to support flexible activity details without changing schema.
-
-Backend Status
-
-Completed:
-- Authentication
-- Group Management
-- Member Management
-- Expense Management
-- Balance Calculation
-- Settlement Recording
-- Activity Feed
-
-Current Work:
-- Ownership Transfer
-
-Remaining:
-- Frontend
-- Realtime Updates
-- Deployment
-
-### Ownership Transfer
-
-Completed:
-- Create ownership transfer request
-- Accept ownership transfer
-- Reject ownership transfer
-- Ownership change transaction
-- Ownership transfer activity logging
-
-Business Rules:
-- Only owner can initiate transfer.
-- Proposed owner must already be a group member.
-- Only proposed owner may accept/reject.
-- Ownership changes only after acceptance.
-
-Backend MVP Status: Complete
-
-Completed:
-- Auth
-- Groups
-- Members
-- Expenses
-- Balances
-- Settlements
-- Activity Feed
-- Ownership Transfer
-
-Current Phase:
-- Backend Stabilization
-
-Next Phase:
-- Frontend Development
-
-## Authentication Update
-
-The app supports both email/password authentication and Google OAuth login.
-
-User schema decisions:
-- `email` is required and unique for all users.
-- `phoneNumber` is optional because Google Auth does not provide phone numbers.
-- `passwordHash` is optional because Google OAuth users do not need passwords.
-- `googleId` is optional but unique, used to identify Google OAuth users.
-- `authProvider` defaults to `EMAIL_PASSWORD`.
-- JWT will still be used for app sessions after either login method succeeds.
-
-Authentication Revision:
-- phoneNumber changed from required to optional.
-- Added googleId unique field.
-- Added Google OAuth login.
-- Backend continues using JWT for authorization.
-- Google OAuth is only used for identity verification.
-
-## Google Auth Backend Implementation
-
-Implemented `POST /api/auth/google`.
-
-The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
-
-The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
-
-Current Google Auth status:
-- Route wired successfully.
-- Missing credential returns validation error.
-- Invalid credential reaches Google verification and is rejected.
-- Real Google login will be tested after frontend GIS button is implemented.
-
-## Google Auth Backend Implementation
-
-Implemented `POST /api/auth/google`.
-
-The route accepts a Google ID token as `credential`, verifies it using `google-auth-library`, then finds or creates the matching user.
-
-The app still uses its own JWT after login, so protected routes work the same for both email/password and Google users.
-
-Current Google Auth status:
-- Route wired successfully.
-- Missing credential returns validation error.
-- Invalid credential reaches Google verification and is rejected.
-- Real Google login will be tested after frontend GIS button is implemented.
-
-# User Personas
-
-The application is intentionally generic and supports:
-
-- Friends
-- Roommates
-- Couples
-- Teams
-- Event organizers
-- Travel groups
-
-No persona-specific functionality exists.
-
----
-
-# MVP Scope
-
-## Must Have
+## Implemented
 
 ### Authentication
 
-- Login module
-- Email/password authentication for local MVP implementation
-- JWT-based session handling
-- Google login can remain a planned enhancement if time does not permit full OAuth setup
+* Email/password registration
+* Email/password login
+* JWT-based protected routes
+* Google OAuth backend route
+* Auth state persistence on frontend using localStorage
 
-### Group Management
+### Groups
 
-- Create groups
-- Rename groups
-- Add members
-- Remove members
-- Transfer ownership
-- Delete groups
-- Invite users through invite links
-- Search existing users and add them
+* Create group
+* View user groups
+* View group details
+* Rename group
+* Delete group
+* Invite-code based group joining
+* Remove group members
+* Group ownership
+* Ownership transfer request, accept, reject
 
-### Expense Management
+### Expenses
 
-- Create expense
-- Edit expense
-- Delete expense
-- Equal split
-- Unequal split
-- Percentage split
-- Share split
-
-### Direct Expenses
-
-- Direct expenses between friends are planned but lower priority than group expense flows
+* Create expense
+* Edit expense
+* Delete expense
+* Equal split
+* Unequal split
+* Percentage split
+* Share split
+* Expense participants can be a subset of group members
+* Expense creator is tracked
+* Payer is tracked
 
 ### Balances
 
-- Group balances
-- Individual balance summary
-- Raw debt view
-- Simplified debt view
-- Balance recalculation from expenses and settlements
+* Group raw balances
+* Group simplified balances
+* Logged-in user balance summary
+* Balances calculated dynamically from expenses and settlements
 
 ### Settlements
 
-- Record settlements
-- Settlement history
-- Settlements reduce outstanding debt
-
-Settlement Authorization Rule:
-
-Only the authenticated payer may record a settlement.
-
-Reason:
-Prevents users from recording payments on behalf of other members and improves trustworthiness of financial records.
+* Record settlement
+* View group settlement history
+* Settlement affects balances
+* User can only record settlements where they are the payer
 
 ### Activity
 
-- Group activity feed
-- User activity feed
-- Activity entries for important actions
+* Group activity feed
+* User activity feed
+* Activity records for:
+
+  * Group creation
+  * Group rename
+  * Group deletion
+  * Member addition
+  * Member removal
+  * Expense creation
+  * Expense update
+  * Expense deletion
+  * Settlement creation
+  * Ownership transfer
+
+### Frontend
+
+* Login page
+* Register page
+* Dashboard page
+* Group detail page
+* Settlement form
+* Ownership transfer page
+* Protected routes
+* API service layer
+* React Context based auth
 
 ---
 
-## Nice To Have
+## 4. Deferred / Not Implemented
 
-- Google OAuth login
-- Phone number + password login
-- WhatsApp invite
-- SMS invite
-- Expense chat/comments
-- Receipt uploads
-- Friend system improvements
-- Realtime updates using Socket.IO
+The following were intentionally deferred due to time constraints:
 
----
-
-## Cut If Needed
-
-- Group chat
-- Multiple currencies
-- Export spreadsheet
-- Receipt uploads
-- Full OAuth implementation
-- Realtime chat/comments
+* Realtime expense chat/comments
+* Socket.IO realtime updates
+* User search for adding members
+* Full friend system UI
+* Direct friend expenses
+* Forgot password
+* Receipt upload UI
+* Multi-currency support
+* Notifications
+* Expense search
+* Mobile app
+* Advanced invite expiration/approval rules
 
 ---
 
-# User Roles
+## 5. Tech Stack
 
-Only two roles exist.
+## Backend
 
-## Owner
+* Node.js
+* Express
+* CommonJS JavaScript
+* PostgreSQL
+* Prisma 7
+* JWT
+* bcryptjs
+* google-auth-library
+* Morgan
+* CORS
+* dotenv
 
-Permissions:
+## Frontend
 
-- Add members
-- Remove members
-- Delete group
-- Edit group details
-- Transfer ownership
-- Override debt-settlement restrictions during member removal
+* React
+* Vite
+* TypeScript
+* React Router DOM
+* Axios
+* React Context API
+* Tailwind CSS / clean CSS
+* localStorage for JWT persistence
 
-## Member
+## Deployment Plan
 
-Permissions:
-
-- Create expenses
-- Edit own expenses
-- Delete own expenses
-- Rename groups
-- Record settlements
-- View balances
-- View activity
-
-No admin role exists.
+* Frontend: Vercel
+* Backend: Render
+* Database: Neon PostgreSQL
 
 ---
 
-# Authentication
+## 6. Backend Folder Structure
 
-## Login Methods
+```txt
+backend/
+  src/
+    app.js
+    server.js
 
-Final MVP implementation priority:
+    config/
+      prisma.js
 
-- Email + password authentication
-- JWT token authentication
-- Protected backend routes
+    controllers/
+      activity.controller.js
+      auth.controller.js
+      balance.controller.js
+      expense.controller.js
+      group.controller.js
+      ownershipTransfer.controller.js
+      settlement.controller.js
 
-Originally considered:
+    generated/
+      prisma/
 
-- Google Login
-- Phone number + password login
+    middleware/
+      auth.middleware.js
+      error.middleware.js
 
-Google login is useful but may be deferred because the assignment requires a login module, not necessarily OAuth.
+    routes/
+      activity.routes.js
+      auth.routes.js
+      balance.routes.js
+      expense.routes.js
+      group.routes.js
+      ownershipTransfer.routes.js
+      settlement.routes.js
 
-## User Profile Fields
+    services/
+      activity.service.js
+      balance.service.js
+      balance.test.js
+      split.service.js
+      split.test.js
 
-Required:
+    utils/
+      apiError.js
+      asyncHandler.js
+      generateToken.js
+```
 
-- Full name
-- Email
-- Password hash
+Important Prisma decision:
 
-Optional:
+The Prisma client is generated into:
 
-- Phone number
-- Username
-- Profile photo
+```txt
+src/generated/prisma
+```
 
-## Unique Identity
+This is configured in `schema.prisma`.
 
-Email address.
+---
+
+## 7. Frontend Folder Structure
+
+```txt
+frontend/
+  src/
+    App.tsx
+    main.tsx
+    index.css
+
+    components/
+      ProtectedRoute.tsx
+      SettlementForm.tsx
+
+    context/
+      AuthContext.ts
+      AuthProvider.tsx
+      useAuth.ts
+
+    pages/
+      Dashboard.tsx
+      GroupDetail.tsx
+      Login.tsx
+      OwnershipTransfers.tsx
+      Register.tsx
+
+    services/
+      activityService.ts
+      api.ts
+      balanceService.ts
+      expenseService.ts
+      groupService.ts
+      ownershipTransferService.ts
+      settlementService.ts
+
+    types/
+      activity.ts
+      auth.ts
+      balance.ts
+      expense.ts
+      group.ts
+      groupDetail.ts
+      settlement.ts
+```
+
+---
+
+## 8. Database Schema
+
+The database uses PostgreSQL through Prisma.
+
+## User
+
+Represents an authenticated user.
+
+Important fields:
+
+* id
+* fullName
+* email
+* phoneNumber
+* username
+* profilePhotoUrl
+* authProvider
+* passwordHash
+* googleId
+* createdAt
+* updatedAt
 
 Rules:
 
-- Every account must have a unique email address.
-- Email is the primary identity key.
-- Phone numbers may be used later for search and invitations but are not the primary identity key.
+* Email is required and unique.
+* Google ID is optional and unique.
+* Password hash is optional because Google users do not need passwords.
+* Phone number is optional.
 
-## Session Behaviour
+## Friendship
 
-Frontend should store the JWT and use it for protected requests.
+Represents a friendship between two users.
 
-## Password Recovery
+Fields:
 
-Not included in MVP.
+* id
+* user1Id
+* user2Id
+* createdAt
 
-Future enhancement.
+Constraint:
+
+* Unique pair: `@@unique([user1Id, user2Id])`
+
+Status:
+
+* Schema exists.
+* Full friend UI was deferred.
+
+## Group
+
+Represents a private expense group.
+
+Fields:
+
+* id
+* name
+* ownerId
+* inviteCode
+* createdAt
+* updatedAt
+
+Rules:
+
+* Group has exactly one owner.
+* Invite code is unique.
+* Group has many members, expenses, settlements, activities, and ownership transfers.
+
+## GroupMember
+
+Join table between users and groups.
+
+Fields:
+
+* id
+* groupId
+* userId
+* joinedAt
+
+Rules:
+
+* A user can join a group only once.
+* Unique pair: `@@unique([groupId, userId])`
+* Deleting a group cascades group members.
+
+## Expense
+
+Represents a financial transaction.
+
+Fields:
+
+* id
+* description
+* amount
+* splitType
+* payerId
+* creatorId
+* groupId
+* receiptUrl
+* createdAt
+* updatedAt
+
+Rules:
+
+* Creator is tracked separately from payer.
+* Payer must be a group member.
+* Participants must be group members.
+* Expense may support nullable groupId in schema, but implemented MVP focuses on group expenses.
+
+## ExpenseParticipant
+
+Represents each participant's share in an expense.
+
+Fields:
+
+* id
+* expenseId
+* userId
+* amountOwed
+* percentage
+* shares
+
+Rules:
+
+* Unique pair: `@@unique([expenseId, userId])`
+* Expense deletion cascades participants.
+* `amountOwed` stores final calculated amount for each participant.
+* `percentage` is used for percentage split.
+* `shares` is used for share split.
+
+## Settlement
+
+Represents a payment from one user to another.
+
+Fields:
+
+* id
+* amount
+* payerId
+* receiverId
+* groupId
+* note
+* screenshotUrl
+* createdAt
+
+Rules:
+
+* Amount must be greater than zero.
+* Payer and receiver cannot be the same user.
+* User can only record settlements where they are the payer.
+* Payer and receiver must both be group members.
+
+## Activity
+
+Stores audit history.
+
+Fields:
+
+* id
+* actorId
+* groupId
+* activityType
+* entityId
+* metadata
+* createdAt
+
+Rules:
+
+* Activities act as audit trail.
+* Metadata is JSON for flexible details.
+
+## OwnershipTransfer
+
+Tracks group ownership transfer requests.
+
+Fields:
+
+* id
+* groupId
+* currentOwnerId
+* proposedOwnerId
+* status
+* createdAt
+* respondedAt
+
+Statuses:
+
+* PENDING
+* ACCEPTED
+* REJECTED
+
+Rules:
+
+* Only current owner can create transfer request.
+* Proposed owner must already be a group member.
+* Proposed owner must accept or reject.
+* Ownership changes only after acceptance.
 
 ---
 
-# Friend System
+## 9. Enums
 
-Users can add friends.
+## AuthProvider
 
-Search is supported through:
+```txt
+GOOGLE
+EMAIL_PASSWORD
+```
 
-- Name
-- Email
-- Phone number if available
+## SplitType
 
-## Friend Removal
+```txt
+EQUAL
+UNEQUAL
+PERCENTAGE
+SHARE
+```
 
-A friend cannot be removed while balances remain unsettled.
+## OwnershipTransferStatus
 
-Flow:
+```txt
+PENDING
+ACCEPTED
+REJECTED
+```
 
-1. Attempt removal
-2. Reminder to settle balances
-3. Settle balances
-4. Remove friend
+## ActivityType
 
-Historical records remain.
-
-Retained:
-
-- Expenses
-- Settlements
-- Activity history
-
----
-
-# Groups
-
-## Visibility
-
-Groups are private.
-
-Only group members can access group data.
-
-## Group Creation
-
-Required fields:
-
-- Group name
-
-Group creation flow:
-
-1. Authenticated user creates group
-2. Creator becomes owner
-3. Creator is added as group member
-4. Optional members can be added
-
-## Group Ownership
-
-Groups have owners.
-
-This differs from Splitwise.
-
-### Why Ownership Exists
-
-Ownership provides:
-
-- Accountability
-- Administrative control
-- Protection against malicious edits
-- Better support for large groups
-
-## Ownership Transfer
-
-Flow:
-
-1. Owner selects member
-2. Transfer request is created
-3. Member accepts
-4. Ownership is transferred
-
-## Group Renaming
-
-Any member can rename a group.
-
-Reason:
-
-- Low-risk action
-- Reduces administrative friction
-
-## Leaving Groups
-
-Users cannot leave until balances are settled.
-
-Owners must transfer ownership before leaving.
-
-## Member Removal
-
-Normal rule:
-
-Members cannot be removed while balances remain unsettled.
-
-### Owner Override
-
-When removing a member with unsettled balances:
-
-1. Show warning
-2. Owner chooses handling strategy
-
-Possible strategies:
-
-- Transfer unresolved responsibility to owner
-- Remove member from future group membership while preserving historical records
-
-The safer MVP implementation is to preserve historical records and prevent removal unless debts are settled.
-
-## Group Deletion
-
-Owner may delete a group.
-
-Recommended MVP behavior:
-
-- Allow only owner to delete
-- Show warning in frontend
-- Keep implementation simple by deleting or soft-deleting depending on schema support
+```txt
+EXPENSE_CREATED
+EXPENSE_UPDATED
+EXPENSE_DELETED
+SETTLEMENT_CREATED
+MEMBER_ADDED
+MEMBER_REMOVED
+GROUP_RENAMED
+OWNERSHIP_TRANSFERRED
+GROUP_DELETED
+GROUP_CREATED
+```
 
 ---
 
-# Invitations
+## 10. Authentication Design
 
-Supported plan:
+The app supports email/password login and has a backend Google login route.
 
-## Existing User Search
+Email/password flow:
 
-Search and add existing users.
+1. User registers with full name, email, and password.
+2. Password is hashed using bcryptjs.
+3. User logs in with email/password.
+4. Backend returns JWT.
+5. Frontend stores JWT and user in localStorage.
+6. Axios interceptor attaches JWT to protected requests.
 
-## Invite Link
+Google auth flow:
 
-Flow:
+1. Frontend sends Google credential to backend.
+2. Backend verifies token using google-auth-library.
+3. Backend finds or creates user.
+4. Backend returns app JWT.
 
-1. Generate invite code
-2. User opens invite link
-3. User logs in if necessary
-4. User joins group
+Current note:
 
-Invite links:
-
-- No expiration in MVP
-- No approval workflow in MVP
-- No usage limits in MVP
-
-Future:
-
-- WhatsApp invites
-- SMS invites
-- Expiring invite links
+Email/password auth is the most reliable demo flow.
 
 ---
 
-# Expenses
+## 11. Group Rules
 
-## Expense Fields
+* Authenticated users can create groups.
+* Creator becomes group owner.
+* Creator is automatically added as member.
+* Groups are private.
+* Only group members can access group details.
+* Invite codes are unique and reusable.
+* Users can join groups through invite code.
+* User search was deferred.
 
-Required:
+Ownership rules:
 
-- Description/title
-- Amount
-- Payer
-- Participants
-- Split type
-
-Automatically generated:
-
-- Creation date
-- Creator
-- Group or direct context
-
-Optional:
-
-- Receipt
-
-## Expense Permissions
-
-Create:
-
-- Any group member
-
-Edit:
-
-- Creator
-- Owner
-
-Delete:
-
-- Creator
-- Owner
-
-## Expense Creator
-
-Creator information remains permanently attached to expenses.
-
-Even if creator later leaves the group.
-
-## Participants
-
-An expense can include only a subset of group members.
-
-Group membership does not imply participation.
+* Owner can remove members.
+* Owner cannot remove themselves.
+* Only owner can initiate ownership transfer.
+* Proposed owner must be a member.
+* Ownership changes only after proposed owner accepts.
 
 ---
 
-# Split Types
+## 12. Expense Rules
 
-The split engine has been implemented and tested.
+Supported split types:
+
+* Equal
+* Unequal
+* Percentage
+* Share
+
+Creation rules:
+
+* User must be authenticated.
+* User must be a group member.
+* Payer must be a group member.
+* All participants must be group members.
+* Participants are required.
+* Description, amount, split type, payer, and group are required.
+* Expense creator is stored as `creatorId`.
+
+Edit/delete rules:
+
+* Expense creator can edit/delete.
+* Group owner can edit/delete.
+* Expense edits rebuild participant allocations for simplicity and correctness.
+
+---
+
+## 13. Split Engine Logic
+
+The split engine lives in:
+
+```txt
+src/services/split.service.js
+```
 
 ## Equal Split
 
-Amount is divided equally among participants.
+* Validates amount > 0.
+* Divides amount equally among participants.
+* Handles rounding by adjusting the first participant.
 
 ## Unequal Split
 
-Custom amount per participant.
-
-Validation:
-
-- Sum of custom participant amounts should match total expense amount.
-- MVP may auto-adjust small rounding differences.
+* Validates amount > 0.
+* Requires each participant to have `amountOwed`.
+* Amount owed cannot be negative.
+* Sum of participant amounts must equal total expense amount.
 
 ## Percentage Split
 
-Custom percentages.
-
-Validation:
-
-- Percentages should total 100.
-- MVP may normalize values where appropriate.
+* Validates amount > 0.
+* Requires each participant to have percentage.
+* Percentage must be greater than zero.
+* Percentages must add up to 100.
+* Calculates amount owed from total amount.
+* Handles rounding difference by adjusting first participant.
 
 ## Share Split
 
-Users receive shares.
-
-Example:
-
-- A = 1 share
-- B = 2 shares
-- C = 3 shares
-
-Amount is distributed proportionally.
+* Validates amount > 0.
+* Requires each participant to have shares.
+* Shares must be positive integers.
+* Splits amount proportionally by total shares.
+* Handles rounding difference by adjusting first participant.
 
 ---
 
-# Balance System
-
-The balance engine has been implemented and tested.
-
-## Source Of Truth
-
-Expenses and settlements are the source of truth.
+## 14. Balance Engine Logic
 
 Balances are calculated dynamically.
 
-Running balances are not stored.
+There is no stored balance table.
 
-## Why
+Source of truth:
 
-- Correctness first
-- Single source of truth
-- Easier reconciliation
-- Avoids stale balance data
-
-## Recalculation Triggers
-
-Balances update when:
-
-- Expense is created
-- Expense is edited
-- Expense is deleted
-- Settlement is recorded
-
-## Raw Balance Calculation
+* Expenses
+* Settlements
 
 For every expense:
 
-1. Determine each participant's owed share.
-2. Ignore payer's own share.
-3. Create debt edge from participant to payer.
-4. Aggregate debt edges.
+1. Read payer.
+2. Read participants.
+3. For each participant, get amount owed.
+4. If participant is not payer, create debt edge:
+
+   * debtor = participant
+   * creditor = payer
+   * amount = participant amount owed
+
+For every settlement:
+
+1. Read payer and receiver.
+2. Treat settlement as reducing payer's debt to receiver.
+
+Debt cancellation:
+
+* Opposite direction debts are netted.
 
 Example:
 
-Expense = ₹900  
-Payer = A  
-Participants = A, B, C, D  
-Each share = ₹225  
+```txt
+A owes B ₹500
+B owes A ₹200
+Net: A owes B ₹300
+```
 
-Generated debts:
+Simplified balances:
 
-- B owes A ₹225
-- C owes A ₹225
-- D owes A ₹225
-
-## Settlement Handling
-
-Settlement creates a negative debt edge.
-
-Example:
-
-B pays A ₹100.
-
-Generated adjustment:
-
-- B owes A -₹100
-
-## Debt Cancellation
-
-Opposite direction debts are cancelled/netted.
-
-Example:
-
-- B owes A ₹500
-- A owes B ₹200
-
-Net result:
-
-- B owes A ₹300
-
-## Simplified Debt View
-
-Users can switch between:
-
-### Raw Balances
-
-Display direct calculated debt pairs.
-
-### Simplified Balances
-
-Display optimized settlement suggestions using a min-cash-flow style approach.
-
-Goal:
-
-- Reduce number of transactions required to settle the group.
+* Raw balances are converted into optimized debtor-creditor settlement suggestions.
+* Goal is to reduce number of payments required to settle group.
 
 ---
 
-# Direct Expenses
+## 15. Settlement Rules
 
-Direct expenses are planned.
+Settlement creation requires:
 
-Requirements:
+* amount
+* payerId
+* receiverId
+* groupId
 
-- Both users should be friends.
-- Direct expenses are not tied to a group.
+Validation:
 
-Flow:
+* Amount must be greater than zero.
+* Payer and receiver cannot be the same user.
+* Authenticated user must be the payer.
+* Authenticated user must be a group member.
+* Payer must be a group member.
+* Receiver must be a group member.
 
-Dashboard → Add Expense → Select Friend → Enter Details
+Settlement behavior:
 
-Priority:
-
-- Lower than group expense APIs for MVP completion.
-
----
-
-# Settlements
-
-Users can record settlements.
-
-Supported:
-
-- Group settlements
-- Direct settlements if direct expense flow is implemented
-
-## Settlement Fields
-
-Required:
-
-- Amount
-- Payer
-- Receiver
-
-Optional:
-
-- Note
-- Payment screenshot
-
-## Settlement Behaviour
-
-Recording a settlement:
-
-1. Creates settlement record
-2. Updates calculated balances
-3. Adds activity entry
+1. Create settlement record.
+2. Create activity record.
+3. Balance endpoint includes settlement while calculating balances.
 
 ---
 
-# Activity System
+## 16. Activity System
 
-## Group Activity Feed
+Activity records are created through:
 
-Default tab inside groups.
+```txt
+src/services/activity.service.js
+```
 
-Tracks:
+The helper accepts:
 
-- Expense creation
-- Expense edits
-- Expense deletion
-- Settlements
-- Member additions
-- Member removals
-- Ownership transfers
-- Group renames
-- Group deletion
+* actorId
+* groupId
+* activityType
+* entityId
+* metadata
 
-All members can view group activity entries.
+Used for:
 
-## User Activity Feed
-
-Tracks user activity across all groups.
-
-Includes:
-
-- Direct expenses
-- Settlements
-- Group events
-- Ownership changes
-
-## Retention
-
-Retention is based on maximum number of entries.
-
-Not time-based.
-
-## Why Activity Instead Of Notifications
-
-Activity feeds:
-
-- Reduce notification fatigue
-- Provide context
-- Act as an audit trail
-
----
-
-# Realtime Requirements
-
-Realtime is required by the assignment for user chat in an expense.
-
-Project priority:
-
-1. Financial correctness
-2. Group and expense CRUD
-3. Balances
-4. Settlements
-5. Activity
-6. Realtime updates/chat
-
-Realtime candidates:
-
-- Expense creation
-- Expense edits
-- Expense deletion
-- Settlement creation
-- Balance updates
-- Expense comments/chat
-
-Socket.IO is planned for realtime if time permits.
-
----
-
-# Search
-
-Supported searches:
-
-- Groups
-- Friends/users
-
-Not supported in MVP:
-
-- Expense search
-- Global public user directory
-
----
-
-# Currency
-
-MVP uses a single currency system.
+* Expense creation
+* Expense update
+* Expense deletion
+* Settlement creation
+* Group changes
+* Ownership transfer
 
 Reason:
 
-- Simpler balance calculations
-- Faster implementation
-- Lower risk
-
-Currency display can use INR for demo purposes.
+* Keeps audit history separate from business tables.
+* JSON metadata allows flexible event-specific information.
 
 ---
 
-# Navigation
+## 17. API Design
 
-## First-Time User Flow
+Base prefix:
 
-1. Login/register
-2. Dashboard/groups page
+```txt
+/api
+```
 
-## Bottom Navigation / Main Navigation
+## Auth
 
-- Groups
-- Balance Summary
-- Activity
+```txt
+POST /api/auth/register
+POST /api/auth/login
+GET /api/auth/me
+POST /api/auth/google
+```
 
-## Dashboard
+## Groups
 
-Displays:
+```txt
+GET /api/groups
+GET /api/groups/:id
+POST /api/groups
+PATCH /api/groups/:id
+DELETE /api/groups/:id
+POST /api/groups/join/:inviteCode
+DELETE /api/groups/:id/members/:userId
+```
 
-- Groups list
-- Search
-- Add expense
-- Add friend
-- Total owed
-- Total owed to user
+## Expenses
 
-## Group Screen
+```txt
+POST /api/expenses
+GET /api/expenses/:id
+GET /api/groups/:id/expenses
+PATCH /api/expenses/:id
+DELETE /api/expenses/:id
+```
 
-Tabs:
+## Balances
 
-### Activity
+```txt
+GET /api/groups/:groupId/balances
+GET /api/balances/summary
+```
 
-Default tab.
+## Settlements
 
-### Balances
+```txt
+POST /api/settlements
+GET /api/groups/:groupId/settlements
+```
 
-Displays debts and settlement suggestions.
+## Activity
 
-### Totals
+```txt
+GET /api/groups/:id/activity
+GET /api/activity
+```
 
-Displays financial summary.
+## Ownership Transfer
 
----
-
-# Current Backend Architecture
-
-## Runtime
-
-- Node.js
-- Express
-- CommonJS JavaScript backend
-
-## Database
-
-- PostgreSQL
-
-## ORM
-
-- Prisma 7
-
-## Existing Backend Files/Folders
-
-The backend currently includes:
-
-- Prisma config
-- TypeScript config generated/used by Prisma tooling
-- Prisma schema
-- Prisma migrations
-- Generated Prisma client output folder
-- Existing services folder
-- Split engine service
-- Balance engine service
-- Tests for split and balance engines
-
-## Important Decision
-
-The generated Prisma folder should not be deleted.
-
-It is likely produced by Prisma 7 custom client output and is needed by the existing services/tests.
+```txt
+POST /api/groups/:groupId/ownership-transfer
+POST /api/ownership-transfer/:id/accept
+POST /api/ownership-transfer/:id/reject
+GET /api/ownership-transfer/pending
+```
 
 ---
 
-# Backend API Development Plan
+## 18. Frontend Routes
 
-## Step 1: Express Setup
+Implemented routes include:
 
-Add:
+```txt
+/login
+/register
+/dashboard
+/groups/:groupId
+/ownership-transfers
+```
 
-- `src/app.js`
-- `src/server.js`
-- CORS
-- JSON body parsing
-- Morgan logging
-- Health check route
+Protected routes are wrapped with `ProtectedRoute`.
 
-Expected health endpoint:
+Auth state is provided through:
 
-`GET /api/health`
+```txt
+AuthProvider
+AuthContext
+useAuth
+```
 
-Expected response:
+API calls are organized into service files:
+
+* activityService
+* balanceService
+* expenseService
+* groupService
+* ownershipTransferService
+* settlementService
+
+---
+
+## 19. Deployment Notes
+
+Frontend deployment requires SPA rewrite configuration because React Router handles client-side routes.
+
+Vercel configuration:
 
 ```json
 {
-  "status": "ok",
-  "service": "splitwise-clone-backend"
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
 ```
 
-## Step 2: Prisma Client Setup
+Reason:
 
-Add:
+Refreshing nested routes like `/groups/:groupId` causes server-side 404 unless all routes are rewritten to `index.html`.
 
-- `src/config/prisma.js`
+Environment variables:
 
-Purpose:
-
-- Create one shared Prisma client instance.
-- Avoid creating multiple clients across controllers/services.
-
-## Step 3: Auth APIs
-
-Planned endpoints:
-
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/auth/me`
-
-Auth implementation:
-
-- bcrypt password hashing
-- JWT signing
-- auth middleware for protected routes
-
-## Step 4: Group APIs
-
-Planned endpoints:
-
-- `GET /api/groups`
-- `GET /api/groups/:id`
-- `POST /api/groups`
-- `PATCH /api/groups/:id`
-- `DELETE /api/groups/:id`
-
-## Step 5: Expense APIs
-
-Planned endpoints:
-
-- `POST /api/expenses`
-- `GET /api/expenses/:id`
-- `GET /api/groups/:id/expenses`
-- `PATCH /api/expenses/:id`
-- `DELETE /api/expenses/:id`
-
-## Step 6: Settlement APIs
-
-Planned endpoints:
-
-- `POST /api/settlements`
-- `GET /api/groups/:id/settlements`
-
-## Step 7: Balance APIs
-
-Planned endpoints:
-
-- `GET /api/groups/:id/balances`
-- `GET /api/balances/summary`
-
-## Step 8: Activity APIs
-
-Planned endpoints:
-
-- `GET /api/groups/:id/activity`
-- `GET /api/activity`
-
----
-
-# Known Limitations / Setup Requirements:
-Forgot password is not implemented in MVP.
-Future version would use email-based password reset tokens.
- 
-Prisma generated client is intentionally excluded from Git using .gitignore.
-
-After cloning the repository, developers must run:
-
-npx prisma generate
-
-before starting the backend.
-
-# Environment Variables
-
-Current planned `.env` values:
+Backend:
 
 ```env
-PORT=5000
-CLIENT_URL=http://localhost:5173
-DATABASE_URL="postgresql://..."
-JWT_SECRET="temporary_dev_secret_change_later"
+DATABASE_URL=
+JWT_SECRET=
+CLIENT_URL=
+PORT=
+GOOGLE_CLIENT_ID=
 ```
 
-JWT secret can exist before JWT setup.
+Frontend:
 
-It will be used once auth APIs are implemented.
-
-For deployment, the JWT secret must be changed to a strong production value.
-
----
-
-# Testing Strategy
-
-
-
-## Completed Tests
-
-- Split engine tests
-- Balance engine tests
-
-## Split Engine Test Coverage
-
-- Equal split
-- Unequal split
-- Percentage split
-- Share split
-- Validation/rounding behavior
-
-## Balance Engine Test Coverage
-
-- Debt generation
-- Settlement adjustment
-- Debt cancellation
-- Debt simplification
-
-## Planned Backend API Tests
-
-Manual testing using Postman/Thunder Client first.
-
-Test order:
-
-1. Health check
-2. Register
-3. Login
-4. Get current user
-5. Create group
-6. Add members
-7. Create equal expense
-8. Create unequal expense
-9. Create percentage expense
-10. Create share expense
-11. Get group balances
-12. Record settlement
-13. Verify updated balances
-14. Get activity feed
-
-## Group Testing Notes
-
-Group module tested successfully.
-
-Confirmed implementation details:
-- Join group endpoint is `POST /api/groups/join/:inviteCode`.
-- Group rename is allowed for any group member by current product design.
-- Owner cannot be removed from the group.
-- Owner self-removal error message: `"Owner cannot be removed from the group"`.
-- Test group was not deleted because it is needed for expense, balance, and settlement testing.
-
-## Expense Split Validation Fix
-
-During backend testing, invalid unequal and percentage split inputs were accepted.
-
-Root cause:
-- Unequal split calculated participant amounts but did not verify that the sum matched the total expense amount.
-- Percentage split normalized percentages instead of requiring them to add up to 100.
-
-Fix:
-- Added strict validation in `split.service.js`.
-- Unequal split amounts must add up to total expense amount.
-- Percentage splits must add up to 100.
-- Share split values must be positive integers.
-- Amount must be greater than zero.
-- Existing invalid test expenses were removed before continuing balance testing.
-
-## End-to-End Backend Test
-
-Tested full backend flow:
-- Created group
-- Added members by invite code
-- Created equal expense
-- Created percentage expense
-- Verified group balances
-- Recorded settlement
-- Verified balances changed after settlement
-- Verified activity feed
-
-Result:
-- Backend modules work together correctly.
-- Remaining Google Auth valid-token test will be done after frontend GIS integration.
----
-
-Frontend tech stack updated:
-- React + Vite
-- TypeScript
-- Axios
-- React Router DOM
-- Tailwind CSS or clean CSS
-- Google Identity Services
-- React Context API
-- localStorage for JWT persistence
-
-Frontend foundation completed:
-- Created React + Vite + TypeScript frontend.
-- Added Axios and React Router DOM.
-- Added centralized API client using VITE_API_BASE_URL.
-- Added Axios request interceptor to attach JWT token from localStorage.
-- Added auth type definitions for User and AuthResponse.
-- Added AuthContext, AuthProvider, and useAuth hook.
-- Used lazy useState initialization to restore auth state from localStorage without useEffect.
-- Split context/provider/hook files to avoid React Fast Refresh warning.
-- Added ProtectedRoute for authenticated pages.
-- Added initial routes for login, register, and dashboard.
-
-Frontend auth update:
-- Built Register page using TypeScript.
-- Created RegisterFormData interface for form state.
-- Connected register form to POST /api/auth/register.
-- On successful registration, frontend stores user and JWT using AuthContext login().
-- User is redirected to /dashboard after registration.
-- Added loading and error states for registration UX.
-
-Frontend auth update:
-- Built Login page using TypeScript.
-- Created LoginFormData interface for login form state.
-- Connected login form to POST /api/auth/login.
-- On successful login, frontend stores user and JWT using AuthContext login().
-- User is redirected to /dashboard after login.
-- Used unknown instead of any for type-safe error handling.
-
-Frontend groups update:
-- Added group TypeScript types.
-- Added groupService.ts for group API functions.
-- Connected Dashboard to GET /api/groups.
-- Added create group form connected to POST /api/groups.
-- Dashboard now shows current user's groups and invite codes.
-- Used type-safe Axios responses and unknown-based error handling.
-
-Frontend groups update:
-- Join group flow initially assumed POST /api/groups/join/:inviteCode returned a group object.
-- Actual backend response did not include data.group, causing a frontend crash.
-- Fixed by calling joinGroup() and then refetching GET /api/groups to refresh the dashboard group list.
-- This makes the frontend less dependent on join endpoint response shape.
-
-Frontend group detail update:
-- Added Expense and ExpenseParticipant TypeScript types.
-- Added expenseService.ts with getGroupExpenses(groupId).
-- Added protected GroupDetail page at /groups/:groupId.
-- GroupDetail fetches expenses using GET /api/groups/:id/expenses.
-- Dashboard group links now navigate to GroupDetail.
-- Empty expense state is shown when group has no expenses.
-
-Frontend group detail update:
-- Reworked GroupDetail page to fetch full group details from GET /api/groups/:id.
-- Added GroupDetailData and GroupMember TypeScript types.
-- GroupDetail now displays group name, invite code, owner, members, and expenses.
-- Removed separate expense state because expenses are now read from group.expenses.
-
-Frontend expense update:
-- Added Create Equal Expense form inside GroupDetail.
-- Uses group.members for payer dropdown and participant checkboxes.
-- Connected to POST /api/expenses.
-- On success, new expense is added to group.expenses in local state.
-
-- Frontend Settlement Form completed.
-- Users can record payments between group members.
-- Balances refresh after successful settlement without page reload.
-- Frontend validates empty fields, same payer/receiver, and invalid amount.
-
-- Frontend Unequal Split completed.
-- Added split type dropdown.
-- Added per-participant amountOwed inputs.
-- Frontend validates that unequal split amounts equal total expense amount.
-- Payload now sends amountOwed per participant for UNEQUAL split.
-
-- Frontend Activity Feed completed.
-- Group detail page now fetches and displays group activities.
-- Activity refreshes after expense creation and settlement creation.
-- Activity currently displays raw activityType values from backend.
-
-TODO:
-- Add user search endpoint and frontend search UI for adding members by name/email.
-- Current MVP uses invite code flow for joining groups.
-
-Implemented Join Group by Invite Code UI using POST /groups/join/:inviteCode.
-Chose invite-code flow because no user search endpoint exists yet.
-
-Implemented member removal UI.
-
-Authorization:
-- Only group owner sees Remove button.
-- Owner cannot remove themselves.
-
-Frontend refreshes:
-- Group details
-- Balances
-- Activity feed
-
-Backend endpoint:
-DELETE /groups/:id/members/:userId
-
-# Product Tradeoffs
-
-## Group Ownership
-
-Added for accountability and security.
-
-## Dynamic Balances
-
-Chosen over stored balances because correctness is more important than query speed for the MVP.
-
-## Single Currency
-
-Chosen to simplify calculations.
-
-## Activity Feed
-
-Chosen over notifications.
-
-## Realtime Deferred Until Core APIs
-
-Realtime is important, but APIs and balance correctness are more foundational.
-
-## Email/Password First
-
-Chosen for implementation speed and reliability.
-
-Google OAuth can be added later if time permits.
+```env
+VITE_API_BASE_URL=
+```
 
 ---
 
-# Future Enhancements
+## 20. Testing Status
 
-- Google OAuth login
-- Phone + password login
-- Password recovery
-- WhatsApp invites
-- SMS invites
-- Expense chat/comments
-- Receipt upload UI
-- Cloudinary receipt storage
-- Export spreadsheet
-- Multi-currency support
-- Enhanced friend system
-- Push notifications
-- Mobile app
-- Analytics dashboard
+## Backend Tested
+
+* Register
+* Login
+* Protected route access
+* Create group
+* Join group through invite code
+* Rename group
+* Add/remove group members
+* Create equal split expense
+* Create unequal split expense
+* Create percentage split expense
+* Create share split expense
+* Invalid unequal split rejection
+* Invalid percentage split rejection
+* Invalid settlement amount rejection
+* Record settlement
+* Balance recalculation after settlement
+* Activity feed
+* Ownership transfer request
+* Ownership transfer accept
+* Ownership transfer reject
+
+## Frontend Tested
+
+* Register page
+* Login page
+* Dashboard loading
+* Create group
+* Join group by invite code
+* Open group detail page
+* Create expenses
+* Display balances
+* Record settlement
+* Refresh balances after settlement
+* Display activity feed
+* Member removal UI
+* Ownership transfer page
 
 ---
 
-# Documentation Maintenance Rule
+## 21. Known Limitations
 
-This file must be updated whenever any of the following change:
+## Realtime Expense Chat Deferred
 
-- Product scope
-- Business rules
-- Database schema
-- API routes
-- Folder structure
-- Authentication design
-- Balance logic
-- Deployment approach
-- Testing results
-- Known limitations
+The assignment mentioned expense chat with realtime updates. This was deferred because the project prioritized financial correctness, database design, split logic, balances, and deployment-readiness.
 
-At each major checkpoint, add a short progress note rather than waiting until the end.
+Future implementation:
+
+* Add ExpenseComment model.
+* Add Socket.IO.
+* Join group/expense rooms.
+* Broadcast comment and balance events.
+
+## User Search Deferred
+
+The database includes Friendship, and early product planning included user search. The final MVP uses invite-code joining instead.
+
+Reason:
+
+* Invite codes are simpler.
+* No search endpoint needed.
+* Faster to test and demo.
+
+Future implementation:
+
+* Search users by name/email/phone.
+* Add user to group directly.
+* Build friend system UI.
+
+## Forgot Password Deferred
+
+Password recovery is not implemented.
+
+Future implementation:
+
+* Password reset token table.
+* Email delivery.
+* Expiring reset links.
+
+## Browser Title and Favicon Pending
+
+Final browser tab title and favicon customization were noted as final polish items.
+
+## Direct Expenses Deferred
+
+The schema supports nullable `groupId`, but final MVP focuses on group expenses.
+
+## Receipt Upload Deferred
+
+Receipt URL fields exist, but upload UI/storage integration was not implemented.
+
+## Frontend Paid By UX Issue
+
+During final testing, a possible UX issue was noted around creating an expense without clearly selecting a payer.
+
+Backend validation requires payerId and verifies payer membership, but frontend UX should be improved by forcing a visible payer selection before submit.
+
+Future fix:
+
+* Add frontend validation message.
+* Disable submit until payer is selected.
+
+---
+
+## 22. Product Tradeoffs
+
+## Invite Code Instead Of User Search
+
+Implemented invite-code joining instead of user search.
+
+Reason:
+
+* Faster MVP implementation.
+* Easier to test.
+* Still supports multi-user groups.
+
+Tradeoff:
+
+* Less convenient than searching users by email/name.
+
+## Dynamic Balances Instead Of Stored Balances
+
+Balances are calculated from expenses and settlements.
+
+Reason:
+
+* Prevents stale balance data.
+* Easier to reason about correctness.
+* Better for interview explanation.
+
+Tradeoff:
+
+* More computation at read time.
+
+## Ownership Added
+
+Splitwise is mostly flat, but this clone adds group ownership.
+
+Reason:
+
+* Clear permissions.
+* Safer member removal.
+* Ownership transfer demonstrates deeper product thinking.
+
+Tradeoff:
+
+* Slightly different from Splitwise.
+
+## Activity Feed Instead Of Notifications
+
+Activity feed was implemented before notifications.
+
+Reason:
+
+* Easier to build.
+* Useful for audit history.
+* Less noisy than notifications.
+
+## Realtime Deferred
+
+Realtime was deferred until after the financial core.
+
+Reason:
+
+* Correct balances matter more than realtime polish.
+* Time was limited.
+
+Tradeoff:
+
+* Assignment realtime chat requirement is not fully satisfied.
+
+---
+
+## 23. AI Collaboration Process
+
+AI was used as a junior engineering collaborator.
+
+The process followed:
+
+1. Clarified product scope.
+2. Discussed Splitwise workflows.
+3. Chose MVP features.
+4. Designed database schema.
+5. Built backend services.
+6. Tested split and balance logic.
+7. Built API controllers and routes.
+8. Built frontend pages and service layer.
+9. Tested core flows manually.
+10. Updated context and build plan throughout.
+
+Important AI usage principle:
+
+The AI was not treated as a magic code generator. It was used to reason through product rules, implementation decisions, edge cases, and tradeoffs.
+
+---
+
+
