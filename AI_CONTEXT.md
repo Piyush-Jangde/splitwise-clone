@@ -1088,4 +1088,46 @@ The AI was not treated as a magic code generator. It was used to reason through 
 
 ---
 
+## Post-Assignment Improvement: Google Authentication
 
+Implemented Google OAuth login on frontend and backend.
+
+### Backend
+- Added `/api/auth/google`.
+- Frontend sends Google credential/ID token to backend.
+- Backend verifies token using `google-auth-library` and `GOOGLE_CLIENT_ID`.
+- If user does not exist, backend creates a new user with:
+  - fullName
+  - email
+  - googleId
+  - profilePhotoUrl
+  - authProvider = GOOGLE
+- If user exists with same email but no googleId, backend links Google account by saving googleId.
+- Backend then generates the app's own JWT using existing `generateToken`.
+- Existing protected routes continue using the same JWT auth middleware.
+
+### Frontend
+- Installed `@react-oauth/google`.
+- Wrapped app with `GoogleOAuthProvider` in `main.tsx`.
+- Added Google Login button to Login page.
+- On successful Google credential response, frontend posts credential to `/auth/google`.
+- Existing `AuthProvider.login(user, token)` flow is reused.
+- Added `.env.development` and `.env.production` for frontend API URLs and Google client ID.
+
+### Auth error handling
+- Added Axios response interceptor.
+- On any `401 Unauthorized`, frontend clears `token` and `user` from localStorage and redirects to `/login`.
+- Updated backend auth middleware to convert malformed/expired JWT errors into `401` instead of server error.
+
+### Testing completed
+- New Google user login works locally.
+- Returning Google user login works locally.
+- Stale/invalid token redirects to login.
+- Email/password login remains unaffected.
+
+### Known limitation / later improvement
+- When an existing email/password user links Google, `googleId` is added but `authProvider` remains `EMAIL_PASSWORD`.
+- This is acceptable for now because the account still supports password login.
+- Later improvement: replace single `authProvider` enum with either:
+  - `hasPasswordAuth` and `hasGoogleAuth` booleans, or
+  - separate `AuthAccount` table for multiple providers.

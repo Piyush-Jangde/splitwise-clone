@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import type { AuthResponse } from "../types/auth";
 import { useAuth } from "../context/useAuth";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
 interface LoginFormData {
   email: string;
@@ -58,6 +59,37 @@ function Login() {
     }
   }
 
+  async function handleGoogleSucess(credentialResponse:CredentialResponse) {
+    try {
+      setError("");
+
+      const credential=credentialResponse.credential;
+
+      if(!credential) {
+        setError("Google Login Failed");
+        return;
+      }
+
+      const response= await api.post<AuthResponse>(
+        "/auth/google",
+        {
+          credential,
+        }
+      );
+
+      login(response.data.user,response.data.token);
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      if(axios.isAxiosError(error)) {
+        setError(
+          error.response?.data?.message || "Google Login Failed"
+        );
+      } else {
+        setError("Google Login Failed");
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-linear-to-br from-teal-50 via-indigo-50 to-amber-50 px-4 py-8">
       <div className="mx-auto flex min-h-[80vh] max-w-5xl items-center justify-center">
@@ -90,6 +122,23 @@ function Login() {
             <p className="mt-2 text-sm text-slate-600">
               Sign in to access your groups and expenses.
             </p>
+
+            <div className="mt-6 flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSucess}
+                onError={()=>{
+                  setError("Google Login Failed")
+                }}
+              />
+            </div>
+
+            <div className="my-6 flex items-center">
+              <div className="h-px flex-1 bg-slate-200"></div>
+              <span className="px-3 text-sm text-slate-500">
+                OR
+              </span>
+              <div className="h-px flex-1 bg-slate-200"></div>
+            </div>
 
             {error && (
               <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
