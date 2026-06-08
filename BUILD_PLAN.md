@@ -917,3 +917,33 @@ The strongest parts of the project are:
 * Clear tradeoff documentation
 
 The main weakness is that realtime expense chat was deferred to protect the quality of the core financial product.
+
+## Post-Assignment Improvements
+
+### 1. Google Authentication
+
+Goal:
+Improve onboarding and login UX by allowing users to sign in with Google in addition to email/password.
+
+Implementation:
+- Used `@react-oauth/google` on frontend.
+- Used `google-auth-library` on backend.
+- Backend verifies Google ID token before trusting user data.
+- Existing users are linked by email if they do not already have a `googleId`.
+- App continues issuing its own JWT after Google verification.
+- Added frontend environment separation:
+  - `.env.development`
+  - `.env.production`
+- Added global 401 handling through Axios interceptor.
+
+Tradeoffs:
+- Kept the existing `authProvider` enum unchanged.
+- Did not introduce a separate auth provider table yet.
+- Google button added only to Login page for now.
+- Register page can be updated later if needed.
+
+Testing:
+- Tested local Google login.
+- Tested stale JWT handling.
+- Tested repeated Google login.
+- Tested that existing email/password auth still works.
